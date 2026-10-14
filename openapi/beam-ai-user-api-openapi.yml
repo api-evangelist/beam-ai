@@ -1,0 +1,454 @@
+openapi: 3.2.0
+info:
+  title: Public User API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: User
+paths:
+  /v2/user/me:
+    get:
+      operationId: UserController_findCurrentUser
+      summary: Get Current User
+      description: Retrieve the profile information of the currently authenticated user, including their workspaces and permissions.
+      parameters: []
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDto'
+      tags:
+      - User
+      security:
+      - x-api-key: []
+      - bearer: []
+components:
+  schemas:
+    FeatureFlag:
+      type: object
+      properties:
+        name:
+          type: string
+        isGlobal:
+          type: boolean
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - isGlobal
+      - id
+      - createdAt
+      - updatedAt
+    AgentTaskTemplateStep:
+      type: object
+      properties:
+        step:
+          type: string
+          description: Step description.
+        toolId:
+          type: string
+          description: Tool ID.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        iconUrl:
+          type: string
+          description: Icon URL.
+        beamTool:
+          type: boolean
+          description: Whether this is a Beam tool.
+        gptTool:
+          type: boolean
+          description: Whether this is a GPT tool.
+        consentRequired:
+          type: boolean
+          description: Whether consent is required.
+        integrationId:
+          type: string
+          description: Integration ID.
+        isIntegrationRequired:
+          type: boolean
+          description: Whether integration is required.
+        isIntegrationConnected:
+          type: boolean
+          description: Whether integration is connected.
+        integrationProvider:
+          type: string
+          description: Integration provider.
+        integrationIdentifier:
+          type: string
+          description: Integration identifier.
+        toolDetail:
+          type: object
+        integrationCustomAuthParameters:
+          type: object
+      required:
+      - step
+    WorkspaceRole:
+      type: object
+      properties:
+        isOwner:
+          type: boolean
+        isAdmin:
+          type: boolean
+      required:
+      - isOwner
+      - isAdmin
+    WorkspaceCreditBalance:
+      type: object
+      properties:
+        totalCredits:
+          type: number
+        usedCredits:
+          type: number
+        lastUpdatedAt:
+          format: date-time
+          type: string
+      required:
+      - totalCredits
+      - usedCredits
+      - lastUpdatedAt
+    WorkspaceSubscription:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        currentPeriodStart:
+          format: date-time
+          type: string
+        currentPeriodEnd:
+          format: date-time
+          type: string
+        cancelAtPeriodEnd:
+          type: boolean
+        paymentProvider:
+          type: string
+        productId:
+          type: string
+        product:
+          $ref: '#/components/schemas/SubscriptionProduct'
+      required:
+      - id
+      - status
+      - currentPeriodStart
+      - currentPeriodEnd
+      - cancelAtPeriodEnd
+      - paymentProvider
+      - productId
+    AgentTaskTemplateCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the agent.
+          example: agent-123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Name of the agent.
+          example: Customer Support Agent
+        description:
+          type: string
+          description: Description of the agent.
+        settings:
+          description: Agent settings.
+          allOf:
+          - $ref: '#/components/schemas/AgentSettingDto'
+        config:
+          description: Agent configuration.
+          allOf:
+          - $ref: '#/components/schemas/AgentConfig'
+        workspaceId:
+          type: string
+          description: UUID of the workspace.
+        creatorId:
+          type: string
+          description: UUID of the creator.
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+          description: Type of the agent.
+        vectorDbId:
+          type: string
+          description: UUID of the vector database.
+        defaultTaskId:
+          type: string
+          description: Default task ID.
+        themeIconUrl:
+          type: string
+          description: URL of the theme icon for the agent.
+          example: https://example.com/icons/support-agent.png
+        agentCategoryId:
+          type: string
+          description: UUID of the agent category.
+        userAccessTokenId:
+          type: string
+          description: UUID of the user access token.
+        agentSetupSessionId:
+          type: string
+          description: UUID of the agent setup session.
+        agentIntroMessage:
+          type: string
+          description: Agent introduction message.
+        agentSetupMessage:
+          type: string
+          description: Agent setup message.
+        skipAgentSetupSop:
+          type: boolean
+          description: Whether to skip agent setup SOP.
+        isAttachmentDataPulledIn:
+          type: boolean
+          description: Whether attachment data from tasks should be pulled into the agent context.
+        creditUsage:
+          type: number
+          description: Total credit usage for this agent.
+          example: 12.5
+        order:
+          type: number
+          description: Display order of the agent.
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - id
+      - name
+      - creatorId
+      - type
+      - vectorDbId
+      - creditUsage
+      - order
+      - createdAt
+      - updatedAt
+    AgentSettingDto:
+      type: object
+      properties:
+        prompts:
+          description: Array of prompt templates used to guide the agent behavior.
+          example:
+          - You are a helpful customer support agent.
+          - Always be polite and professional.
+          type: array
+          items:
+            type: string
+        preferredModel:
+          type: string
+          description: Preferred AI model for this agent.
+          example: gpt-4
+        instructions:
+          type: string
+          description: Additional instructions for agent behavior.
+          example: Focus on providing concise answers.
+      required:
+      - prompts
+    SubscriptionProduct:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        productType:
+          type: string
+        priceAmount:
+          type: number
+        currency:
+          type: string
+        creditsAmount:
+          type: number
+        billingPeriod:
+          type: string
+        isActive:
+          type: boolean
+        iconSrc:
+          type: string
+        orderNumber:
+          type: number
+        metadata:
+          $ref: '#/components/schemas/ProductMetaDataType'
+      required:
+      - id
+      - name
+      - productType
+      - priceAmount
+      - currency
+      - creditsAmount
+      - isActive
+    UserResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatarSrc:
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        paymentProviderCustomerId:
+          type: string
+        workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponseDtoWorkspace'
+        featureFlags:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureFlag'
+        createdAt:
+          format: date-time
+          type: string
+        isInternalUser:
+          type: boolean
+      required:
+      - id
+      - name
+      - email
+      - featureFlags
+      - createdAt
+      - isInternalUser
+    UserResponseDtoWorkspace:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconSrc:
+          type: string
+        domain:
+          type: string
+        role:
+          $ref: '#/components/schemas/WorkspaceRole'
+        isPremium:
+          type: boolean
+        allowNegativeCredits:
+          type: boolean
+        notificationUserEmails:
+          type: array
+          items:
+            type: string
+        subscription:
+          $ref: '#/components/schemas/WorkspaceSubscription'
+        creditBalance:
+          $ref: '#/components/schemas/WorkspaceCreditBalance'
+        createdAt:
+          format: date-time
+          type: string
+        agent:
+          $ref: '#/components/schemas/Agent'
+      required:
+      - id
+      - name
+      - role
+      - creditBalance
+      - createdAt
+      - agent
+    ProductMetaDataType:
+      type: object
+      properties:
+        isPremium:
+          type: boolean
+        isFree:
+          type: boolean
+        creditsAmount:
+          type: number
+        unlimitedCredits:
+          type: boolean
+      required:
+      - isPremium
+      - isFree
+      - creditsAmount
+      - unlimitedCredits
+    AgentTaskTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Template ID.
+        objective:
+          type: string
+          description: Task objective.
+        description:
+          type: string
+          description: Task description.
+        steps:
+          description: Steps in this task template.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplateStep'
+        default:
+          type: boolean
+          description: Whether this is the default template.
+        category:
+          $ref: '#/components/schemas/AgentTaskTemplateCategory'
+        lastUpdatedAt:
+          format: date-time
+          type: string
+          description: Last updated timestamp.
+      required:
+      - id
+      - objective
+      - description
+      - steps
+    AgentConfig:
+      type: object
+      properties:
+        restrictions:
+          type: string
+        taskTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplate'
+        tools:
+          type: array
+          items:
+            type: string
+        llmTools:
+          type: array
+          items:
+            type: object
+        sop:
+          type: object
+        defaultTaskId:
+          type: string
+        workspaceId:
+          type: string
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

@@ -1,0 +1,19 @@
+generated: '2026-10-14'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://docs.beam.ai/08-reference/api/authentication/authentication
+sources:
+- https://docs.beam.ai/08-reference/api/authentication/authentication
+- https://docs.beam.ai/01-getting-started/beam-ai-copilot/beam-ai-copilot
+- https://docs.beam.ai/01-getting-started/core-concepts/core-concepts
+- https://docs.beam.ai/01-getting-started/guided-onboarding/guided-onboarding
+description: The Beam AI public API uses API key authentication. Include your API key in the x-api-key header with every request.
+schemes:
+- type: apiKey
+  name: apiKey
+  evidence: The Beam AI public API uses API key authentication. Include your API key in the x-api-key header with every request.
+  location: header
+  header: x-api-key
+  how_to_obtain: Log in to Beam AI → Navigate to your workspace settings → Go to the API Keys section → Create a new API key or copy an existing
+    one
+docs: https://docs.beam.ai/08-reference/api/authentication/authentication

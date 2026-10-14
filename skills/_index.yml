@@ -1,0 +1,19 @@
+generated: '2026-10-14'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/beam-ai-openapi.json
+skills:
+- file: skills/beam-ai-add-node-edge-publish.md
+  name: beam-ai-add-node-edge-publish
+  api: openapi/beam-ai-openapi.json
+  operations:
+  - AgentGraphController_addNode
+  - AgentGraphController_addEdge
+  - AgentGraphController_publishGraph
+- file: skills/beam-ai-agent-context-files.md
+  name: beam-ai-agent-context-files
+  api: openapi/beam-ai-openapi.json
+  operations:
+  - AgentContextFilesController_uploadFile
+  - AgentContextFilesController_getFileDownloadLink
+  - AgentContextFilesController_deleteFile

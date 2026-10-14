@@ -1,0 +1,125 @@
+openapi: 3.2.0
+info:
+  title: Public Agent Context Files API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: Agent Context Files
+paths:
+  /context/agent/{agentId}/file:
+    post:
+      operationId: AgentContextFilesController_uploadFile
+      summary: Upload Context File
+      description: Upload context files for an agent.
+      parameters:
+      - name: agentId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: uploadSource
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: taskId
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Context file uploaded successfully
+      tags:
+      - Agent Context Files
+      security:
+      - bearer: []
+      - x-api-key: []
+  /context/agent/{agentId}/file/{fileId}/download:
+    get:
+      operationId: AgentContextFilesController_getFileDownloadLink
+      summary: Download Context File
+      description: Generate a download link for an agent context file.
+      parameters:
+      - name: agentId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: fileId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Download link generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadContextFileResponseDto'
+      tags:
+      - Agent Context Files
+      security:
+      - bearer: []
+      - x-api-key: []
+  /context/agent/{agentId}/file/{fileKey}:
+    delete:
+      operationId: AgentContextFilesController_deleteFile
+      summary: Delete Context File
+      description: Delete a context file for an agent by file key.
+      parameters:
+      - name: agentId
+        required: true
+        in: path
+        description: The unique identifier of the agent
+        schema:
+          type: string
+      - name: fileKey
+        required: true
+        in: path
+        description: The unique key of the context file to delete
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Context file deleted successfully
+      tags:
+      - Agent Context Files
+      security:
+      - x-api-key: []
+components:
+  schemas:
+    DownloadContextFileResponseDto:
+      type: object
+      properties:
+        downloadUrl:
+          type: string
+      required:
+      - downloadUrl
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

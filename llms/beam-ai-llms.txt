@@ -1,0 +1,66 @@
+# Beam AI: Agentic Process Automation (APA)
+
+last-updated: 2025-10-28
+purpose: Curated, LLM-friendly index of canonical Beam AI pages.
+site: https://beam.ai
+default-language: en
+locales: en,de,ar,es
+license: https://beam.ai/legal/terms-of-use
+usage: Please attribute "Beam AI" with a source link when citing.
+trust: verified-source; curated-by-human; gdpr-compliant; enterprise
+contact: demo@beam.ai
+
+summary: Beam AI is a leading provider of AI agents and agentic process automation. The platform lets enterprises design, deploy and orchestrate production-grade ai agents with policy controls, monitoring, human-in-the-loop and compliance across existing workflows and systems.
+
+
+## Sitemaps & Robots
+- https://beam.ai/sitemap.xml
+- https://beam.ai/news-sitemap.xml
+- https://beam.ai/robots.txt
+
+## Localization
+- English (default): https://beam.ai/
+- German: https://beam.ai/de/
+- Arabic: https://beam.ai/ar/
+- Spanish: https://beam.ai/es/
+
+## LLM Data Feeds
+- core-pages.jsonl — Top 300–500 canonical pages ranked by GSC traffic.
+  url: https://beam.ai/.well-known/core-pages.json
+  refresh: monthly
+
+## Company & Platform
+- https://beam.ai/ — Leading provider of AI agents and agentic process automation. Autonomous workflows connect people, systems and data for measurable business outcomes.
+- https://beam.ai/platform — Unified platform to design, deploy and orchestrate production AI agents with policy controls, monitoring, human-in-the-loop and compliance.
+
+## Solutions (index)
+- https://beam.ai/solutions — Entry point to industry and process solutions with focus on BPO, finance, insurance, healthcare, HR and customer service; ROI and compliance oriented.
+
+## Agents (index)
+- https://beam.ai/agents — Catalog of ready-to-use agent templates and blueprints with configurable skills, connectors and guardrails for evaluation and production rollout.
+
+## Tools (index)
+- https://beam.ai/tools — Developer tools and SDKs for building, testing and operating agents; evaluation utilities, prompt/config management, CLI and UI components.
+
+## Integrations (index)
+- https://beam.ai/integrations — Official integrations with enterprise systems and SaaS such as Salesforce, Microsoft 365, Slack and Shopify; custom connectors supported.
+
+## Knowledge & Insights
+- https://beam.ai/agentic-insights/articles — Articles on AI agents, agentic automation and AI/agentic workflows.
+
+## Get Started
+- https://beam.ai/start — Primary “Get started” entry point for onboarding to AI agents and agentic automation.
+- https://beam.ai/demo — Book a demo/onboarding call with the team.
+
+## Legal & Contact
+- https://beam.ai/legal/privacy-policy
+- https://beam.ai/legal/terms-of-use
+- https://beam.ai/legal/imprint
+- https://beam.ai/legal/data-security
+- https://beam.ai/contact
+
+## Notes
+- Canonical URLs only; deep catalogs live under the index pages above.
+
+dataset-type: company_website_index
+topics: ai-agents, agentic-automation, ai-automation, ai-platform, enterprise-integration, compliance, workflows

@@ -1,0 +1,1630 @@
+{
+  "@context": {
+    "@vocab": "https://beam.ai/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "beam": "https://beam.ai/schema#",
+    "Workspace": "beam:Workspace",
+    "name": {
+      "@id": "beam:name",
+      "@type": "xsd:string"
+    },
+    "iconSrc": {
+      "@id": "beam:iconSrc",
+      "@type": "xsd:string"
+    },
+    "domain": {
+      "@id": "beam:domain",
+      "@type": "xsd:string"
+    },
+    "isPremium": {
+      "@id": "beam:isPremium",
+      "@type": "xsd:boolean"
+    },
+    "allowNegativeCredits": {
+      "@id": "beam:allowNegativeCredits",
+      "@type": "xsd:boolean"
+    },
+    "creatorId": {
+      "@id": "beam:creatorId",
+      "@type": "xsd:string"
+    },
+    "notificationUserEmails": {
+      "@id": "beam:notificationUserEmails",
+      "@container": "@list"
+    },
+    "id": {
+      "@id": "beam:id",
+      "@type": "xsd:string"
+    },
+    "createdAt": {
+      "@id": "beam:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "beam:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "Member": "beam:Member",
+    "profileImageSrc": {
+      "@id": "beam:profileImageSrc",
+      "@type": "xsd:string"
+    },
+    "FindInvitedWorkspacesResponseDtoWorkspace": "beam:FindInvitedWorkspacesResponseDtoWorkspace",
+    "code": {
+      "@id": "beam:code",
+      "@type": "xsd:string"
+    },
+    "members": {
+      "@id": "beam:members",
+      "@container": "@list"
+    },
+    "remainingMembersCount": {
+      "@id": "beam:remainingMembersCount",
+      "@type": "xsd:decimal"
+    },
+    "FindInvitedWorkspacesResponseDto": "beam:FindInvitedWorkspacesResponseDto",
+    "workspaces": {
+      "@id": "beam:workspaces",
+      "@container": "@list"
+    },
+    "count": {
+      "@id": "beam:count",
+      "@type": "xsd:decimal"
+    },
+    "UpsertWorkspaceReqBodyDto": "beam:UpsertWorkspaceReqBodyDto",
+    "WorkspaceRole": "beam:WorkspaceRole",
+    "isOwner": {
+      "@id": "beam:isOwner",
+      "@type": "xsd:boolean"
+    },
+    "isAdmin": {
+      "@id": "beam:isAdmin",
+      "@type": "xsd:boolean"
+    },
+    "WorkspaceCreditBalance": "beam:WorkspaceCreditBalance",
+    "totalCredits": {
+      "@id": "beam:totalCredits",
+      "@type": "xsd:decimal"
+    },
+    "usedCredits": {
+      "@id": "beam:usedCredits",
+      "@type": "xsd:decimal"
+    },
+    "lastUpdatedAt": {
+      "@id": "beam:lastUpdatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "ProductMetaDataType": "beam:ProductMetaDataType",
+    "isFree": {
+      "@id": "beam:isFree",
+      "@type": "xsd:boolean"
+    },
+    "creditsAmount": {
+      "@id": "beam:creditsAmount",
+      "@type": "xsd:decimal"
+    },
+    "unlimitedCredits": {
+      "@id": "beam:unlimitedCredits",
+      "@type": "xsd:boolean"
+    },
+    "SubscriptionProduct": "beam:SubscriptionProduct",
+    "description": {
+      "@id": "beam:description",
+      "@type": "xsd:string"
+    },
+    "productType": {
+      "@id": "beam:productType",
+      "@type": "xsd:string"
+    },
+    "priceAmount": {
+      "@id": "beam:priceAmount",
+      "@type": "xsd:decimal"
+    },
+    "currency": {
+      "@id": "beam:currency",
+      "@type": "xsd:string"
+    },
+    "billingPeriod": {
+      "@id": "beam:billingPeriod",
+      "@type": "xsd:string"
+    },
+    "isActive": {
+      "@id": "beam:isActive",
+      "@type": "xsd:boolean"
+    },
+    "orderNumber": {
+      "@id": "beam:orderNumber",
+      "@type": "xsd:decimal"
+    },
+    "metadata": {
+      "@id": "beam:metadata",
+      "@type": "@id"
+    },
+    "WorkspaceSubscription": "beam:WorkspaceSubscription",
+    "status": {
+      "@id": "beam:status",
+      "@type": "xsd:string"
+    },
+    "currentPeriodStart": {
+      "@id": "beam:currentPeriodStart",
+      "@type": "xsd:dateTime"
+    },
+    "currentPeriodEnd": {
+      "@id": "beam:currentPeriodEnd",
+      "@type": "xsd:dateTime"
+    },
+    "cancelAtPeriodEnd": {
+      "@id": "beam:cancelAtPeriodEnd",
+      "@type": "xsd:boolean"
+    },
+    "paymentProvider": {
+      "@id": "beam:paymentProvider",
+      "@type": "xsd:string"
+    },
+    "productId": {
+      "@id": "beam:productId",
+      "@type": "xsd:string"
+    },
+    "product": {
+      "@id": "beam:product",
+      "@type": "@id"
+    },
+    "WorkspaceResponseDto": "beam:WorkspaceResponseDto",
+    "role": {
+      "@id": "beam:role",
+      "@type": "@id"
+    },
+    "creditBalance": {
+      "@id": "beam:creditBalance",
+      "@type": "@id"
+    },
+    "subscription": {
+      "@id": "beam:subscription",
+      "@type": "@id"
+    },
+    "OwnershipTransferDto": "beam:OwnershipTransferDto",
+    "ownerUserId": {
+      "@id": "beam:ownerUserId",
+      "@type": "xsd:string"
+    },
+    "ownerName": {
+      "@id": "beam:ownerName",
+      "@type": "xsd:string"
+    },
+    "targetUserId": {
+      "@id": "beam:targetUserId",
+      "@type": "xsd:string"
+    },
+    "targetUserName": {
+      "@id": "beam:targetUserName",
+      "@type": "xsd:string"
+    },
+    "MembershipStatus": "beam:MembershipStatus",
+    "WorkspaceMemberResponseDto": "beam:WorkspaceMemberResponseDto",
+    "userId": {
+      "@id": "beam:userId",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "beam:email",
+      "@type": "xsd:string"
+    },
+    "membershipStatus": {
+      "@id": "beam:membershipStatus",
+      "@type": "@id"
+    },
+    "FindWorkspaceMembersResponseDto": "beam:FindWorkspaceMembersResponseDto",
+    "pendingOwnershipTransfer": {
+      "@id": "beam:pendingOwnershipTransfer",
+      "@type": "@id"
+    },
+    "GetWorkspaceUsersWithContextFilesCountDto": "beam:GetWorkspaceUsersWithContextFilesCountDto",
+    "InviteMemberReqBodyDto": "beam:InviteMemberReqBodyDto",
+    "workspaceId": {
+      "@id": "beam:workspaceId",
+      "@type": "xsd:string"
+    },
+    "emails": {
+      "@id": "beam:emails",
+      "@container": "@list"
+    },
+    "InviteMemberResponseDto": "beam:InviteMemberResponseDto",
+    "message": {
+      "@id": "beam:message",
+      "@type": "xsd:string"
+    },
+    "ManageOwnershipRequestDto": "beam:ManageOwnershipRequestDto",
+    "action": {
+      "@id": "beam:action",
+      "@type": "xsd:string"
+    },
+    "targetUserEmail": {
+      "@id": "beam:targetUserEmail",
+      "@type": "xsd:string"
+    },
+    "transferId": {
+      "@id": "beam:transferId",
+      "@type": "xsd:string"
+    },
+    "token": {
+      "@id": "beam:token",
+      "@type": "xsd:string"
+    },
+    "ManageOwnershipResponseDto": "beam:ManageOwnershipResponseDto",
+    "UpdateNotificationUserEmailsDto": "beam:UpdateNotificationUserEmailsDto",
+    "WorkspaceUpdateUserAccessLevelRequestDto": "beam:WorkspaceUpdateUserAccessLevelRequestDto",
+    "userEmail": {
+      "@id": "beam:userEmail",
+      "@type": "xsd:string"
+    },
+    "RequestJoinToWorkspaceResponseDto": "beam:RequestJoinToWorkspaceResponseDto",
+    "User": "beam:User",
+    "avatarSrc": {
+      "@id": "beam:avatarSrc",
+      "@type": "xsd:string"
+    },
+    "cognitoUserId": {
+      "@id": "beam:cognitoUserId",
+      "@type": "xsd:string"
+    },
+    "socialProvider": {
+      "@id": "beam:socialProvider",
+      "@type": "xsd:string"
+    },
+    "socialProviderId": {
+      "@id": "beam:socialProviderId",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "beam:password",
+      "@type": "xsd:string"
+    },
+    "paymentProviderCustomerId": {
+      "@id": "beam:paymentProviderCustomerId",
+      "@type": "xsd:string"
+    },
+    "rememberToken": {
+      "@id": "beam:rememberToken",
+      "@type": "xsd:string"
+    },
+    "emailVerified": {
+      "@id": "beam:emailVerified",
+      "@type": "xsd:boolean"
+    },
+    "referralCode": {
+      "@id": "beam:referralCode",
+      "@type": "xsd:string"
+    },
+    "role_name": {
+      "@id": "beam:role_name",
+      "@type": "xsd:string"
+    },
+    "isInternalUser": {
+      "@id": "beam:isInternalUser",
+      "@type": "xsd:boolean"
+    },
+    "WorkspaceOwnershipTransfer": "beam:WorkspaceOwnershipTransfer",
+    "ownerUser": {
+      "@id": "beam:ownerUser",
+      "@type": "@id"
+    },
+    "targetUser": {
+      "@id": "beam:targetUser",
+      "@type": "@id"
+    },
+    "respondedAt": {
+      "@id": "beam:respondedAt",
+      "@type": "xsd:dateTime"
+    },
+    "WorkspaceCreator": "beam:WorkspaceCreator",
+    "WorkspaceInvitationWithRoles": "beam:WorkspaceInvitationWithRoles",
+    "inviteeEmail": {
+      "@id": "beam:inviteeEmail",
+      "@type": "xsd:string"
+    },
+    "inviterUserId": {
+      "@id": "beam:inviterUserId",
+      "@type": "xsd:string"
+    },
+    "GetWorkspaceInvitationsResponseDto": "beam:GetWorkspaceInvitationsResponseDto",
+    "creator": {
+      "@id": "beam:creator",
+      "@type": "@id"
+    },
+    "workspaceInvitations": {
+      "@id": "beam:workspaceInvitations",
+      "@container": "@list"
+    },
+    "AcceptRequestBodyDto": "beam:AcceptRequestBodyDto",
+    "AcceptInviteResponseDto": "beam:AcceptInviteResponseDto",
+    "workspace": {
+      "@id": "beam:workspace",
+      "@type": "@id"
+    },
+    "RejectInviteResponseDto": "beam:RejectInviteResponseDto",
+    "AcceptInviteReqBodyDto": "beam:AcceptInviteReqBodyDto",
+    "DeleteWorkspaceMemberResponseDto": "beam:DeleteWorkspaceMemberResponseDto",
+    "AdminTransferOwnershipDto": "beam:AdminTransferOwnershipDto",
+    "newOwnerId": {
+      "@id": "beam:newOwnerId",
+      "@type": "xsd:string"
+    },
+    "AdminTransferOwnershipResponseDto": "beam:AdminTransferOwnershipResponseDto",
+    "oldOwnerId": {
+      "@id": "beam:oldOwnerId",
+      "@type": "xsd:string"
+    },
+    "AgentSettingDto": "beam:AgentSettingDto",
+    "prompts": {
+      "@id": "beam:prompts",
+      "@container": "@list"
+    },
+    "preferredModel": {
+      "@id": "beam:preferredModel",
+      "@type": "xsd:string"
+    },
+    "instructions": {
+      "@id": "beam:instructions",
+      "@type": "xsd:string"
+    },
+    "AgentTaskTemplateStep": "beam:AgentTaskTemplateStep",
+    "step": {
+      "@id": "beam:step",
+      "@type": "xsd:string"
+    },
+    "toolId": {
+      "@id": "beam:toolId",
+      "@type": "xsd:string"
+    },
+    "iconUrl": {
+      "@id": "beam:iconUrl",
+      "@type": "xsd:string"
+    },
+    "beamTool": {
+      "@id": "beam:beamTool",
+      "@type": "xsd:boolean"
+    },
+    "gptTool": {
+      "@id": "beam:gptTool",
+      "@type": "xsd:boolean"
+    },
+    "consentRequired": {
+      "@id": "beam:consentRequired",
+      "@type": "xsd:boolean"
+    },
+    "integrationId": {
+      "@id": "beam:integrationId",
+      "@type": "xsd:string"
+    },
+    "isIntegrationRequired": {
+      "@id": "beam:isIntegrationRequired",
+      "@type": "xsd:boolean"
+    },
+    "isIntegrationConnected": {
+      "@id": "beam:isIntegrationConnected",
+      "@type": "xsd:boolean"
+    },
+    "integrationProvider": {
+      "@id": "beam:integrationProvider",
+      "@type": "xsd:string"
+    },
+    "integrationIdentifier": {
+      "@id": "beam:integrationIdentifier",
+      "@type": "xsd:string"
+    },
+    "toolDetail": {
+      "@id": "beam:toolDetail"
+    },
+    "integrationCustomAuthParameters": {
+      "@id": "beam:integrationCustomAuthParameters"
+    },
+    "AgentTaskTemplateCategory": "beam:AgentTaskTemplateCategory",
+    "title": {
+      "@id": "beam:title",
+      "@type": "xsd:string"
+    },
+    "AgentTaskTemplate": "beam:AgentTaskTemplate",
+    "objective": {
+      "@id": "beam:objective",
+      "@type": "xsd:string"
+    },
+    "steps": {
+      "@id": "beam:steps",
+      "@container": "@list"
+    },
+    "default": {
+      "@id": "beam:default",
+      "@type": "xsd:boolean"
+    },
+    "category": {
+      "@id": "beam:category",
+      "@type": "@id"
+    },
+    "AgentConfig": "beam:AgentConfig",
+    "restrictions": {
+      "@id": "beam:restrictions",
+      "@type": "xsd:string"
+    },
+    "taskTemplates": {
+      "@id": "beam:taskTemplates",
+      "@container": "@list"
+    },
+    "tools": {
+      "@id": "beam:tools",
+      "@container": "@list"
+    },
+    "llmTools": {
+      "@id": "beam:llmTools",
+      "@container": "@list"
+    },
+    "sop": {
+      "@id": "beam:sop"
+    },
+    "defaultTaskId": {
+      "@id": "beam:defaultTaskId",
+      "@type": "xsd:string"
+    },
+    "Agent": "beam:Agent",
+    "settings": {
+      "@id": "beam:settings"
+    },
+    "config": {
+      "@id": "beam:config"
+    },
+    "type": {
+      "@id": "beam:type",
+      "@type": "xsd:string"
+    },
+    "vectorDbId": {
+      "@id": "beam:vectorDbId",
+      "@type": "xsd:string"
+    },
+    "themeIconUrl": {
+      "@id": "beam:themeIconUrl",
+      "@type": "xsd:string"
+    },
+    "agentCategoryId": {
+      "@id": "beam:agentCategoryId",
+      "@type": "xsd:string"
+    },
+    "userAccessTokenId": {
+      "@id": "beam:userAccessTokenId",
+      "@type": "xsd:string"
+    },
+    "agentSetupSessionId": {
+      "@id": "beam:agentSetupSessionId",
+      "@type": "xsd:string"
+    },
+    "agentIntroMessage": {
+      "@id": "beam:agentIntroMessage",
+      "@type": "xsd:string"
+    },
+    "agentSetupMessage": {
+      "@id": "beam:agentSetupMessage",
+      "@type": "xsd:string"
+    },
+    "skipAgentSetupSop": {
+      "@id": "beam:skipAgentSetupSop",
+      "@type": "xsd:boolean"
+    },
+    "isAttachmentDataPulledIn": {
+      "@id": "beam:isAttachmentDataPulledIn",
+      "@type": "xsd:boolean"
+    },
+    "creditUsage": {
+      "@id": "beam:creditUsage",
+      "@type": "xsd:decimal"
+    },
+    "order": {
+      "@id": "beam:order",
+      "@type": "xsd:decimal"
+    },
+    "UserResponseDtoWorkspace": "beam:UserResponseDtoWorkspace",
+    "agent": {
+      "@id": "beam:agent",
+      "@type": "@id"
+    },
+    "FeatureFlag": "beam:FeatureFlag",
+    "isGlobal": {
+      "@id": "beam:isGlobal",
+      "@type": "xsd:boolean"
+    },
+    "UserResponseDto": "beam:UserResponseDto",
+    "accessToken": {
+      "@id": "beam:accessToken",
+      "@type": "xsd:string"
+    },
+    "refreshToken": {
+      "@id": "beam:refreshToken",
+      "@type": "xsd:string"
+    },
+    "featureFlags": {
+      "@id": "beam:featureFlags",
+      "@container": "@list"
+    },
+    "UpdateUserReqBodyDto": "beam:UpdateUserReqBodyDto",
+    "SetupPasswordDto": "beam:SetupPasswordDto",
+    "IsPasswordResetResponseDto": "beam:IsPasswordResetResponseDto",
+    "isPasswordSet": {
+      "@id": "beam:isPasswordSet",
+      "@type": "xsd:boolean"
+    },
+    "ChangePasswordDto": "beam:ChangePasswordDto",
+    "oldPassword": {
+      "@id": "beam:oldPassword",
+      "@type": "xsd:string"
+    },
+    "newPassword": {
+      "@id": "beam:newPassword",
+      "@type": "xsd:string"
+    },
+    "UserRegisterReqDto": "beam:UserRegisterReqDto",
+    "originUrl": {
+      "@id": "beam:originUrl",
+      "@type": "xsd:string"
+    },
+    "UserLoginReqDto": "beam:UserLoginReqDto",
+    "AuthUserResponseDto": "beam:AuthUserResponseDto",
+    "user": {
+      "@id": "beam:user",
+      "@type": "@id"
+    },
+    "idToken": {
+      "@id": "beam:idToken",
+      "@type": "xsd:string"
+    },
+    "SocialLoginReqDto": "beam:SocialLoginReqDto",
+    "EmailVerificationTokenResDto": "beam:EmailVerificationTokenResDto",
+    "ChangesPasswordReqDto": "beam:ChangesPasswordReqDto",
+    "verificationToken": {
+      "@id": "beam:verificationToken",
+      "@type": "xsd:string"
+    },
+    "ForgotPasswordReqDto": "beam:ForgotPasswordReqDto",
+    "UserAccessTokenFetchReqDto": "beam:UserAccessTokenFetchReqDto",
+    "apiKey": {
+      "@id": "beam:apiKey",
+      "@type": "xsd:string"
+    },
+    "TokenResponse": "beam:TokenResponse",
+    "UserTokenFetchReqWithRefreshTokenDto": "beam:UserTokenFetchReqWithRefreshTokenDto",
+    "InvokeToolformerRequestDto": "beam:InvokeToolformerRequestDto",
+    "path": {
+      "@id": "beam:path",
+      "@type": "xsd:string"
+    },
+    "body": {
+      "@id": "beam:body"
+    },
+    "TestToolDto": "beam:TestToolDto",
+    "fallbackModels": {
+      "@id": "beam:fallbackModels",
+      "@type": "xsd:string"
+    },
+    "agentId": {
+      "@id": "beam:agentId",
+      "@type": "xsd:string"
+    },
+    "prompt": {
+      "@id": "beam:prompt",
+      "@type": "xsd:string"
+    },
+    "toolFunctionName": {
+      "@id": "beam:toolFunctionName",
+      "@type": "xsd:string"
+    },
+    "agentGraphNodeId": {
+      "@id": "beam:agentGraphNodeId",
+      "@type": "xsd:string"
+    },
+    "params": {
+      "@id": "beam:params"
+    },
+    "outputParams": {
+      "@id": "beam:outputParams"
+    },
+    "AgentBanner": "beam:AgentBanner",
+    "background": {
+      "@id": "beam:background",
+      "@type": "xsd:string"
+    },
+    "AgentTheme": "beam:AgentTheme",
+    "icon": {
+      "@id": "beam:icon",
+      "@type": "xsd:string"
+    },
+    "AgentCategory": "beam:AgentCategory",
+    "publish": {
+      "@id": "beam:publish",
+      "@type": "xsd:boolean"
+    },
+    "AgentTemplate": "beam:AgentTemplate",
+    "graph": {
+      "@id": "beam:graph"
+    },
+    "longDescription": {
+      "@id": "beam:longDescription",
+      "@type": "xsd:string"
+    },
+    "personality": {
+      "@id": "beam:personality",
+      "@type": "xsd:string"
+    },
+    "shortDescription": {
+      "@id": "beam:shortDescription",
+      "@type": "xsd:string"
+    },
+    "bannerId": {
+      "@id": "beam:bannerId",
+      "@type": "xsd:string"
+    },
+    "themeId": {
+      "@id": "beam:themeId",
+      "@type": "xsd:string"
+    },
+    "sampleAgentTasks": {
+      "@id": "beam:sampleAgentTasks"
+    },
+    "agentBanner": {
+      "@id": "beam:agentBanner",
+      "@type": "@id"
+    },
+    "agentTheme": {
+      "@id": "beam:agentTheme",
+      "@type": "@id"
+    },
+    "AgentRecommendationResponseDto": "beam:AgentRecommendationResponseDto",
+    "templates": {
+      "@id": "beam:templates",
+      "@container": "@list"
+    },
+    "IntegrationProviderRequest": "beam:IntegrationProviderRequest",
+    "endpoint": {
+      "@id": "beam:endpoint",
+      "@type": "xsd:string"
+    },
+    "method": {
+      "@id": "beam:method",
+      "@type": "xsd:string"
+    },
+    "query": {
+      "@id": "beam:query",
+      "@container": "@list"
+    },
+    "bypassTLS": {
+      "@id": "beam:bypassTLS",
+      "@type": "xsd:boolean"
+    },
+    "IntegrationProviderDetails": "beam:IntegrationProviderDetails",
+    "request": {
+      "@id": "beam:request",
+      "@type": "@id"
+    },
+    "response": {
+      "@id": "beam:response"
+    },
+    "AgentCategoryInfo": "beam:AgentCategoryInfo",
+    "GetToolsMetaDto": "beam:GetToolsMetaDto",
+    "integration_provider_details": {
+      "@id": "beam:integration_provider_details",
+      "@type": "@id"
+    },
+    "agent_category": {
+      "@id": "beam:agent_category",
+      "@type": "@id"
+    },
+    "payload": {
+      "@id": "beam:payload",
+      "@type": "xsd:string"
+    },
+    "tool_name": {
+      "@id": "beam:tool_name",
+      "@type": "xsd:string"
+    },
+    "function_name": {
+      "@id": "beam:function_name",
+      "@type": "xsd:string"
+    },
+    "requires_consent": {
+      "@id": "beam:requires_consent",
+      "@type": "xsd:boolean"
+    },
+    "requires_translation": {
+      "@id": "beam:requires_translation",
+      "@type": "xsd:boolean"
+    },
+    "required_extracted_args": {
+      "@id": "beam:required_extracted_args",
+      "@container": "@list"
+    },
+    "optional_extracted_args": {
+      "@id": "beam:optional_extracted_args",
+      "@container": "@list"
+    },
+    "content": {
+      "@id": "beam:content",
+      "@type": "xsd:string"
+    },
+    "categories": {
+      "@id": "beam:categories",
+      "@container": "@list"
+    },
+    "icon_src": {
+      "@id": "beam:icon_src",
+      "@type": "xsd:string"
+    },
+    "integration_provider_auth": {
+      "@id": "beam:integration_provider_auth",
+      "@type": "xsd:string"
+    },
+    "integration_provider_executor": {
+      "@id": "beam:integration_provider_executor",
+      "@type": "xsd:string"
+    },
+    "preferred_model": {
+      "@id": "beam:preferred_model",
+      "@type": "xsd:string"
+    },
+    "integration_id": {
+      "@id": "beam:integration_id",
+      "@type": "xsd:string"
+    },
+    "apiKeyType": {
+      "@id": "beam:apiKeyType",
+      "@type": "xsd:string"
+    },
+    "parameter": {
+      "@id": "beam:parameter",
+      "@type": "xsd:string"
+    },
+    "tool_category_id": {
+      "@id": "beam:tool_category_id",
+      "@type": "xsd:string"
+    },
+    "agent_categories": {
+      "@id": "beam:agent_categories",
+      "@container": "@list"
+    },
+    "required_generated_args": {
+      "@id": "beam:required_generated_args",
+      "@container": "@list"
+    },
+    "optional_generated_args": {
+      "@id": "beam:optional_generated_args",
+      "@container": "@list"
+    },
+    "is_memory_tool": {
+      "@id": "beam:is_memory_tool",
+      "@type": "xsd:boolean"
+    },
+    "memory_lookup_instruction": {
+      "@id": "beam:memory_lookup_instruction",
+      "@type": "xsd:string"
+    },
+    "workspace_id": {
+      "@id": "beam:workspace_id",
+      "@type": "xsd:string"
+    },
+    "LinkParamsDto": "beam:LinkParamsDto",
+    "outputParam": {
+      "@id": "beam:outputParam",
+      "@type": "xsd:string"
+    },
+    "outputId": {
+      "@id": "beam:outputId",
+      "@type": "xsd:string"
+    },
+    "LinkedOutputParamRuleDto": "beam:LinkedOutputParamRuleDto",
+    "elementKey": {
+      "@id": "beam:elementKey",
+      "@type": "xsd:string"
+    },
+    "operator": {
+      "@id": "beam:operator",
+      "@type": "xsd:string"
+    },
+    "comparisonValueType": {
+      "@id": "beam:comparisonValueType",
+      "@type": "xsd:string"
+    },
+    "comparisonValue": {
+      "@id": "beam:comparisonValue",
+      "@type": "xsd:string"
+    },
+    "nextRuleOperator": {
+      "@id": "beam:nextRuleOperator",
+      "@type": "xsd:string"
+    },
+    "ParamRuleConditionConfig": "beam:ParamRuleConditionConfig",
+    "conditionType": {
+      "@id": "beam:conditionType",
+      "@type": "xsd:string"
+    },
+    "LinkedOutputParamRulesDto": "beam:LinkedOutputParamRulesDto",
+    "rules": {
+      "@id": "beam:rules",
+      "@container": "@list"
+    },
+    "linkedParamRulePrompt": {
+      "@id": "beam:linkedParamRulePrompt",
+      "@type": "xsd:string"
+    },
+    "linkedParamConfigurations": {
+      "@id": "beam:linkedParamConfigurations"
+    },
+    "UserInputParamConfigDto": "beam:UserInputParamConfigDto",
+    "position": {
+      "@id": "beam:position",
+      "@type": "xsd:decimal"
+    },
+    "paramName": {
+      "@id": "beam:paramName",
+      "@type": "xsd:string"
+    },
+    "fillType": {
+      "@id": "beam:fillType",
+      "@type": "xsd:string"
+    },
+    "question": {
+      "@id": "beam:question",
+      "@type": "xsd:string"
+    },
+    "linkParams": {
+      "@id": "beam:linkParams"
+    },
+    "linkParamOutputId": {
+      "@id": "beam:linkParamOutputId",
+      "@type": "xsd:string"
+    },
+    "paramDescription": {
+      "@id": "beam:paramDescription",
+      "@type": "xsd:string"
+    },
+    "paramTip": {
+      "@id": "beam:paramTip",
+      "@type": "xsd:string"
+    },
+    "staticValue": {
+      "@id": "beam:staticValue",
+      "@type": "xsd:string"
+    },
+    "required": {
+      "@id": "beam:required",
+      "@type": "xsd:boolean"
+    },
+    "dataType": {
+      "@id": "beam:dataType",
+      "@type": "xsd:string"
+    },
+    "isArray": {
+      "@id": "beam:isArray",
+      "@type": "xsd:boolean"
+    },
+    "typeOptions": {
+      "@id": "beam:typeOptions"
+    },
+    "outputExample": {
+      "@id": "beam:outputExample",
+      "@type": "xsd:string"
+    },
+    "reloadProps": {
+      "@id": "beam:reloadProps",
+      "@type": "xsd:boolean"
+    },
+    "remoteOptions": {
+      "@id": "beam:remoteOptions",
+      "@type": "xsd:boolean"
+    },
+    "options": {
+      "@id": "beam:options",
+      "@container": "@list"
+    },
+    "linkedOutputParamRulesData": {
+      "@id": "beam:linkedOutputParamRulesData"
+    },
+    "CustomToolOutput": "beam:CustomToolOutput",
+    "agentToolConfigurationId": {
+      "@id": "beam:agentToolConfigurationId",
+      "@type": "xsd:string"
+    },
+    "parentId": {
+      "@id": "beam:parentId",
+      "@type": "xsd:string"
+    },
+    "paramPath": {
+      "@id": "beam:paramPath",
+      "@type": "xsd:string"
+    },
+    "CustomIntegrationToolQueryParamsDTO": "beam:CustomIntegrationToolQueryParamsDTO",
+    "key": {
+      "@id": "beam:key",
+      "@type": "xsd:string"
+    },
+    "parameterHint": {
+      "@id": "beam:parameterHint",
+      "@type": "xsd:string"
+    },
+    "CustomIntegrationToolBodyParamsDTO": "beam:CustomIntegrationToolBodyParamsDTO",
+    "CustomIntegrationToolUrlParamsDTO": "beam:CustomIntegrationToolUrlParamsDTO",
+    "AgentToolConfigurationOutputParams": "beam:AgentToolConfigurationOutputParams",
+    "LinkedOutputParamRules": "beam:LinkedOutputParamRules",
+    "agentToolConfigurationInputParamsId": {
+      "@id": "beam:agentToolConfigurationInputParamsId",
+      "@type": "xsd:string"
+    },
+    "AgentToolConfigurationInputParams": "beam:AgentToolConfigurationInputParams",
+    "linkOutputParam": {
+      "@id": "beam:linkOutputParam",
+      "@type": "@id"
+    },
+    "linkedOutputParamRules": {
+      "@id": "beam:linkedOutputParamRules",
+      "@container": "@list"
+    },
+    "ruleConditionConfig": {
+      "@id": "beam:ruleConditionConfig",
+      "@type": "@id"
+    },
+    "AgentToolConfiguration": "beam:AgentToolConfiguration",
+    "integrationProviderId": {
+      "@id": "beam:integrationProviderId",
+      "@type": "xsd:string"
+    },
+    "inputParams": {
+      "@id": "beam:inputParams",
+      "@container": "@list"
+    },
+    "outputParamsData": {
+      "@id": "beam:outputParamsData",
+      "@container": "@list"
+    },
+    "inputParamsData": {
+      "@id": "beam:inputParamsData",
+      "@container": "@list"
+    },
+    "requiresConsent": {
+      "@id": "beam:requiresConsent",
+      "@type": "xsd:boolean"
+    },
+    "isBackgroundTool": {
+      "@id": "beam:isBackgroundTool",
+      "@type": "xsd:boolean"
+    },
+    "isMemoryTool": {
+      "@id": "beam:isMemoryTool",
+      "@type": "xsd:boolean"
+    },
+    "isBatchExecutionEnabled": {
+      "@id": "beam:isBatchExecutionEnabled",
+      "@type": "xsd:boolean"
+    },
+    "accuracyScore": {
+      "@id": "beam:accuracyScore",
+      "@type": "xsd:decimal"
+    },
+    "memoryLookupInstruction": {
+      "@id": "beam:memoryLookupInstruction",
+      "@type": "xsd:string"
+    },
+    "dynamicPropsId": {
+      "@id": "beam:dynamicPropsId",
+      "@type": "xsd:string"
+    },
+    "codeLanguage": {
+      "@id": "beam:codeLanguage",
+      "@type": "xsd:string"
+    },
+    "originalTool": {
+      "@id": "beam:originalTool",
+      "@type": "@id"
+    },
+    "Question": "beam:Question",
+    "keywordInPrompt": {
+      "@id": "beam:keywordInPrompt",
+      "@type": "xsd:string"
+    },
+    "CustomIntegrationAuthenticationMetaDTO": "beam:CustomIntegrationAuthenticationMetaDTO",
+    "clientId": {
+      "@id": "beam:clientId",
+      "@type": "xsd:string"
+    },
+    "customOAuthUrl": {
+      "@id": "beam:customOAuthUrl",
+      "@type": "xsd:string"
+    },
+    "clientSecret": {
+      "@id": "beam:clientSecret",
+      "@type": "xsd:string"
+    },
+    "authorizationUrl": {
+      "@id": "beam:authorizationUrl",
+      "@type": "xsd:string"
+    },
+    "accessTokenUrl": {
+      "@id": "beam:accessTokenUrl",
+      "@type": "xsd:string"
+    },
+    "refreshTokenUrl": {
+      "@id": "beam:refreshTokenUrl",
+      "@type": "xsd:string"
+    },
+    "scopes": {
+      "@id": "beam:scopes",
+      "@container": "@list"
+    },
+    "grantType": {
+      "@id": "beam:grantType",
+      "@type": "xsd:string"
+    },
+    "clientAuthentication": {
+      "@id": "beam:clientAuthentication",
+      "@type": "xsd:string"
+    },
+    "IntegrationProvider": "beam:IntegrationProvider",
+    "credentialId": {
+      "@id": "beam:credentialId",
+      "@type": "xsd:string"
+    },
+    "connectionName": {
+      "@id": "beam:connectionName",
+      "@type": "xsd:string"
+    },
+    "integration": {
+      "@id": "beam:integration",
+      "@type": "xsd:string"
+    },
+    "isOAuth2": {
+      "@id": "beam:isOAuth2",
+      "@type": "xsd:boolean"
+    },
+    "provider": {
+      "@id": "beam:provider",
+      "@type": "xsd:string"
+    },
+    "tokenExpiresIn": {
+      "@id": "beam:tokenExpiresIn",
+      "@type": "xsd:decimal"
+    },
+    "credentials": {
+      "@id": "beam:credentials"
+    },
+    "isDefault": {
+      "@id": "beam:isDefault",
+      "@type": "xsd:boolean"
+    },
+    "IntegrationCategory": "beam:IntegrationCategory",
+    "Tool": "beam:Tool",
+    "toolName": {
+      "@id": "beam:toolName",
+      "@type": "xsd:string"
+    },
+    "isVisibleOnUi": {
+      "@id": "beam:isVisibleOnUi",
+      "@type": "xsd:boolean"
+    },
+    "meta": {
+      "@id": "beam:meta"
+    },
+    "httpMethod": {
+      "@id": "beam:httpMethod",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "beam:url",
+      "@type": "xsd:string"
+    },
+    "isAvailableToWorkspace": {
+      "@id": "beam:isAvailableToWorkspace",
+      "@type": "xsd:boolean"
+    },
+    "isSharable": {
+      "@id": "beam:isSharable",
+      "@type": "xsd:boolean"
+    },
+    "systemIntegrationIdentifier": {
+      "@id": "beam:systemIntegrationIdentifier",
+      "@type": "xsd:string"
+    },
+    "allowWaiting": {
+      "@id": "beam:allowWaiting",
+      "@type": "xsd:boolean"
+    },
+    "queryParams": {
+      "@id": "beam:queryParams",
+      "@container": "@list"
+    },
+    "bodyParams": {
+      "@id": "beam:bodyParams",
+      "@container": "@list"
+    },
+    "urlParams": {
+      "@id": "beam:urlParams",
+      "@container": "@list"
+    },
+    "deletedAt": {
+      "@id": "beam:deletedAt",
+      "@type": "xsd:dateTime"
+    },
+    "toolConfigurations": {
+      "@id": "beam:toolConfigurations",
+      "@container": "@list"
+    },
+    "questions": {
+      "@id": "beam:questions",
+      "@container": "@list"
+    },
+    "embedding": {
+      "@id": "beam:embedding",
+      "@type": "xsd:string"
+    },
+    "toolConfiguration": {
+      "@id": "beam:toolConfiguration",
+      "@type": "@id"
+    },
+    "IntegrationsViewEntity": "beam:IntegrationsViewEntity",
+    "integrationCategoryId": {
+      "@id": "beam:integrationCategoryId",
+      "@type": "xsd:string"
+    },
+    "privacyPolicyUrl": {
+      "@id": "beam:privacyPolicyUrl",
+      "@type": "xsd:string"
+    },
+    "systemIntegrationProvider": {
+      "@id": "beam:systemIntegrationProvider",
+      "@type": "xsd:string"
+    },
+    "customAuthParameters": {
+      "@id": "beam:customAuthParameters"
+    },
+    "authenticationMeta": {
+      "@id": "beam:authenticationMeta"
+    },
+    "syncModels": {
+      "@id": "beam:syncModels"
+    },
+    "isPublished": {
+      "@id": "beam:isPublished",
+      "@type": "xsd:boolean"
+    },
+    "attributes": {
+      "@id": "beam:attributes"
+    },
+    "customHeaders": {
+      "@id": "beam:customHeaders"
+    },
+    "authType": {
+      "@id": "beam:authType",
+      "@type": "xsd:string"
+    },
+    "providers": {
+      "@id": "beam:providers",
+      "@container": "@list"
+    },
+    "integrationCategory": {
+      "@id": "beam:integrationCategory",
+      "@type": "@id"
+    },
+    "actions": {
+      "@id": "beam:actions",
+      "@container": "@list"
+    },
+    "ToolsViewWithIntegrationConnectionStatus": "beam:ToolsViewWithIntegrationConnectionStatus",
+    "GetAllToolsViewDto": "beam:GetAllToolsViewDto",
+    "AgentTemplateResponseDto": "beam:AgentTemplateResponseDto",
+    "PeriodMetricsDto": "beam:PeriodMetricsDto",
+    "totalTasks": {
+      "@id": "beam:totalTasks",
+      "@type": "xsd:decimal"
+    },
+    "completedTasks": {
+      "@id": "beam:completedTasks",
+      "@type": "xsd:decimal"
+    },
+    "failedTasks": {
+      "@id": "beam:failedTasks",
+      "@type": "xsd:decimal"
+    },
+    "averageEvaluationScore": {
+      "@id": "beam:averageEvaluationScore",
+      "@type": "xsd:decimal"
+    },
+    "averageRuntimeSeconds": {
+      "@id": "beam:averageRuntimeSeconds",
+      "@type": "xsd:decimal"
+    },
+    "totalRuntimeSeconds": {
+      "@id": "beam:totalRuntimeSeconds",
+      "@type": "xsd:decimal"
+    },
+    "positiveFeedbackCount": {
+      "@id": "beam:positiveFeedbackCount",
+      "@type": "xsd:decimal"
+    },
+    "consentRequiredCount": {
+      "@id": "beam:consentRequiredCount",
+      "@type": "xsd:decimal"
+    },
+    "negativeFeedbackCount": {
+      "@id": "beam:negativeFeedbackCount",
+      "@type": "xsd:decimal"
+    },
+    "MetricsDeltaDto": "beam:MetricsDeltaDto",
+    "totalTasksDelta": {
+      "@id": "beam:totalTasksDelta",
+      "@type": "xsd:string"
+    },
+    "completedTasksDelta": {
+      "@id": "beam:completedTasksDelta",
+      "@type": "xsd:string"
+    },
+    "failedTasksDelta": {
+      "@id": "beam:failedTasksDelta",
+      "@type": "xsd:string"
+    },
+    "consentRequiredTasksDelta": {
+      "@id": "beam:consentRequiredTasksDelta",
+      "@type": "xsd:string"
+    },
+    "averageRuntimeSecondsDelta": {
+      "@id": "beam:averageRuntimeSecondsDelta",
+      "@type": "xsd:string"
+    },
+    "totalRuntimeSecondsDelta": {
+      "@id": "beam:totalRuntimeSecondsDelta",
+      "@type": "xsd:string"
+    },
+    "averageEvaluationScoreDelta": {
+      "@id": "beam:averageEvaluationScoreDelta",
+      "@type": "xsd:string"
+    },
+    "AgentAnalyticsChartResponseDto": "beam:AgentAnalyticsChartResponseDto",
+    "date": {
+      "@id": "beam:date",
+      "@type": "xsd:string"
+    },
+    "completedCount": {
+      "@id": "beam:completedCount",
+      "@type": "xsd:decimal"
+    },
+    "failedCount": {
+      "@id": "beam:failedCount",
+      "@type": "xsd:decimal"
+    },
+    "AgentAnalyticsResponseDto": "beam:AgentAnalyticsResponseDto",
+    "currentPeriod": {
+      "@id": "beam:currentPeriod",
+      "@type": "@id"
+    },
+    "metricsDelta": {
+      "@id": "beam:metricsDelta",
+      "@type": "@id"
+    },
+    "taskAndEvaluationChart": {
+      "@id": "beam:taskAndEvaluationChart",
+      "@container": "@list"
+    },
+    "TemplateWithTool": "beam:TemplateWithTool",
+    "AgentTemplateDetailResponseDto": "beam:AgentTemplateDetailResponseDto",
+    "template": {
+      "@id": "beam:template",
+      "@type": "@id"
+    },
+    "AgentCategoriesWithWorkflowsCountDto": "beam:AgentCategoriesWithWorkflowsCountDto",
+    "templatesCount": {
+      "@id": "beam:templatesCount",
+      "@type": "xsd:decimal"
+    },
+    "MinimalAgentCategoryDto": "beam:MinimalAgentCategoryDto",
+    "MinimalAgentDto": "beam:MinimalAgentDto",
+    "OptimizedAgentListResponseDto": "beam:OptimizedAgentListResponseDto",
+    "agents": {
+      "@id": "beam:agents",
+      "@container": "@list"
+    },
+    "ReadyForTaskForAgentDto": "beam:ReadyForTaskForAgentDto",
+    "flowEnabled": {
+      "@id": "beam:flowEnabled",
+      "@type": "xsd:boolean"
+    },
+    "AgentCreditUsageResponseDto": "beam:AgentCreditUsageResponseDto",
+    "UpdateAgentDto": "beam:UpdateAgentDto",
+    "agentConfig": {
+      "@id": "beam:agentConfig",
+      "@type": "@id"
+    },
+    "AgentOrderItemDto": "beam:AgentOrderItemDto",
+    "UpdateAgentsOrderDto": "beam:UpdateAgentsOrderDto",
+    "CreateAgentCharacterDto": "beam:CreateAgentCharacterDto",
+    "CreateAgentCharacterResponseDto": "beam:CreateAgentCharacterResponseDto",
+    "AgentCreationProgressResponseDTO": "beam:AgentCreationProgressResponseDTO",
+    "module": {
+      "@id": "beam:module",
+      "@type": "xsd:string"
+    },
+    "label": {
+      "@id": "beam:label",
+      "@type": "xsd:string"
+    },
+    "isComplete": {
+      "@id": "beam:isComplete",
+      "@type": "xsd:boolean"
+    },
+    "TranscribeAudioResponseDto": "beam:TranscribeAudioResponseDto",
+    "transcription": {
+      "@id": "beam:transcription",
+      "@type": "xsd:string"
+    },
+    "ExportAgentsDto": "beam:ExportAgentsDto",
+    "agentIds": {
+      "@id": "beam:agentIds",
+      "@container": "@list"
+    },
+    "taskCount": {
+      "@id": "beam:taskCount",
+      "@type": "xsd:decimal"
+    },
+    "ImportAgentDataDto": "beam:ImportAgentDataDto",
+    "graphTools": {
+      "@id": "beam:graphTools",
+      "@container": "@list"
+    },
+    "lastCompletedTasks": {
+      "@id": "beam:lastCompletedTasks",
+      "@container": "@list"
+    },
+    "ImportAgentsDto": "beam:ImportAgentsDto",
+    "clearData": {
+      "@id": "beam:clearData",
+      "@type": "xsd:string"
+    },
+    "data": {
+      "@id": "beam:data",
+      "@container": "@list"
+    },
+    "SaveAgentResponseDto": "beam:SaveAgentResponseDto",
+    "contextFiles": {
+      "@id": "beam:contextFiles",
+      "@container": "@list"
+    },
+    "SaveAgentDto": "beam:SaveAgentDto",
+    "threadId": {
+      "@id": "beam:threadId",
+      "@type": "xsd:string"
+    },
+    "agentWelcomeMessage": {
+      "@id": "beam:agentWelcomeMessage",
+      "@type": "xsd:string"
+    },
+    "NodeSelection": "beam:NodeSelection",
+    "edgeId": {
+      "@id": "beam:edgeId",
+      "@type": "xsd:string"
+    },
+    "condition": {
+      "@id": "beam:condition",
+      "@type": "xsd:string"
+    },
+    "selected": {
+      "@id": "beam:selected",
+      "@type": "xsd:boolean"
+    },
+    "reasoning": {
+      "@id": "beam:reasoning",
+      "@type": "xsd:string"
+    },
+    "otherEdges": {
+      "@id": "beam:otherEdges",
+      "@container": "@list"
+    },
+    "TaskExecutionState": "beam:TaskExecutionState",
+    "nodeSelections": {
+      "@id": "beam:nodeSelections",
+      "@container": "@list"
+    },
+    "TaskNodeTokenUsage": "beam:TaskNodeTokenUsage",
+    "agentTaskId": {
+      "@id": "beam:agentTaskId",
+      "@type": "xsd:string"
+    },
+    "creditTransactionId": {
+      "@id": "beam:creditTransactionId",
+      "@type": "xsd:string"
+    },
+    "promptSlug": {
+      "@id": "beam:promptSlug",
+      "@type": "xsd:string"
+    },
+    "executionStage": {
+      "@id": "beam:executionStage",
+      "@type": "xsd:string"
+    },
+    "iteration": {
+      "@id": "beam:iteration",
+      "@type": "xsd:decimal"
+    },
+    "model": {
+      "@id": "beam:model",
+      "@type": "xsd:string"
+    },
+    "operation": {
+      "@id": "beam:operation",
+      "@type": "xsd:string"
+    },
+    "inputToken": {
+      "@id": "beam:inputToken",
+      "@type": "xsd:decimal"
+    },
+    "outputToken": {
+      "@id": "beam:outputToken",
+      "@type": "xsd:decimal"
+    },
+    "reasoningToken": {
+      "@id": "beam:reasoningToken",
+      "@type": "xsd:decimal"
+    },
+    "totalToken": {
+      "@id": "beam:totalToken",
+      "@type": "xsd:decimal"
+    },
+    "isLatest": {
+      "@id": "beam:isLatest",
+      "@type": "xsd:boolean"
+    },
+    "agentTask": {
+      "@id": "beam:agentTask",
+      "@type": "@id"
+    },
+    "AgentTask": "beam:AgentTask",
+    "agentGraphId": {
+      "@id": "beam:agentGraphId",
+      "@type": "xsd:string"
+    },
+    "customId": {
+      "@id": "beam:customId",
+      "@type": "xsd:string"
+    },
+    "originalTaskQuery": {
+      "@id": "beam:originalTaskQuery",
+      "@type": "xsd:string"
+    },
+    "taskObjective": {
+      "@id": "beam:taskObjective",
+      "@type": "xsd:string"
+    },
+    "taskInstructions": {
+      "@id": "beam:taskInstructions",
+      "@type": "xsd:string"
+    },
+    "taskContext": {
+      "@id": "beam:taskContext"
+    },
+    "taskSuccessCriteria": {
+      "@id": "beam:taskSuccessCriteria",
+      "@type": "xsd:string"
+    },
+    "taskQuery": {
+      "@id": "beam:taskQuery",
+      "@type": "xsd:string"
+    },
+    "taskSummary": {
+      "@id": "beam:taskSummary",
+      "@type": "xsd:string"
+    },
+    "initiationDetail": {
+      "@id": "beam:initiationDetail"
+    },
+    "triggerRecordId": {
+      "@id": "beam:triggerRecordId",
+      "@type": "xsd:string"
+    },
+    "manualRetryCount": {
+      "@id": "beam:manualRetryCount",
+      "@type": "xsd:decimal"
+    },
+    "isSuccess": {
+      "@id": "beam:isSuccess",
+      "@type": "xsd:boolean"
+    },
+    "isViewed": {
+      "@id": "beam:isViewed",
+      "@type": "xsd:boolean"
+    },
+    "canRerunTaskNode": {
+      "@id": "beam:canRerunTaskNode",
+      "@type": "xsd:boolean"
+    },
+    "startedAt": {
+      "@id": "beam:startedAt",
+      "@type": "xsd:dateTime"
+    },
+    "endedAt": {
+      "@id": "beam:endedAt",
+      "@type": "xsd:dateTime"
+    },
+    "mode": {
+      "@id": "beam:mode",
+      "@type": "xsd:string"
+    },
+    "userFeedback": {
+      "@id": "beam:userFeedback",
+      "@type": "xsd:string"
+    },
+    "rating": {
+      "@id": "beam:rating",
+      "@type": "xsd:string"
+    },
+    "taskState": {
+      "@id": "beam:taskState"
+    },
+    "graphState": {
+      "@id": "beam:graphState"
+    },
+    "totalExecutionTime": {
+      "@id": "beam:totalExecutionTime",
+      "@type": "xsd:decimal"
+    },
+    "tokensUsed": {
+      "@id": "beam:tokensUsed",
+      "@type": "xsd:decimal"
+    },
+    "totalCost": {
+      "@id": "beam:totalCost",
+      "@type": "xsd:decimal"
+    },
+    "taskReceiveAt": {
+      "@id": "beam:taskReceiveAt",
+      "@type": "xsd:decimal"
+    },
+    "tokenUsages": {
+      "@id": "beam:tokenUsages",
+      "@container": "@list"
+    },
+    "ContextFile": "beam:ContextFile",
+    "src": {
+      "@id": "beam:src",
+      "@type": "xsd:string"
+    },
+    "fileKey": {
+      "@id": "beam:fileKey",
+      "@type": "xsd:string"
+    },
+    "uploadStatus": {
+      "@id": "beam:uploadStatus",
+      "@type": "xsd:string"
+    },
+    "uploadSource": {
+      "@id": "beam:uploadSource",
+      "@type": "xsd:string"
+    },
+    "isForAgentDatabase": {
+      "@id": "beam:isForAgentDatabase",
+      "@type": "xsd:boolean"
+    },
+    "mimeType": {
+      "@id": "beam:mimeType",
+      "@type": "xsd:string"
+    },
+    "taskId": {
+      "@id": "beam:taskId",
+      "@type": "xsd:string"
+    },
+    "datasourceConnectionId": {
+      "@id": "beam:datasourceConnectionId",
+      "@type": "xsd:string"
+    },
+    "externalFileId": {
+      "@id": "beam:externalFileId",
+      "@type": "xsd:string"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Beam AI API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Beam AI's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-14) from openapi/beam-ai-openapi.json.",
+  "dcterms:created": "2026-10-14",
+  "dcterms:source": [
+    "openapi/beam-ai-openapi.json"
+  ]
+}

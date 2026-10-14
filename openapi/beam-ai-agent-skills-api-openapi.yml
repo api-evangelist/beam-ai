@@ -1,0 +1,81 @@
+openapi: 3.2.0
+info:
+  title: Public Agent Skills API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: Agent Skills
+paths:
+  /agent/{agentId}/skills/import:
+    post:
+      operationId: AgentSkillController_importSkill
+      summary: Import a skill from a zip file
+      description: Import a skill into an agent from a zip file. The zip file should contain the skill configuration and any associated assets. The skill will be added to the specified agent.
+      parameters:
+      - name: agentId
+        required: true
+        in: path
+        description: Agent ID
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Zip file containing the skill to import
+      responses:
+        '201':
+          description: Skill imported successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportSkillResponseDto'
+        '400':
+          description: Invalid file type
+        '401':
+          description: Authentication required
+      tags:
+      - Agent Skills
+      security:
+      - x-api-key: []
+components:
+  schemas:
+    ImportSkillResponseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the skill was imported successfully
+        destination:
+          type: string
+          description: The destination path or identifier where the skill was imported
+        error:
+          type: string
+          description: Error message if the import failed
+      required:
+      - success
+      - destination
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

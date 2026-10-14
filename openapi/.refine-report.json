@@ -1,0 +1,40 @@
+{
+  "provider": "beam-ai",
+  "sources": [
+    "beam-ai-openapi.json"
+  ],
+  "outputs": [
+    "beam-ai-agent-context-files-api-openapi.yml",
+    "beam-ai-agent-graph-api-openapi.yml",
+    "beam-ai-agent-setup-api-openapi.yml",
+    "beam-ai-agent-skills-api-openapi.yml",
+    "beam-ai-agent-task-api-openapi.yml",
+    "beam-ai-agent-views-api-openapi.yml",
+    "beam-ai-agents-api-openapi.yml",
+    "beam-ai-complete-agent-graph-api-openapi.yml",
+    "beam-ai-custom-tool-api-openapi.yml",
+    "beam-ai-tool-api-openapi.yml",
+    "beam-ai-user-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/beam-ai-openapi.json"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "beam-ai-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "beam-ai-openapi.json: declared missing tag: Agent Context Files",
+    "beam-ai-openapi.json: declared missing tag: Agent Graph",
+    "beam-ai-openapi.json: declared missing tag: Agent Setup",
+    "beam-ai-openapi.json: declared missing tag: Agent Skills",
+    "beam-ai-openapi.json: declared missing tag: Agent Task",
+    "beam-ai-openapi.json: declared missing tag: Agent Views",
+    "beam-ai-openapi.json: declared missing tag: Agents",
+    "beam-ai-openapi.json: declared missing tag: Complete Agent Graph",
+    "beam-ai-openapi.json: declared missing tag: Custom Tool",
+    "beam-ai-openapi.json: declared missing tag: Tool",
+    "beam-ai-openapi.json: declared missing tag: User",
+    "apis.yml register: written (+11 apis, 11 total)"
+  ],
+  "skipped": []
+}

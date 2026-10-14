@@ -1,0 +1,37 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/beam-ai-openapi.json
+format: custom
+envelope:
+  media_type: null
+  schema: null
+coverage:
+  operations: 48
+  statuses_declared: 4
+problems:
+- status: 400
+  title: Bad Request
+  description: Bad Request - Missing required fields for the current step or invalid step provided.
+  operations: 3
+  media_types: []
+  schema: null
+- status: 401
+  title: Unauthorized
+  description: Authentication required
+  operations: 1
+  media_types: []
+  schema: null
+- status: 404
+  title: Not Found
+  description: Agent setup session not found.
+  operations: 3
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: Conflict - Invalid tool type provided
+  operations: 1
+  media_types: []
+  schema: null

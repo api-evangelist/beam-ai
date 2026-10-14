@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/beam-ai/main/json-schema/beam-ai-setup-beam-agent-dto-schema.json",
+  "title": "SetupBeamAgentDTO",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/beam-ai-openapi.json#/components/schemas/SetupBeamAgentDTO",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "maxLength": 50000,
+      "description": "User input or instructions for the current setup step. Use this to provide context about what the agent should do, describe its purpose, or give feedback during the setup process."
+    },
+    "contextFileIds": {
+      "description": "Array of context file UUIDs to attach to the agent. These files provide additional knowledge or reference materials that the agent can use when processing requests.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "agentId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID of the agent. Required for all setup steps (GENERATE_SOP and onwards) to identify which agent is being configured."
+    },
+    "agentSetupStep": {
+      "enum": [
+        "GENERATE_SOP",
+        "GRAPH_GENERATION",
+        "TOOL_MATCHING",
+        "TOOL_GENERATION",
+        "TOOL_INTEGRATION",
+        "UPDATE_AGENT",
+        "AGENT_UPDATED",
+        "CREATE_TASK"
+      ],
+      "type": "string",
+      "description": "Current step in the agent setup workflow. Use /agent-context and /agent-creation first, then use this endpoint for the remaining steps:\n\n• GENERATE_SOP - Generate Standard Operating Procedures for the agent (requires query)\n• GRAPH_GENERATION - Create the agent's workflow graph\n• TOOL_MATCHING - Match existing tools to the agent's needs\n• TOOL_GENERATION - Generate new custom tools if needed\n• TOOL_INTEGRATION - Integrate selected tools with the agent\n• UPDATE_AGENT - Finalize and update the agent configuration\n• AGENT_UPDATED - Confirmation that setup is complete"
+    }
+  },
+  "required": [
+    "agentId",
+    "agentSetupStep"
+  ]
+}

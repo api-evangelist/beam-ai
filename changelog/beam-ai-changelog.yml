@@ -1,0 +1,43 @@
+generated: '2026-10-14'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://docs.beam.ai/05-resources/changelog/changelog
+sources:
+- https://docs.beam.ai/05-resources/changelog/changelog
+- https://beam.ai/resources/changelog
+entries:
+- breaking: false
+  highlights:
+  - Agent Templates Start from a working agent instead of a blank canvas.
+  - 'The template library has been rebuilt: browse by category or search by name, then open a template to see what it does, what starts it, and
+    which apps it needs before you commit.'
+  - Guided Onboarding New users no longer land in an empty workspace.
+  - Sign‑up now collects your workspace name, industry, team size, and role, then hands off to a guided chat that turns what you need into a real
+    agent.
+  date: '2026-09-29'
+- breaking: false
+  highlights:
+  - Integration Auto Fix When an integration step fails, Beam now diagnoses it and fixes it for you.
+  - Click "Fix with AI" on the failed step and copilot opens with the error already explained in plain language, a suggested repair, and the reasoning
+    behind it.
+  - Agent Monitoring Every agent now has a Monitoring tab where you set rules for the moments your team needs to know about.
+  - 'Smart monitor, on Pro: an AI model watches the agent, tracks escalations to resolution, and feeds Agent learning.'
+  date: '2026-09-15'
+- breaking: false
+  highlights:
+  - Role‑Based Access Control Give every teammate exactly the access they need and nothing more.
+  - Roles now control which agents each person can use and what they can do with them, all from one place.
+  - Nested Structured Outputs Keep related values correctly paired, so a price always stays with the right item.
+  - Bug Fixes Fixed tasks failing when a condition was the first step inside a loop.
+  date: '2026-09-01'
+- breaking: false
+  highlights:
+  - Learning Hub See exactly how your agent is performing and improve it in a few clicks.
+  - The new Learning Hub turns the feedback your agent collects from you and from its own self‑checks into a clear list of recurring issues, then
+    drafts fixes to the instructions behind them.
+  - Reasoning Effort for LLM Models Choose how hard a model thinks on each step.
+  - Set reasoning to Minimal, Low, Medium, or High on any reasoning‑capable model.
+  date: '2026-08-18'
+current_version: '2026-09-29'
+note: Versioning scheme is date‑based (YYYY‑MM‑DD). Only the four most recent entries are listed as the page contains four dated updates.
+docs: https://docs.beam.ai/05-resources/changelog/changelog

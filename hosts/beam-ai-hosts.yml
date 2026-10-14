@@ -1,0 +1,102 @@
+generated: '2026-10-14'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 6
+  own: 5
+  other_domain: 1
+  platform: 0
+  roles:
+  - api
+  - other
+  - portal
+  - website
+hosts:
+- host: api.beam.ai
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: beam.ai
+  role: api
+  relation: own
+- host: api.beamstudio.ai
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: beamstudio.ai
+  role: api
+  relation: other-domain
+- host: app.beam.ai
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: beam.ai
+  role: other
+  relation: own
+- host: beam.ai
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - TrustCenter
+  - TermsOfService
+  - Security
+  - PrivacyPolicy
+  - Newsroom
+  - ChangeLog
+  - Website
+  - Support
+  - Blog
+  - Pricing
+  serves:
+  - docs
+  registrable_domain: beam.ai
+  role: website
+  relation: own
+- host: docs.beam.ai
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - APIReference
+  - DeveloperPortal
+  - Documentation
+  - GettingStarted
+  serves:
+  - docs
+  - spec
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: beam.ai
+  role: portal
+  relation: own
+- host: security.beam.ai
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: beam.ai
+  role: other
+  relation: own

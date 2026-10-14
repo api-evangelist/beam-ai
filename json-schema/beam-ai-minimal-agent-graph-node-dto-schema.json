@@ -1,0 +1,1207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/beam-ai/main/json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json",
+  "title": "MinimalAgentGraphNodeDto",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/beam-ai-openapi.json#/components/schemas/MinimalAgentGraphNodeDto",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "customId": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "evaluationCriteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "isEntryNode": {
+      "type": "boolean"
+    },
+    "isExitNode": {
+      "type": "boolean"
+    },
+    "xCoordinate": {
+      "type": "number"
+    },
+    "yCoordinate": {
+      "type": "number"
+    },
+    "isEvaluationEnabled": {
+      "type": "boolean"
+    },
+    "autoRetryWhenAccuracyLessThan": {
+      "type": "number"
+    },
+    "autoRetryLimitWhenAccuracyIsLow": {
+      "type": "number"
+    },
+    "enableAutoRetryWhenAccuracyIsLow": {
+      "type": "boolean"
+    },
+    "enableAutoRetryWhenFailure": {
+      "type": "boolean"
+    },
+    "autoRetryDescription": {
+      "type": "string",
+      "default": null
+    },
+    "enableAutoRetryDescription": {
+      "type": "boolean",
+      "default": false
+    },
+    "autoRetryCountWhenFailure": {
+      "type": "number"
+    },
+    "autoRetryWaitTimeWhenFailureInMs": {
+      "type": "number"
+    },
+    "isAttachmentDataPulledIn": {
+      "type": "boolean"
+    },
+    "isEdited": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "onError": {
+      "type": "string",
+      "enum": [
+        "CONTINUE",
+        "STOP"
+      ]
+    },
+    "nodeType": {
+      "enum": [
+        "executionNode",
+        "conditionNode",
+        "waitingNode",
+        "entryNode",
+        "exitNode"
+      ],
+      "type": "string"
+    },
+    "nodeConfigurations": {
+      "$ref": "#/$defs/NodeConfigurations"
+    },
+    "toolConfiguration": {
+      "$ref": "#/$defs/MinimalToolConfigurationDto"
+    },
+    "childEdges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MinimalAgentGraphEdgeDto"
+      }
+    },
+    "parentEdges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MinimalAgentGraphEdgeDto"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "customId",
+    "objective",
+    "evaluationCriteria",
+    "isEntryNode",
+    "isExitNode",
+    "isEvaluationEnabled",
+    "autoRetryWhenAccuracyLessThan",
+    "autoRetryLimitWhenAccuracyIsLow",
+    "enableAutoRetryWhenAccuracyIsLow",
+    "enableAutoRetryWhenFailure",
+    "autoRetryDescription",
+    "enableAutoRetryDescription",
+    "autoRetryCountWhenFailure",
+    "autoRetryWaitTimeWhenFailureInMs",
+    "isAttachmentDataPulledIn",
+    "isEdited",
+    "createdAt",
+    "toolConfiguration",
+    "childEdges",
+    "parentEdges"
+  ],
+  "$defs": {
+    "AgentGraphEdge": {
+      "type": "object",
+      "properties": {
+        "sourceAgentGraphNodeId": {
+          "type": "string"
+        },
+        "targetAgentGraphNodeId": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "isAttachmentDataPulledIn": {
+          "type": "boolean"
+        },
+        "conditionGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentGraphEdgeConditionGroup"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sourceAgentGraphNodeId",
+        "targetAgentGraphNodeId",
+        "isAttachmentDataPulledIn",
+        "conditionGroups",
+        "id",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AgentGraphEdgeConditionGroup": {
+      "type": "object",
+      "properties": {
+        "agentGraphEdgeId": {
+          "type": "string"
+        },
+        "nextGroupOperator": {
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "type": "string"
+        },
+        "edge": {
+          "$ref": "#/$defs/AgentGraphEdge"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentGraphEdgeConditionRule"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agentGraphEdgeId",
+        "edge",
+        "rules",
+        "id",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AgentGraphEdgeConditionRule": {
+      "type": "object",
+      "properties": {
+        "agentGraphEdgeConditionGroupId": {
+          "type": "string"
+        },
+        "sourceAgentToolConfigurationOutputParamsId": {
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "equals",
+            "not_equals",
+            "greater_than",
+            "less_than",
+            "contains",
+            "does_not_contain",
+            "starts_with",
+            "ends_with",
+            "is_empty",
+            "is_not_empty"
+          ],
+          "type": "string"
+        },
+        "comparisonValueType": {
+          "enum": [
+            "static",
+            "output_param"
+          ],
+          "type": "string"
+        },
+        "comparisonValue": {
+          "type": "string"
+        },
+        "comparisonAgentToolConfigurationOutputParamsId": {
+          "type": "string"
+        },
+        "nextRuleOperator": {
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "type": "string"
+        },
+        "group": {
+          "$ref": "#/$defs/AgentGraphEdgeConditionGroup"
+        },
+        "sourceOutputParam": {
+          "$ref": "#/$defs/AgentToolConfigurationOutputParams"
+        },
+        "comparisonOutputParam": {
+          "$ref": "#/$defs/AgentToolConfigurationOutputParams"
+        },
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agentGraphEdgeConditionGroupId",
+        "sourceAgentToolConfigurationOutputParamsId",
+        "operator",
+        "comparisonValueType",
+        "group",
+        "sourceOutputParam",
+        "id",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AgentToolConfigurationInputParams": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the input parameter."
+        },
+        "paramName": {
+          "type": "string",
+          "description": "Name of the input parameter."
+        },
+        "position": {
+          "type": "number",
+          "description": "Position/order of the parameter in the input list."
+        },
+        "fillType": {
+          "enum": [
+            "ai_fill",
+            "static",
+            "user_fill",
+            "from_memory",
+            "from_task_attachment",
+            "linked"
+          ],
+          "type": "string",
+          "description": "How the parameter value should be filled."
+        },
+        "agentToolConfigurationId": {
+          "type": "string",
+          "description": "UUID of the parent tool configuration."
+        },
+        "question": {
+          "type": "string",
+          "description": "Question to ask the user when fillType is USER_FILL."
+        },
+        "linkParamOutputId": {
+          "type": "string",
+          "description": "ID of the linked output parameter for data flow."
+        },
+        "paramDescription": {
+          "type": "string",
+          "description": "Human-readable description of what this parameter represents."
+        },
+        "paramTip": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Helpful tip or hint for providing this parameter value."
+        },
+        "staticValue": {
+          "type": "string",
+          "description": "Static value to use when fillType is STATIC."
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this parameter is required."
+        },
+        "dataType": {
+          "type": "string",
+          "description": "Data type of the parameter."
+        },
+        "outputExample": {
+          "type": "string",
+          "description": "Example value demonstrating the expected input format."
+        },
+        "reloadProps": {
+          "type": "boolean",
+          "description": "Whether to reload dynamic properties when this parameter changes."
+        },
+        "remoteOptions": {
+          "type": "boolean",
+          "description": "Whether options are loaded from a remote source."
+        },
+        "options": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Available options for selection-type parameters."
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "Timestamp when the parameter was created."
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "Timestamp when the parameter was last updated."
+        },
+        "linkOutputParam": {
+          "$ref": "#/$defs/AgentToolConfigurationOutputParams"
+        },
+        "linkedOutputParamRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LinkedOutputParamRules"
+          }
+        },
+        "linkedParamRulePrompt": {
+          "type": "string"
+        },
+        "ruleConditionConfig": {
+          "$ref": "#/$defs/ParamRuleConditionConfig"
+        }
+      },
+      "required": [
+        "id",
+        "paramName",
+        "fillType",
+        "agentToolConfigurationId",
+        "createdAt",
+        "updatedAt",
+        "linkOutputParam",
+        "linkedOutputParamRules"
+      ]
+    },
+    "AgentToolConfigurationOutputParams": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the output parameter."
+        },
+        "paramName": {
+          "type": "string",
+          "description": "Name of the output parameter."
+        },
+        "position": {
+          "type": "number",
+          "description": "Position/order of the parameter in the output list."
+        },
+        "paramDescription": {
+          "type": "string",
+          "description": "Human-readable description of what this output parameter represents."
+        },
+        "agentToolConfigurationId": {
+          "type": "string",
+          "description": "UUID of the parent tool configuration."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "UUID of the parent parameter for nested structures."
+        },
+        "paramPath": {
+          "type": "string",
+          "description": "JSON path to this parameter in the output structure."
+        },
+        "outputExample": {
+          "type": "string",
+          "description": "Example value demonstrating the expected output format."
+        },
+        "dataType": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "enum"
+          ],
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Data type of the output parameter."
+        },
+        "isArray": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this parameter returns an array of values."
+        },
+        "typeOptions": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Additional type-specific configuration options."
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "Timestamp when the parameter was created."
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "Timestamp when the parameter was last updated."
+        }
+      },
+      "required": [
+        "id",
+        "agentToolConfigurationId",
+        "isArray",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AgentTriggerConfigurationFiltersConditions": {
+      "type": "object",
+      "properties": {
+        "condition": {
+          "enum": [
+            "is",
+            "is_not",
+            "contain",
+            "does_not_contain",
+            "any",
+            "all",
+            "less_than",
+            "GREATER_than",
+            "count",
+            "exist",
+            "does_not_exist"
+          ],
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "condition",
+        "operator",
+        "property",
+        "value"
+      ]
+    },
+    "AgentTriggerConfigurationFiltersGroup": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "type": "string"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentTriggerConfigurationFiltersConditions"
+          }
+        }
+      },
+      "required": [
+        "operator",
+        "conditions"
+      ]
+    },
+    "CustomToolOutput": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "number"
+        },
+        "paramName": {
+          "type": "string"
+        },
+        "paramDescription": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "agentToolConfigurationId": {
+          "type": "string"
+        },
+        "dataType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "enum"
+          ]
+        },
+        "isArray": {
+          "type": "boolean"
+        },
+        "typeOptions": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true
+        },
+        "parentId": {
+          "type": "string"
+        },
+        "paramPath": {
+          "type": "string"
+        },
+        "outputExample": {
+          "type": "string"
+        }
+      }
+    },
+    "LinkParamsDto": {
+      "type": "object",
+      "properties": {
+        "toolId": {
+          "type": "string"
+        },
+        "toolFunctionName": {
+          "type": "string"
+        },
+        "outputParam": {
+          "type": "string"
+        },
+        "outputId": {
+          "type": "string"
+        }
+      }
+    },
+    "LinkedOutputParamRuleDto": {
+      "type": "object",
+      "properties": {
+        "elementKey": {
+          "type": "string",
+          "description": "Element key for the rule."
+        },
+        "operator": {
+          "enum": [
+            "equals",
+            "not_equals",
+            "greater_than",
+            "less_than",
+            "contains",
+            "does_not_contain",
+            "starts_with",
+            "ends_with",
+            "is_empty",
+            "is_not_empty"
+          ],
+          "type": "string",
+          "description": "Comparison operator for the rule."
+        },
+        "comparisonValueType": {
+          "enum": [
+            "static",
+            "output_param"
+          ],
+          "type": "string",
+          "description": "Type of the comparison value."
+        },
+        "comparisonValue": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Value to compare against."
+        },
+        "nextRuleOperator": {
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "type": "string",
+          "description": "Logical operator linking to the next rule."
+        }
+      },
+      "required": [
+        "elementKey",
+        "operator",
+        "comparisonValueType"
+      ]
+    },
+    "LinkedOutputParamRules": {
+      "type": "object",
+      "properties": {
+        "elementKey": {
+          "type": "string"
+        },
+        "agentToolConfigurationInputParamsId": {
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "equals",
+            "not_equals",
+            "greater_than",
+            "less_than",
+            "contains",
+            "does_not_contain",
+            "starts_with",
+            "ends_with",
+            "is_empty",
+            "is_not_empty"
+          ],
+          "type": "string"
+        },
+        "comparisonValueType": {
+          "enum": [
+            "static",
+            "output_param"
+          ],
+          "type": "string"
+        },
+        "comparisonValue": {
+          "type": "string"
+        },
+        "nextRuleOperator": {
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "elementKey",
+        "agentToolConfigurationInputParamsId",
+        "operator",
+        "comparisonValueType",
+        "id",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "LinkedOutputParamRulesDto": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "description": "Array of linked output param rules.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LinkedOutputParamRuleDto"
+          }
+        },
+        "linkedParamRulePrompt": {
+          "type": "string",
+          "description": "Prompt for the linked param rule."
+        },
+        "linkedParamConfigurations": {
+          "description": "Configuration for linked param nodes.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ParamRuleConditionConfig"
+            }
+          ]
+        }
+      },
+      "required": [
+        "linkedParamConfigurations"
+      ]
+    },
+    "MinimalAgentGraphEdgeDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sourceAgentGraphNodeId": {
+          "type": "string"
+        },
+        "targetAgentGraphNodeId": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "isAttachmentDataPulledIn": {
+          "type": "boolean"
+        },
+        "conditionGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentGraphEdgeConditionGroup"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "sourceAgentGraphNodeId",
+        "targetAgentGraphNodeId",
+        "isAttachmentDataPulledIn",
+        "conditionGroups"
+      ]
+    },
+    "MinimalIntegrationDto": {
+      "type": "object",
+      "properties": {
+        "systemIntegrationProvider": {
+          "type": "string"
+        },
+        "systemIntegrationIdentifier": {
+          "type": "string"
+        },
+        "customAuthParameters": {
+          "type": "object"
+        }
+      }
+    },
+    "MinimalOriginalToolDto": {
+      "type": "object",
+      "properties": {
+        "toolName": {
+          "type": "string"
+        },
+        "toolFunctionName": {
+          "type": "string"
+        },
+        "iconSrc": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "preferredModel": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "integrationId": {
+          "type": "string"
+        },
+        "isIntegrationRequired": {
+          "type": "boolean"
+        },
+        "isIntegrationConnected": {
+          "type": "boolean"
+        },
+        "allowWaiting": {
+          "type": "boolean"
+        },
+        "integration": {
+          "$ref": "#/$defs/MinimalIntegrationDto"
+        },
+        "inputParams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UserInputParamConfigDto"
+          }
+        },
+        "outputParams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CustomToolOutput"
+          }
+        }
+      },
+      "required": [
+        "toolName",
+        "toolFunctionName",
+        "allowWaiting"
+      ]
+    },
+    "MinimalToolConfigurationDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "toolFunctionName": {
+          "type": "string"
+        },
+        "toolName": {
+          "type": "string"
+        },
+        "iconSrc": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "requiresConsent": {
+          "type": "boolean"
+        },
+        "isMemoryTool": {
+          "type": "boolean"
+        },
+        "memoryLookupInstruction": {
+          "type": "string"
+        },
+        "isBackgroundTool": {
+          "type": "boolean"
+        },
+        "isBatchExecutionEnabled": {
+          "type": "boolean"
+        },
+        "accuracyScore": {
+          "type": "number"
+        },
+        "integrationProviderId": {
+          "type": "string"
+        },
+        "dynamicPropsId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fallbackModels": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "preferredModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "codeLanguage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inputParams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentToolConfigurationInputParams"
+          }
+        },
+        "outputParams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentToolConfigurationOutputParams"
+          }
+        },
+        "originalTool": {
+          "$ref": "#/$defs/MinimalOriginalToolDto"
+        }
+      },
+      "required": [
+        "id",
+        "toolFunctionName",
+        "toolName",
+        "requiresConsent",
+        "isMemoryTool",
+        "isBackgroundTool",
+        "isBatchExecutionEnabled",
+        "inputParams",
+        "outputParams"
+      ]
+    },
+    "NodeConfigurations": {
+      "type": "object",
+      "properties": {
+        "conditionType": {
+          "enum": [
+            "llm_based",
+            "rule_based"
+          ],
+          "type": "string"
+        },
+        "llmModel": {
+          "type": "string"
+        },
+        "fallbackModels": {
+          "type": "string"
+        },
+        "waitType": {
+          "enum": [
+            "time_based",
+            "condition_based"
+          ],
+          "type": "string"
+        },
+        "timeToWaitValue": {
+          "type": "number"
+        },
+        "timeToWaitUnit": {
+          "enum": [
+            "minutes",
+            "hours",
+            "days",
+            "months"
+          ],
+          "type": "string"
+        },
+        "linkedAgentGraphNodeId": {
+          "type": "string"
+        },
+        "rule": {
+          "type": "string"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentTriggerConfigurationFiltersGroup"
+          }
+        },
+        "timeoutType": {
+          "enum": [
+            "no_timeout",
+            "set_timeout"
+          ],
+          "type": "string"
+        },
+        "timeoutValue": {
+          "type": "number"
+        },
+        "timeoutUnit": {
+          "enum": [
+            "minutes",
+            "hours",
+            "days",
+            "months"
+          ],
+          "type": "string"
+        },
+        "onTimeout": {
+          "enum": [
+            "continue",
+            "fail"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ParamRuleConditionConfig": {
+      "type": "object",
+      "properties": {
+        "conditionType": {
+          "type": "string",
+          "enum": [
+            "llm_based",
+            "rule_based"
+          ]
+        }
+      }
+    },
+    "UserInputParamConfigDto": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "number",
+          "description": "Position/order of the parameter in the input list."
+        },
+        "paramName": {
+          "type": "string",
+          "description": "Name of the input parameter."
+        },
+        "fillType": {
+          "default": "ai_fill",
+          "enum": [
+            "ai_fill",
+            "static",
+            "user_fill",
+            "from_memory",
+            "from_task_attachment",
+            "linked"
+          ],
+          "type": "string",
+          "description": "How the parameter value should be filled."
+        },
+        "question": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Question to ask the user when fillType is USER_FILL."
+        },
+        "linkParams": {
+          "description": "Configuration for linking this parameter to another tool output.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/LinkParamsDto"
+            }
+          ]
+        },
+        "linkParamOutputId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ID of the linked output parameter for data flow."
+        },
+        "paramDescription": {
+          "type": "string",
+          "description": "Human-readable description of what this parameter represents."
+        },
+        "paramTip": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Helpful tip or hint for providing this parameter value."
+        },
+        "staticValue": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Static value to use when fillType is STATIC."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this parameter is required."
+        },
+        "dataType": {
+          "type": "string",
+          "default": "string",
+          "description": "Data type of the parameter."
+        },
+        "isArray": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this parameter accepts an array of values."
+        },
+        "typeOptions": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true,
+          "description": "Additional type-specific configuration options."
+        },
+        "outputExample": {
+          "type": "string",
+          "description": "Example value demonstrating the expected input format."
+        },
+        "reloadProps": {
+          "type": "boolean",
+          "description": "Whether to reload dynamic properties when this parameter changes."
+        },
+        "remoteOptions": {
+          "type": "boolean",
+          "description": "Whether options are loaded from a remote source."
+        },
+        "options": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Available options for selection-type parameters."
+        },
+        "linkedOutputParamRulesData": {
+          "description": "Rules for linked output parameters.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/LinkedOutputParamRulesDto"
+            }
+          ]
+        }
+      },
+      "required": [
+        "paramName",
+        "fillType"
+      ]
+    }
+  }
+}

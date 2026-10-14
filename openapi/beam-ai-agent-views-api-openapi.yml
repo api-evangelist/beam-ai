@@ -1,0 +1,409 @@
+openapi: 3.2.0
+info:
+  title: Public Agent Views API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: Agent Views
+paths:
+  /agent-views:
+    get:
+      operationId: AgentViewController_listViews
+      summary: List all views
+      parameters:
+      - name: agentId
+        required: false
+        in: query
+        description: Filter by agent ID
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: Search by view name or description
+        schema:
+          type: string
+      - name: pageNum
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          type: number
+      - name: pageSize
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 100
+          type: number
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewListResponseDto'
+      tags:
+      - Agent Views
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-views/{viewId}:
+    get:
+      operationId: AgentViewController_getView
+      summary: Get a view by ID
+      parameters:
+      - name: viewId
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewResponseDto'
+      tags:
+      - Agent Views
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-views/{viewId}/records:
+    get:
+      operationId: AgentViewController_listRecords
+      summary: List records from a view
+      parameters:
+      - name: viewId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: pageNum
+        required: false
+        in: query
+        description: 'Page number (default: 1)'
+        schema:
+          minimum: 1
+          default: 1
+          type: number
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Number of records per page (default: 25, max: 100)'
+        schema:
+          minimum: 1
+          maximum: 100
+          default: 25
+          type: number
+      - name: fields
+        required: false
+        in: query
+        description: Comma-separated field names to include in response
+        schema:
+          example: field1,field2,field3
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Comma-separated field names for sorting. Prefix with - for DESC
+        schema:
+          example: createdAt,-priority
+          type: string
+      - name: where
+        required: false
+        in: query
+        description: 'Filter conditions: (field,op,value)~and(field2,op,value2)'
+        schema:
+          example: (status,eq,active)~and(priority,gt,5)
+          type: string
+      - name: viewId
+        required: false
+        in: query
+        description: View ID for pre-filtered view
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRecordsResponseDto'
+      tags:
+      - Agent Views
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-views/{viewId}/columns/{columnId}/links/{recordId}:
+    get:
+      operationId: AgentViewController_listLinkedRecords
+      summary: List linked records for a link column
+      parameters:
+      - name: viewId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: columnId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: recordId
+        required: true
+        in: path
+        schema:
+          type: number
+      - name: pageNum
+        required: false
+        in: query
+        description: 'Page number (default: 1)'
+        schema:
+          minimum: 1
+          default: 1
+          type: number
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Number of records per page (default: 25, max: 100)'
+        schema:
+          minimum: 1
+          maximum: 100
+          default: 25
+          type: number
+      - name: fields
+        required: false
+        in: query
+        description: Comma-separated field names to include from linked records
+        schema:
+          example: field1,field2
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Comma-separated field names for sorting. Prefix with - for DESC
+        schema:
+          example: createdAt,-priority
+          type: string
+      - name: where
+        required: false
+        in: query
+        description: 'Filter conditions: (field,op,value)'
+        schema:
+          example: (status,eq,active)
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRecordsResponseDto'
+      tags:
+      - Agent Views
+      security:
+      - bearer: []
+      - x-api-key: []
+components:
+  schemas:
+    ViewResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        agentId:
+          type: string
+        agent:
+          $ref: '#/components/schemas/AgentInfoDto'
+        name:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnResponseDto'
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - id
+      - agentId
+      - name
+      - isActive
+      - createdAt
+      - updatedAt
+    AgentInfoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconUrl:
+          type: string
+      required:
+      - id
+      - name
+    LinkedViewInfoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+    ColumnResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        dataType:
+          enum:
+          - string
+          - text
+          - number
+          - decimal
+          - boolean
+          - date
+          - datetime
+          - enum
+          - multi_enum
+          - object
+          - array
+          - url
+          - email
+          - link
+          - LinkToAnotherRecord
+          type: string
+        agentGraphNodeId:
+          type: string
+        paramType:
+          enum:
+          - input
+          - output
+          type: string
+        paramName:
+          type: string
+        position:
+          type: number
+        linkedAgentViewId:
+          type: string
+        linkedView:
+          $ref: '#/components/schemas/LinkedViewInfoDto'
+        linkType:
+          type: string
+        linkMatchSourceColumn:
+          $ref: '#/components/schemas/LinkedColumnInfoDto'
+        linkMatchTargetColumn:
+          $ref: '#/components/schemas/LinkedColumnInfoDto'
+        reverseColumnId:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - id
+      - name
+      - dataType
+      - agentGraphNodeId
+      - paramType
+      - paramName
+      - position
+      - createdAt
+      - updatedAt
+    ViewListResponseDto:
+      type: object
+      properties:
+        views:
+          type: array
+          items:
+            $ref: '#/components/schemas/ViewResponseDto'
+        total:
+          type: number
+      required:
+      - views
+      - total
+    ListRecordsResponseDto:
+      type: object
+      properties:
+        list:
+          type: array
+          description: Array of record objects
+          items:
+            type: object
+            additionalProperties: true
+        pageInfo:
+          $ref: '#/components/schemas/RecordsPageInfoDto'
+      required:
+      - list
+      - pageInfo
+    LinkedColumnInfoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        paramType:
+          enum:
+          - input
+          - output
+          type: string
+      required:
+      - id
+      - name
+    RecordsPageInfoDto:
+      type: object
+      properties:
+        totalRows:
+          type: number
+          description: Total number of rows matching the query
+        page:
+          type: number
+          description: Current page number
+        pageSize:
+          type: number
+          description: Number of records per page
+        isFirstPage:
+          type: boolean
+          description: Whether this is the first page
+        isLastPage:
+          type: boolean
+          description: Whether this is the last page
+      required:
+      - totalRows
+      - page
+      - pageSize
+      - isFirstPage
+      - isLastPage
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

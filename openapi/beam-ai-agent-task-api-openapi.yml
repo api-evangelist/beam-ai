@@ -1,0 +1,2935 @@
+openapi: 3.2.0
+info:
+  title: Public Agent Task API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: Agent Task
+paths:
+  /agent-tasks/{taskId}/updates:
+    get:
+      operationId: AgentTaskController_getSseUpdates
+      summary: Get Task Updates (SSE)
+      description: Subscribe to real-time updates for a specific task using Server-Sent Events (SSE). Returns a stream of task execution status changes and results.
+      parameters:
+      - name: taskId
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Agent Task
+      security:
+      - x-api-key: []
+  /agent-tasks:
+    post:
+      operationId: AgentTaskController_createTaskSession
+      summary: Create Agent Task
+      description: Create a new task for an agent to execute. The task will be queued and processed according to the agent workflow.
+      parameters:
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskSessionDto'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTaskWithUrlDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+    get:
+      operationId: AgentTaskController_allTasks
+      summary: List Agent Tasks
+      description: Retrieve a paginated list of agent tasks with filtering and grouping options.
+      parameters:
+      - name: pageNum
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          default: 1
+          type: number
+      - name: pageSize
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 100
+          default: 10
+          type: number
+      - name: agentId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: statuses
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: searchQuery
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: grouping
+        required: false
+        in: query
+        schema:
+          enum:
+          - status
+          - agent
+          type: string
+      - name: isDraftTask
+        required: false
+        in: query
+        description: If true, only draft tasks are returned. If false, only non-draft tasks are returned. If omitted, both are returned.
+        schema:
+          type: boolean
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptimizedAllGraphTaskResponseDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/analytics:
+    get:
+      operationId: AgentTaskController_agentAnalyticsDetail
+      summary: Get Agent Analytics
+      description: Retrieve analytics data for agent task execution including success rates, performance metrics, and usage statistics.
+      parameters:
+      - name: startDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: agentId
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Analytics data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAnalyticsResponseDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/execution/{taskId}/user-input:
+    patch:
+      operationId: AgentTaskController_submitUserInput
+      summary: Submit User Input
+      description: Provide user input for a task that requires human interaction to continue execution.
+      parameters:
+      - name: taskId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitTaskNodeExecutionUserInputDto'
+      responses:
+        '200':
+          description: User input submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinimalAgentTaskDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/execution/{taskId}/rejection:
+    post:
+      operationId: AgentTaskController_submitUserRejection
+      summary: Reject Task Execution
+      description: Reject a task execution that requires user consent. The task will be marked as rejected and stop execution.
+      parameters:
+      - name: taskId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskNodeUserConsentDto'
+      responses:
+        '201':
+          description: Task rejection recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinimalAgentTaskDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/execution/{taskId}/user-consent:
+    post:
+      operationId: AgentTaskController_submitUserConsent
+      summary: Approve Task Execution
+      description: Provide user consent for a task to continue execution when approval is required.
+      parameters:
+      - name: taskId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitTaskNodeUserConsentDto'
+      responses:
+        '201':
+          description: User consent recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinimalAgentTaskDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/latest-executions:
+    get:
+      operationId: AgentTaskController_getLatestExecutions
+      summary: Get Latest Task Executions
+      description: Retrieve the most recent task executions for monitoring and debugging purposes.
+      parameters:
+      - name: agentId
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: pageNum
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          default: 1
+          type: number
+      - name: pageSize
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 100
+          default: 5
+          type: number
+      - name: includedStatuses
+        required: false
+        in: query
+        schema:
+          default: COMPLETED
+          type: string
+      - name: searchQuery
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Latest executions retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LatestExecutionsResponseDTO'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/iterate:
+    get:
+      operationId: AgentTaskController_getNextTask
+      summary: Get Next Task
+      description: Iterate through tasks based on filters. Useful for task queue processing and navigation.
+      parameters:
+      - name: agentId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: taskId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: statuses
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: searchQuery
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: createdAt
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: updatedAt
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: grouping
+        required: false
+        in: query
+        schema:
+          enum:
+          - status
+          - agent
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Next task retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NavigationResponseDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/execution/{taskId}/output-rating:
+    patch:
+      operationId: AgentTaskController_submitOutputRating
+      summary: Rate Task Output
+      description: Submit a rating for task execution output to improve agent performance.
+      parameters:
+      - name: taskId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitTaskRatingDto'
+      responses:
+        '200':
+          description: Rating submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinimalAgentTaskDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/tool-output-schema/{graphNodeId}:
+    get:
+      operationId: AgentTaskController_getToolOutputParamsByGraphNode
+      summary: Get Tool Output Schema
+      description: Retrieve the expected output schema for a specific tool in the agent graph.
+      parameters:
+      - name: graphNodeId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Tool output schema retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/retry:
+    post:
+      operationId: AgentTaskController_retryTaskExecution
+      summary: Retry Task Execution
+      description: Retry a failed or incomplete task execution with optional modifications.
+      parameters:
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskNodeExecutionRetryOptionsDto'
+      responses:
+        '201':
+          description: Task retry initiated successfully
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent-tasks/{taskId}:
+    get:
+      operationId: AgentTaskController_taskDetail
+      summary: Get Task Details
+      description: Retrieve detailed information about a specific task including execution status and results.
+      parameters:
+      - name: taskId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinimalAgentTaskDto'
+      tags:
+      - Agent Task
+      security:
+      - bearer: []
+      - x-api-key: []
+components:
+  schemas:
+    AgentTaskWithUrlDto:
+      type: object
+      properties:
+        id:
+          type: string
+        agentGraphId:
+          type: string
+        customId:
+          type: string
+        tokensUsed:
+          type: number
+        totalCost:
+          type: number
+        taskSummary:
+          type:
+          - string
+          - 'null'
+        originalTaskQuery:
+          type:
+          - string
+          - 'null'
+        taskObjective:
+          type: string
+        taskQuery:
+          type:
+          - string
+          - 'null'
+        taskState:
+          allOf:
+          - $ref: '#/components/schemas/TaskExecutionState'
+        userFeedback:
+          type: string
+        graphState:
+          type:
+          - object
+          - 'null'
+        isViewed:
+          type: boolean
+        canRerunTaskNode:
+          type: boolean
+        status:
+          enum:
+          - QUEUED
+          - IN_PROGRESS
+          - COMPLETED
+          - FAILED
+          - USER_INPUT_REQUIRED
+          - USER_CONSENT_REQUIRED
+          - STOPPED
+          - AUTHENTICATION_REQUIRED
+          - INSUFFICIENT_CREDITS
+          - WAITING
+          type: string
+        rating:
+          enum:
+          - positive
+          - negative
+          type: string
+        averageEvaluationScore:
+          type:
+          - number
+          - 'null'
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        agentTaskNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentTaskNodeDto'
+        contextFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContextFile'
+        agentGraph:
+          $ref: '#/components/schemas/OptimizedAgentGraphDto'
+        initiationDetail:
+          type:
+          - object
+          - 'null'
+        creditTransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCreditTransactionResponseDto'
+        updatesUrl:
+          type: string
+      required:
+      - id
+      - agentGraphId
+      - customId
+      - tokensUsed
+      - totalCost
+      - taskSummary
+      - taskObjective
+      - graphState
+      - isViewed
+      - canRerunTaskNode
+      - status
+      - averageEvaluationScore
+      - createdAt
+      - updatedAt
+      - agentTaskNodes
+      - contextFiles
+      - agentGraph
+      - initiationDetail
+      - updatesUrl
+    TaskStepUserInput:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+        parameter:
+          type: string
+        memoryAnswer:
+          type: boolean
+        foodForThought:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoodForThought'
+      required:
+      - question
+      - answer
+    AgentTaskTemplateStep:
+      type: object
+      properties:
+        step:
+          type: string
+          description: Step description.
+        toolId:
+          type: string
+          description: Tool ID.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        iconUrl:
+          type: string
+          description: Icon URL.
+        beamTool:
+          type: boolean
+          description: Whether this is a Beam tool.
+        gptTool:
+          type: boolean
+          description: Whether this is a GPT tool.
+        consentRequired:
+          type: boolean
+          description: Whether consent is required.
+        integrationId:
+          type: string
+          description: Integration ID.
+        isIntegrationRequired:
+          type: boolean
+          description: Whether integration is required.
+        isIntegrationConnected:
+          type: boolean
+          description: Whether integration is connected.
+        integrationProvider:
+          type: string
+          description: Integration provider.
+        integrationIdentifier:
+          type: string
+          description: Integration identifier.
+        toolDetail:
+          type: object
+        integrationCustomAuthParameters:
+          type: object
+      required:
+      - step
+    AgentSettingDto:
+      type: object
+      properties:
+        prompts:
+          description: Array of prompt templates used to guide the agent behavior.
+          example:
+          - You are a helpful customer support agent.
+          - Always be polite and professional.
+          type: array
+          items:
+            type: string
+        preferredModel:
+          type: string
+          description: Preferred AI model for this agent.
+          example: gpt-4
+        instructions:
+          type: string
+          description: Additional instructions for agent behavior.
+          example: Focus on providing concise answers.
+      required:
+      - prompts
+    LinkedOutputParamRuleDto:
+      type: object
+      properties:
+        elementKey:
+          type: string
+          description: Element key for the rule.
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+          description: Comparison operator for the rule.
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+          description: Type of the comparison value.
+        comparisonValue:
+          type:
+          - string
+          - 'null'
+          description: Value to compare against.
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+          description: Logical operator linking to the next rule.
+      required:
+      - elementKey
+      - operator
+      - comparisonValueType
+    SampleAgentTaskQuery:
+      type: object
+      properties: {}
+    OptimizedAllGraphTaskResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OptimizedGraphTaskResponseDto'
+        totalCount:
+          type: number
+      required:
+      - data
+      - totalCount
+    TaskNodeQuestionAnswerDto:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+        parameter:
+          type: string
+      required:
+      - question
+      - answer
+    AgentGraphEdge:
+      type: object
+      properties:
+        sourceAgentGraphNodeId:
+          type: string
+        targetAgentGraphNodeId:
+          type: string
+        condition:
+          type: string
+        isAttachmentDataPulledIn:
+          type: boolean
+        conditionGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - sourceAgentGraphNodeId
+      - targetAgentGraphNodeId
+      - isAttachmentDataPulledIn
+      - conditionGroups
+      - id
+      - createdAt
+      - updatedAt
+    AgentTriggerConfigurationFiltersGroup:
+      type: object
+      properties:
+        operator:
+          enum:
+          - AND
+          - OR
+          type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTriggerConfigurationFiltersConditions'
+      required:
+      - operator
+      - conditions
+    OptimizedAgentGraphDto:
+      type: object
+      properties:
+        id:
+          type: string
+        agentId:
+          type: string
+        isActive:
+          type: boolean
+        isDraft:
+          type: boolean
+        isPublished:
+          type: boolean
+        isEdited:
+          type: boolean
+        publishedAt:
+          type: object
+        isEverExecuted:
+          type: boolean
+        isEverUsedForTemplate:
+          type: boolean
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentGraphNodeDto'
+        agent:
+          $ref: '#/components/schemas/MinimalAgentDto'
+      required:
+      - id
+      - agentId
+      - isActive
+      - isDraft
+      - isPublished
+      - isEdited
+      - isEverExecuted
+      - isEverUsedForTemplate
+      - nodes
+      - agent
+    TaskNodeInput:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+        answer:
+          type: string
+        question:
+          type:
+          - string
+          - 'null'
+        reasoning:
+          type:
+          - string
+          - 'null'
+        found:
+          type: boolean
+        required:
+          type: boolean
+      required:
+      - id
+      - name
+      - value
+      - question
+      - reasoning
+      - found
+      - required
+    FoodForThought:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+      required:
+      - question
+      - answer
+    TaskNodeUserConsentDto:
+      type: object
+      properties:
+        taskNodeId:
+          type: string
+        taskId:
+          type: string
+        userFeedback:
+          type: array
+          items:
+            type: string
+      required:
+      - taskNodeId
+      - taskId
+      - userFeedback
+    MinimalAgentDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        themeIconUrl:
+          type: string
+        agentCategoryId:
+          type: string
+        category:
+          $ref: '#/components/schemas/MinimalAgentCategoryDto'
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+        workspaceId:
+          type: string
+        creatorId:
+          type: string
+        order:
+          type: number
+      required:
+      - id
+      - name
+      - type
+      - creatorId
+      - order
+    CustomToolOutput:
+      type: object
+      properties:
+        position:
+          type: number
+        paramName:
+          type: string
+        paramDescription:
+          type: string
+        id:
+          type: string
+        agentToolConfigurationId:
+          type: string
+        dataType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - string
+          - number
+          - boolean
+          - object
+          - enum
+        isArray:
+          type: boolean
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        parentId:
+          type: string
+        paramPath:
+          type: string
+        outputExample:
+          type: string
+    NodeConfigurations:
+      type: object
+      properties:
+        conditionType:
+          enum:
+          - llm_based
+          - rule_based
+          type: string
+        llmModel:
+          type: string
+        fallbackModels:
+          type: string
+        waitType:
+          enum:
+          - time_based
+          - condition_based
+          type: string
+        timeToWaitValue:
+          type: number
+        timeToWaitUnit:
+          enum:
+          - minutes
+          - hours
+          - days
+          - months
+          type: string
+        linkedAgentGraphNodeId:
+          type: string
+        rule:
+          type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTriggerConfigurationFiltersGroup'
+        timeoutType:
+          enum:
+          - no_timeout
+          - set_timeout
+          type: string
+        timeoutValue:
+          type: number
+        timeoutUnit:
+          enum:
+          - minutes
+          - hours
+          - days
+          - months
+          type: string
+        onTimeout:
+          enum:
+          - continue
+          - fail
+          type: string
+    MinimalIntegrationDto:
+      type: object
+      properties:
+        systemIntegrationProvider:
+          type: string
+        systemIntegrationIdentifier:
+          type: string
+        customAuthParameters:
+          type: object
+    ParamRuleConditionConfig:
+      type: object
+      properties:
+        conditionType:
+          type: string
+          enum:
+          - llm_based
+          - rule_based
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the agent.
+          example: agent-123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Name of the agent.
+          example: Customer Support Agent
+        description:
+          type: string
+          description: Description of the agent.
+        settings:
+          description: Agent settings.
+          allOf:
+          - $ref: '#/components/schemas/AgentSettingDto'
+        config:
+          description: Agent configuration.
+          allOf:
+          - $ref: '#/components/schemas/AgentConfig'
+        workspaceId:
+          type: string
+          description: UUID of the workspace.
+        creatorId:
+          type: string
+          description: UUID of the creator.
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+          description: Type of the agent.
+        vectorDbId:
+          type: string
+          description: UUID of the vector database.
+        defaultTaskId:
+          type: string
+          description: Default task ID.
+        themeIconUrl:
+          type: string
+          description: URL of the theme icon for the agent.
+          example: https://example.com/icons/support-agent.png
+        agentCategoryId:
+          type: string
+          description: UUID of the agent category.
+        userAccessTokenId:
+          type: string
+          description: UUID of the user access token.
+        agentSetupSessionId:
+          type: string
+          description: UUID of the agent setup session.
+        agentIntroMessage:
+          type: string
+          description: Agent introduction message.
+        agentSetupMessage:
+          type: string
+          description: Agent setup message.
+        skipAgentSetupSop:
+          type: boolean
+          description: Whether to skip agent setup SOP.
+        isAttachmentDataPulledIn:
+          type: boolean
+          description: Whether attachment data from tasks should be pulled into the agent context.
+        creditUsage:
+          type: number
+          description: Total credit usage for this agent.
+          example: 12.5
+        order:
+          type: number
+          description: Display order of the agent.
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - id
+      - name
+      - creatorId
+      - type
+      - vectorDbId
+      - creditUsage
+      - order
+      - createdAt
+      - updatedAt
+    AgentTaskTemplateCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+    TaskExecutionState:
+      type: object
+      properties:
+        nodeSelections:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeSelection'
+    NodeSelection:
+      type: object
+      properties:
+        edgeId:
+          type: string
+        condition:
+          type: string
+        selected:
+          type: boolean
+        reasoning:
+          type: string
+        otherEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeSelection'
+      required:
+      - edgeId
+      - condition
+      - selected
+      - reasoning
+      - otherEdges
+    OptimizedGraphTaskResponseDto:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentTaskDto'
+        groupName:
+          type: string
+        groupId:
+          type: string
+        groupCount:
+          type: number
+        groupIcon:
+          type: string
+      required:
+      - tasks
+    CreateTaskSessionDto:
+      type: object
+      properties:
+        taskQuery:
+          $ref: '#/components/schemas/TaskQueryDto'
+        parsingUrls:
+          type: array
+          items:
+            type: string
+        encodedContextFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/EncodedContextFile'
+        agentId:
+          type: string
+        isDraftTask:
+          type: boolean
+          description: If true, the task will be created against the agent's draft graph instead of the active (published) graph. Defaults to false.
+          example: false
+      required:
+      - taskQuery
+      - agentId
+    EncodedContextFile:
+      type: object
+      properties:
+        data:
+          type: string
+        mimeType:
+          type: string
+        fileName:
+          type: string
+        fileSize:
+          type: string
+      required:
+      - data
+      - mimeType
+      - fileName
+      - fileSize
+    NavigationResponseDto:
+      type: object
+      properties:
+        previous:
+          allOf:
+          - $ref: '#/components/schemas/NavigationNode'
+        next:
+          allOf:
+          - $ref: '#/components/schemas/NavigationNode'
+      required:
+      - previous
+      - next
+    MinimalOriginalToolDto:
+      type: object
+      properties:
+        toolName:
+          type: string
+        toolFunctionName:
+          type: string
+        iconSrc:
+          type: string
+        type:
+          type: string
+        prompt:
+          type: string
+        description:
+          type: string
+        preferredModel:
+          type: string
+        meta:
+          type: object
+        integrationId:
+          type: string
+        isIntegrationRequired:
+          type: boolean
+        isIntegrationConnected:
+          type: boolean
+        allowWaiting:
+          type: boolean
+        integration:
+          $ref: '#/components/schemas/MinimalIntegrationDto'
+        inputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInputParamConfigDto'
+        outputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomToolOutput'
+      required:
+      - toolName
+      - toolFunctionName
+      - allowWaiting
+    TaskNodeTokenUsage:
+      type: object
+      properties:
+        agentTaskId:
+          type: string
+        agentGraphNodeId:
+          type:
+          - string
+          - 'null'
+        creditTransactionId:
+          type:
+          - string
+          - 'null'
+        promptSlug:
+          type:
+          - string
+          - 'null'
+        executionStage:
+          enum:
+          - QUERY_REFORMULATION
+          - NODE_SELECTION
+          - NODE_GENERATION
+          - TOOL_SELECTION
+          - NODE_RETRIEVAL
+          - PARAMETER_EXTRACTION
+          - TOOL_EXECUTION
+          - NODE_EVALUATION
+          type: string
+        iteration:
+          type: number
+        model:
+          type: string
+        operation:
+          enum:
+          - NORMAL
+          - PROVIDER_ERROR
+          - PARSER_ERROR
+          - TIMEOUT
+          - HIGH_TOKEN_FALLBACK
+          - MODEL_FALLBACK
+          - AUTO_FIX
+          - RATE_LIMIT
+          type: string
+        inputToken:
+          type: number
+        outputToken:
+          type: number
+        reasoningToken:
+          type:
+          - number
+          - 'null'
+        totalToken:
+          type: number
+        isLatest:
+          type: boolean
+        agentTask:
+          $ref: '#/components/schemas/AgentTask'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentTaskId
+      - agentGraphNodeId
+      - creditTransactionId
+      - promptSlug
+      - executionStage
+      - iteration
+      - model
+      - operation
+      - inputToken
+      - outputToken
+      - reasoningToken
+      - totalToken
+      - isLatest
+      - agentTask
+      - id
+      - createdAt
+      - updatedAt
+    AgentToolConfigurationOutputParams:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the output parameter.
+          example: param-123e4567-e89b-12d3-a456-426614174000
+        paramName:
+          type: string
+          description: Name of the output parameter.
+          example: customerData
+        position:
+          type: number
+          description: Position/order of the parameter in the output list.
+          example: 1
+        paramDescription:
+          type: string
+          description: Human-readable description of what this output parameter represents.
+          example: The customer data retrieved from the database.
+        agentToolConfigurationId:
+          type: string
+          description: UUID of the parent tool configuration.
+          example: config-123e4567-e89b-12d3-a456-426614174000
+        parentId:
+          type: string
+          description: UUID of the parent parameter for nested structures.
+        paramPath:
+          type: string
+          description: JSON path to this parameter in the output structure.
+          example: response.data.customer
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected output format.
+          example: '{"name": "John Doe", "email": "john@example.com"}'
+        dataType:
+          enum:
+          - string
+          - number
+          - boolean
+          - object
+          - enum
+          type:
+          - string
+          - 'null'
+          description: Data type of the output parameter.
+          example: string
+        isArray:
+          type: boolean
+          default: false
+          description: Whether this parameter returns an array of values.
+          example: false
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          description: Additional type-specific configuration options.
+        createdAt:
+          format: date-time
+          type: string
+          description: Timestamp when the parameter was created.
+        updatedAt:
+          format: date-time
+          type: string
+          description: Timestamp when the parameter was last updated.
+      required:
+      - id
+      - agentToolConfigurationId
+      - isArray
+      - createdAt
+      - updatedAt
+    MinimalAgentGraphNodeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        customId:
+          type: string
+        objective:
+          type: string
+        evaluationCriteria:
+          type: array
+          items:
+            type: string
+        isEntryNode:
+          type: boolean
+        isExitNode:
+          type: boolean
+        xCoordinate:
+          type: number
+        yCoordinate:
+          type: number
+        isEvaluationEnabled:
+          type: boolean
+        autoRetryWhenAccuracyLessThan:
+          type: number
+        autoRetryLimitWhenAccuracyIsLow:
+          type: number
+        enableAutoRetryWhenAccuracyIsLow:
+          type: boolean
+        enableAutoRetryWhenFailure:
+          type: boolean
+        autoRetryDescription:
+          type: string
+          default: null
+        enableAutoRetryDescription:
+          type: boolean
+          default: false
+        autoRetryCountWhenFailure:
+          type: number
+        autoRetryWaitTimeWhenFailureInMs:
+          type: number
+        isAttachmentDataPulledIn:
+          type: boolean
+        isEdited:
+          type: boolean
+        createdAt:
+          format: date-time
+          type: string
+        onError:
+          type: string
+          enum:
+          - CONTINUE
+          - STOP
+        nodeType:
+          enum:
+          - executionNode
+          - conditionNode
+          - waitingNode
+          - entryNode
+          - exitNode
+          type: string
+        nodeConfigurations:
+          $ref: '#/components/schemas/NodeConfigurations'
+        toolConfiguration:
+          $ref: '#/components/schemas/MinimalToolConfigurationDto'
+        childEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentGraphEdgeDto'
+        parentEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentGraphEdgeDto'
+      required:
+      - id
+      - customId
+      - objective
+      - evaluationCriteria
+      - isEntryNode
+      - isExitNode
+      - isEvaluationEnabled
+      - autoRetryWhenAccuracyLessThan
+      - autoRetryLimitWhenAccuracyIsLow
+      - enableAutoRetryWhenAccuracyIsLow
+      - enableAutoRetryWhenFailure
+      - autoRetryDescription
+      - enableAutoRetryDescription
+      - autoRetryCountWhenFailure
+      - autoRetryWaitTimeWhenFailureInMs
+      - isAttachmentDataPulledIn
+      - isEdited
+      - createdAt
+      - toolConfiguration
+      - childEdges
+      - parentEdges
+    MinimalToolConfigurationDto:
+      type: object
+      properties:
+        id:
+          type: string
+        toolFunctionName:
+          type: string
+        toolName:
+          type: string
+        iconSrc:
+          type: string
+        description:
+          type: string
+        requiresConsent:
+          type: boolean
+        isMemoryTool:
+          type: boolean
+        memoryLookupInstruction:
+          type: string
+        isBackgroundTool:
+          type: boolean
+        isBatchExecutionEnabled:
+          type: boolean
+        accuracyScore:
+          type: number
+        integrationProviderId:
+          type: string
+        dynamicPropsId:
+          type:
+          - string
+          - 'null'
+        fallbackModels:
+          type:
+          - string
+          - 'null'
+        preferredModel:
+          type:
+          - string
+          - 'null'
+        code:
+          type:
+          - string
+          - 'null'
+        codeLanguage:
+          type:
+          - string
+          - 'null'
+        inputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentToolConfigurationInputParams'
+        outputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        originalTool:
+          $ref: '#/components/schemas/MinimalOriginalToolDto'
+      required:
+      - id
+      - toolFunctionName
+      - toolName
+      - requiresConsent
+      - isMemoryTool
+      - isBackgroundTool
+      - isBatchExecutionEnabled
+      - inputParams
+      - outputParams
+    MinimalAgentTaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+        agentGraphId:
+          type: string
+        customId:
+          type: string
+        tokensUsed:
+          type: number
+        totalCost:
+          type: number
+        taskSummary:
+          type:
+          - string
+          - 'null'
+        originalTaskQuery:
+          type:
+          - string
+          - 'null'
+        taskObjective:
+          type: string
+        taskQuery:
+          type:
+          - string
+          - 'null'
+        taskState:
+          allOf:
+          - $ref: '#/components/schemas/TaskExecutionState'
+        userFeedback:
+          type: string
+        graphState:
+          type:
+          - object
+          - 'null'
+        isViewed:
+          type: boolean
+        canRerunTaskNode:
+          type: boolean
+        status:
+          enum:
+          - QUEUED
+          - IN_PROGRESS
+          - COMPLETED
+          - FAILED
+          - USER_INPUT_REQUIRED
+          - USER_CONSENT_REQUIRED
+          - STOPPED
+          - AUTHENTICATION_REQUIRED
+          - INSUFFICIENT_CREDITS
+          - WAITING
+          type: string
+        rating:
+          enum:
+          - positive
+          - negative
+          type: string
+        averageEvaluationScore:
+          type:
+          - number
+          - 'null'
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        agentTaskNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentTaskNodeDto'
+        contextFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContextFile'
+        agentGraph:
+          $ref: '#/components/schemas/OptimizedAgentGraphDto'
+        initiationDetail:
+          type:
+          - object
+          - 'null'
+        creditTransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCreditTransactionResponseDto'
+      required:
+      - id
+      - agentGraphId
+      - customId
+      - tokensUsed
+      - totalCost
+      - taskSummary
+      - taskObjective
+      - graphState
+      - isViewed
+      - canRerunTaskNode
+      - status
+      - averageEvaluationScore
+      - createdAt
+      - updatedAt
+      - agentTaskNodes
+      - contextFiles
+      - agentGraph
+      - initiationDetail
+    LinkedOutputParamRules:
+      type: object
+      properties:
+        elementKey:
+          type: string
+        agentToolConfigurationInputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type: string
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - elementKey
+      - agentToolConfigurationInputParamsId
+      - operator
+      - comparisonValueType
+      - id
+      - createdAt
+      - updatedAt
+    AgentTaskTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Template ID.
+        objective:
+          type: string
+          description: Task objective.
+        description:
+          type: string
+          description: Task description.
+        steps:
+          description: Steps in this task template.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplateStep'
+        default:
+          type: boolean
+          description: Whether this is the default template.
+        category:
+          $ref: '#/components/schemas/AgentTaskTemplateCategory'
+        lastUpdatedAt:
+          format: date-time
+          type: string
+          description: Last updated timestamp.
+      required:
+      - id
+      - objective
+      - description
+      - steps
+    MinimalAgentGraphEdgeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        sourceAgentGraphNodeId:
+          type: string
+        targetAgentGraphNodeId:
+          type: string
+        condition:
+          type: string
+        isAttachmentDataPulledIn:
+          type: boolean
+        conditionGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
+      required:
+      - id
+      - sourceAgentGraphNodeId
+      - targetAgentGraphNodeId
+      - isAttachmentDataPulledIn
+      - conditionGroups
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of the user.
+          example: John Doe
+        avatarSrc:
+          type: string
+          description: URL to the user profile avatar image.
+          example: https://example.com/avatars/user123.png
+        email:
+          type: string
+        cognitoUserId:
+          type: string
+        socialProvider:
+          type: string
+        socialProviderId:
+          type: string
+        password:
+          type: string
+        paymentProviderCustomerId:
+          type: string
+        rememberToken:
+          type: string
+        emailVerified:
+          type: boolean
+        referralCode:
+          type: string
+        role_name:
+          type: string
+        isInternalUser:
+          type: boolean
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - email
+      - cognitoUserId
+      - role_name
+      - isInternalUser
+      - id
+      - createdAt
+      - updatedAt
+    AgentConfig:
+      type: object
+      properties:
+        restrictions:
+          type: string
+        taskTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplate'
+        tools:
+          type: array
+          items:
+            type: string
+        llmTools:
+          type: array
+          items:
+            type: object
+        sop:
+          type: object
+        defaultTaskId:
+          type: string
+        workspaceId:
+          type: string
+    LinkedOutputParamRulesDto:
+      type: object
+      properties:
+        rules:
+          description: Array of linked output param rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
+        linkedParamRulePrompt:
+          type: string
+          description: Prompt for the linked param rule.
+        linkedParamConfigurations:
+          description: Configuration for linked param nodes.
+          allOf:
+          - $ref: '#/components/schemas/ParamRuleConditionConfig'
+      required:
+      - linkedParamConfigurations
+    AgentToolConfigurationInputParams:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the input parameter.
+          example: param-123e4567-e89b-12d3-a456-426614174000
+        paramName:
+          type: string
+          description: Name of the input parameter.
+          example: customerId
+        position:
+          type: number
+          description: Position/order of the parameter in the input list.
+          example: 1
+        fillType:
+          enum:
+          - ai_fill
+          - static
+          - user_fill
+          - from_memory
+          - from_task_attachment
+          - linked
+          type: string
+          description: How the parameter value should be filled.
+          example: ai_fill
+        agentToolConfigurationId:
+          type: string
+          description: UUID of the parent tool configuration.
+          example: config-123e4567-e89b-12d3-a456-426614174000
+        question:
+          type: string
+          description: Question to ask the user when fillType is USER_FILL.
+          example: What is the customer ID?
+        linkParamOutputId:
+          type: string
+          description: ID of the linked output parameter for data flow.
+        paramDescription:
+          type: string
+          description: Human-readable description of what this parameter represents.
+          example: The unique identifier for the customer record.
+        paramTip:
+          type:
+          - string
+          - 'null'
+          description: Helpful tip or hint for providing this parameter value.
+          example: Enter the 8-digit customer ID from their account.
+        staticValue:
+          type: string
+          description: Static value to use when fillType is STATIC.
+          example: default_value
+        required:
+          type: boolean
+          description: Whether this parameter is required.
+          example: true
+        dataType:
+          type: string
+          description: Data type of the parameter.
+          example: string
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected input format.
+          example: CUST-12345678
+        reloadProps:
+          type: boolean
+          description: Whether to reload dynamic properties when this parameter changes.
+          example: false
+        remoteOptions:
+          type: boolean
+          description: Whether options are loaded from a remote source.
+          example: false
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+          description: Available options for selection-type parameters.
+        createdAt:
+          format: date-time
+          type: string
+          description: Timestamp when the parameter was created.
+        updatedAt:
+          format: date-time
+          type: string
+          description: Timestamp when the parameter was last updated.
+        linkOutputParam:
+          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        linkedOutputParamRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedOutputParamRules'
+        linkedParamRulePrompt:
+          type: string
+        ruleConditionConfig:
+          $ref: '#/components/schemas/ParamRuleConditionConfig'
+      required:
+      - id
+      - paramName
+      - fillType
+      - agentToolConfigurationId
+      - createdAt
+      - updatedAt
+      - linkOutputParam
+      - linkedOutputParamRules
+    SubmitTaskRatingDto:
+      type: object
+      properties:
+        taskNodeId:
+          type: string
+        rating:
+          enum:
+          - positive
+          - negative
+          type: string
+        userFeedback:
+          type: string
+        expectedOutput:
+          type: string
+      required:
+      - rating
+    MinimalAgentTaskNodeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        agentGraphNodeId:
+          type: string
+        status:
+          enum:
+          - QUEUED
+          - IN_PROGRESS
+          - USER_INPUT_REQUIRED
+          - COMPLETED
+          - USER_CONSENT_REQUIRED
+          - FAILED
+          - INSUFFICIENT_CREDITS
+          - WAITING
+          type: string
+        retriedCountWhenFailure:
+          type: number
+        retriedCountWhenAccuracyIsLow:
+          type: number
+        manualRetryCount:
+          type: number
+        isEverConsentRequired:
+          type: boolean
+        userFeedback:
+          type: string
+        evaluationScore:
+          type:
+          - number
+          - 'null'
+        userQuestions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaskStepUserInput'
+        output:
+          allOf:
+          - $ref: '#/components/schemas/TaskNodeOutput'
+        input:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaskNodeInput'
+        toolData:
+          allOf:
+          - $ref: '#/components/schemas/ToolDataDto'
+        agentGraphNode:
+          $ref: '#/components/schemas/MinimalAgentGraphNodeDto'
+        edgeEvaluations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EdgeEvaluationDto'
+        nodeEvaluation:
+          type:
+          - array
+          - 'null'
+          items:
+            type: array
+        rating:
+          enum:
+          - positive
+          - negative
+          type: string
+      required:
+      - id
+      - agentGraphNodeId
+      - status
+      - retriedCountWhenFailure
+      - retriedCountWhenAccuracyIsLow
+      - manualRetryCount
+      - isEverConsentRequired
+      - agentGraphNode
+      - edgeEvaluations
+      - nodeEvaluation
+    ToolDataDto:
+      type: object
+      properties:
+        tool_id:
+          type: string
+        tool_parameters:
+          type: array
+          items:
+            type: object
+        tool_output:
+          type: array
+          items:
+            type: object
+        required_parameters:
+          type: object
+          additionalProperties: true
+        optional_parameters:
+          type: object
+          additionalProperties: true
+        reasoning:
+          type: object
+          additionalProperties: true
+        filled_prompt:
+          type: string
+        skip_param_extraction:
+          type: array
+          items:
+            type: string
+        integration_identifier:
+          type: string
+        integration_error:
+          type: boolean
+          default: false
+      required:
+      - tool_id
+      - tool_parameters
+    TaskNodeOutput:
+      type: object
+      properties:
+        value:
+          type: object
+      required:
+      - value
+    EdgeEvaluationDto:
+      type: object
+      properties:
+        target_node_id:
+          type: string
+          description: Target Node Id
+        eval_criteria:
+          type: string
+          description: Evaluation Criteria
+        branch_name:
+          type: string
+          description: branch name
+        reason:
+          type: string
+          description: Evaluation Reasoning
+        selected:
+          type: boolean
+          description: Is the edge selected
+      required:
+      - target_node_id
+      - eval_criteria
+      - branch_name
+      - reason
+      - selected
+    SampleAgentTask:
+      type: object
+      properties:
+        agentId:
+          type: string
+        customId:
+          type: string
+        taskObjective:
+          type: string
+        taskQuery:
+          $ref: '#/components/schemas/SampleAgentTaskQuery'
+        status:
+          type: string
+        contextFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/SampleAgentTaskContextFile'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentId
+      - customId
+      - taskObjective
+      - taskQuery
+      - status
+      - contextFiles
+      - id
+      - createdAt
+      - updatedAt
+    PeriodMetricsDto:
+      type: object
+      properties:
+        totalTasks:
+          type: number
+        completedTasks:
+          type: number
+        failedTasks:
+          type: number
+        averageEvaluationScore:
+          type: number
+        averageRuntimeSeconds:
+          type: number
+        totalRuntimeSeconds:
+          type: number
+        positiveFeedbackCount:
+          type: number
+        consentRequiredCount:
+          type: number
+        negativeFeedbackCount:
+          type: number
+      required:
+      - totalTasks
+      - completedTasks
+      - failedTasks
+      - averageEvaluationScore
+      - averageRuntimeSeconds
+      - totalRuntimeSeconds
+      - positiveFeedbackCount
+      - consentRequiredCount
+      - negativeFeedbackCount
+    LatestExecutionsResponseDTO:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentTaskDto'
+        sampleTasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SampleAgentTask'
+        totalCount:
+          type: number
+      required:
+      - tasks
+      - sampleTasks
+      - totalCount
+    AgentAnalyticsChartResponseDto:
+      type: object
+      properties:
+        date:
+          type: string
+        completedCount:
+          type: number
+        failedCount:
+          type: number
+        averageEvaluationScore:
+          type: number
+      required:
+      - date
+      - completedCount
+      - failedCount
+      - averageEvaluationScore
+    SubmitTaskNodeExecutionUserInputDto:
+      type: object
+      properties:
+        taskNodeId:
+          type: string
+        userInputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskNodeQuestionAnswerDto'
+      required:
+      - taskNodeId
+      - userInputs
+    UserInputParamConfigDto:
+      type: object
+      properties:
+        position:
+          type: number
+          description: Position/order of the parameter in the input list.
+          example: 1
+        paramName:
+          type: string
+          description: Name of the input parameter.
+          example: customerId
+        fillType:
+          default: ai_fill
+          enum:
+          - ai_fill
+          - static
+          - user_fill
+          - from_memory
+          - from_task_attachment
+          - linked
+          type: string
+          description: How the parameter value should be filled.
+          example: ai_fill
+        question:
+          type:
+          - string
+          - 'null'
+          description: Question to ask the user when fillType is USER_FILL.
+          example: What is the customer ID?
+        linkParams:
+          description: Configuration for linking this parameter to another tool output.
+          allOf:
+          - $ref: '#/components/schemas/LinkParamsDto'
+        linkParamOutputId:
+          type:
+          - string
+          - 'null'
+          description: ID of the linked output parameter for data flow.
+        paramDescription:
+          type: string
+          description: Human-readable description of what this parameter represents.
+          example: The unique identifier for the customer record.
+        paramTip:
+          type:
+          - string
+          - 'null'
+          description: Helpful tip or hint for providing this parameter value.
+          example: Enter the 8-digit customer ID from their account.
+        staticValue:
+          type:
+          - string
+          - 'null'
+          description: Static value to use when fillType is STATIC.
+          example: default_value
+        required:
+          type: boolean
+          default: true
+          description: Whether this parameter is required.
+          example: true
+        dataType:
+          type: string
+          default: string
+          description: Data type of the parameter.
+          example: string
+        isArray:
+          type: boolean
+          default: false
+          description: Whether this parameter accepts an array of values.
+          example: false
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Additional type-specific configuration options.
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected input format.
+          example: CUST-12345678
+        reloadProps:
+          type: boolean
+          description: Whether to reload dynamic properties when this parameter changes.
+          example: false
+        remoteOptions:
+          type: boolean
+          description: Whether options are loaded from a remote source.
+          example: false
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+          description: Available options for selection-type parameters.
+        linkedOutputParamRulesData:
+          description: Rules for linked output parameters.
+          allOf:
+          - $ref: '#/components/schemas/LinkedOutputParamRulesDto'
+      required:
+      - paramName
+      - fillType
+    AgentTriggerConfigurationFiltersConditions:
+      type: object
+      properties:
+        condition:
+          enum:
+          - is
+          - is_not
+          - contain
+          - does_not_contain
+          - any
+          - all
+          - less_than
+          - GREATER_than
+          - count
+          - exist
+          - does_not_exist
+          type: string
+        operator:
+          enum:
+          - AND
+          - OR
+          type: string
+        property:
+          type: string
+        value:
+          type: string
+      required:
+      - condition
+      - operator
+      - property
+      - value
+    SubmitTaskNodeUserConsentDto:
+      type: object
+      properties:
+        taskNodeId:
+          type: string
+        consent:
+          type: boolean
+        taskId:
+          type: string
+        feedback:
+          type: string
+        toolParameters:
+          type: object
+      required:
+      - taskNodeId
+      - consent
+      - taskId
+    TaskNodeExecutionRetryOptionsDto:
+      type: object
+      properties:
+        taskNodeId:
+          type: string
+        taskId:
+          type: string
+        taskNodeFeedbackAsText:
+          type: string
+        taskNodeFeedbackPerKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskNodeFeedbackPerKeysDto'
+    TaskQueryDto:
+      type: object
+      properties:
+        query:
+          type: string
+          description: The task query string.
+        additionalInfo:
+          type: string
+          description: Additional context or information for the task.
+      required:
+      - query
+    TaskNodeFeedbackPerKeysDto:
+      type: object
+      properties:
+        outputKey:
+          type: string
+        description:
+          type: string
+      required:
+      - outputKey
+      - description
+    SampleAgentTaskContextFile:
+      type: object
+      properties: {}
+    NavigationNode:
+      type: object
+      properties:
+        id:
+          type: string
+        agentGraph:
+          $ref: '#/components/schemas/IterateGraphResponseDto'
+      required:
+      - id
+      - agentGraph
+    IterateGraphResponseDto:
+      type: object
+      properties:
+        agentId:
+          type: string
+      required:
+      - agentId
+    AgentAnalyticsResponseDto:
+      type: object
+      properties:
+        currentPeriod:
+          $ref: '#/components/schemas/PeriodMetricsDto'
+        metricsDelta:
+          $ref: '#/components/schemas/MetricsDeltaDto'
+        taskAndEvaluationChart:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentAnalyticsChartResponseDto'
+      required:
+      - currentPeriod
+      - metricsDelta
+      - taskAndEvaluationChart
+    AgentGraphEdgeConditionRule:
+      type: object
+      properties:
+        agentGraphEdgeConditionGroupId:
+          type: string
+        sourceAgentToolConfigurationOutputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type: string
+        comparisonAgentToolConfigurationOutputParamsId:
+          type: string
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        group:
+          $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
+        sourceOutputParam:
+          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        comparisonOutputParam:
+          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentGraphEdgeConditionGroupId
+      - sourceAgentToolConfigurationOutputParamsId
+      - operator
+      - comparisonValueType
+      - group
+      - sourceOutputParam
+      - id
+      - createdAt
+      - updatedAt
+    MetricsDeltaDto:
+      type: object
+      properties:
+        totalTasksDelta:
+          type: string
+        completedTasksDelta:
+          type: string
+        failedTasksDelta:
+          type: string
+        consentRequiredTasksDelta:
+          type: string
+        averageRuntimeSecondsDelta:
+          type: string
+        totalRuntimeSecondsDelta:
+          type: string
+        averageEvaluationScoreDelta:
+          type: string
+      required:
+      - totalTasksDelta
+      - completedTasksDelta
+      - failedTasksDelta
+      - consentRequiredTasksDelta
+      - averageRuntimeSecondsDelta
+      - totalRuntimeSecondsDelta
+      - averageEvaluationScoreDelta
+    MinimalAgentCategoryDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+      required:
+      - id
+      - title
+    AgentGraphEdgeConditionGroup:
+      type: object
+      properties:
+        agentGraphEdgeId:
+          type: string
+        nextGroupOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        edge:
+          $ref: '#/components/schemas/AgentGraphEdge'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentGraphEdgeConditionRule'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentGraphEdgeId
+      - edge
+      - rules
+      - id
+      - createdAt
+      - updatedAt
+    TaskCreditTransactionResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        transactionType:
+          enum:
+          - subscription_purchase
+          - one_time_purchase
+          - subscription_renewal
+          - credit_usage
+          - credit_reset
+          - credit_suspension
+          - refund
+          type: string
+        creditsAmount:
+          type: number
+        tokensUsed:
+          type: number
+        costAmount:
+          type: number
+        usageCategory:
+          type: string
+        agentGraphNodeId:
+          type: string
+        toolType:
+          type: string
+        modelName:
+          type: string
+      required:
+      - id
+      - transactionType
+      - creditsAmount
+    ContextFile:
+      type: object
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+          description: UUID of the user.
+        src:
+          type: string
+          description: Source path of the file.
+        fileKey:
+          type: string
+        uploadStatus:
+          enum:
+          - processing
+          - uploaded
+          - failed
+          type: string
+        uploadSource:
+          enum:
+          - file_upload
+          - text_snippet
+          - url_upload
+          type: string
+        isForAgentDatabase:
+          type: boolean
+          description: Whether the file is for the agent database.
+        agentId:
+          type: string
+          description: UUID of the agent.
+        mimeType:
+          type: string
+          description: MIME type of the file.
+        taskId:
+          type: string
+          description: UUID of the task.
+        agentTaskId:
+          type: string
+          description: UUID of the agent task.
+        url:
+          type: string
+        datasourceConnectionId:
+          type: string
+          description: Datasource connection identifier.
+        externalFileId:
+          type: string
+          description: External file identifier.
+        agent:
+          $ref: '#/components/schemas/Agent'
+        user:
+          $ref: '#/components/schemas/User'
+        agentTask:
+          $ref: '#/components/schemas/AgentTask'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - userId
+      - uploadStatus
+      - uploadSource
+      - isForAgentDatabase
+      - agentId
+      - agent
+      - user
+      - agentTask
+      - id
+      - createdAt
+      - updatedAt
+    AgentTask:
+      type: object
+      properties:
+        agentGraphId:
+          type: string
+          description: UUID of the agent graph this task is associated with.
+          example: graph-123e4567-e89b-12d3-a456-426614174000
+        customId:
+          type: string
+          description: Custom identifier for external reference or tracking.
+          example: TASK-2024-001
+        originalTaskQuery:
+          type:
+          - string
+          - 'null'
+          description: The original query or request that initiated this task.
+          example: Generate a quarterly sales report for Q4 2024
+        taskObjective:
+          type: string
+          description: The main objective or goal of this task.
+          example: Analyze sales data and create comprehensive report
+        taskInstructions:
+          type:
+          - string
+          - 'null'
+          description: Detailed instructions for executing this task.
+          example: Include revenue breakdown by region and product category
+        taskContext:
+          type: object
+          description: Additional context data for task execution.
+        taskSuccessCriteria:
+          type:
+          - string
+          - 'null'
+          description: Criteria that define successful completion of this task.
+          example: Report must include all regions and be formatted as PDF
+        taskQuery:
+          type:
+          - string
+          - 'null'
+          description: The processed query used for task execution.
+          example: Generate sales report for Q4 2024 with regional breakdown
+        taskSummary:
+          type:
+          - string
+          - 'null'
+          description: Summary of the task results after completion.
+          example: Successfully generated Q4 sales report with 15 pages
+        initiationDetail:
+          type:
+          - object
+          - 'null'
+          description: Details about how this task was initiated.
+        triggerRecordId:
+          type:
+          - string
+          - 'null'
+          description: Record ID from the trigger source (e.g., Nango sync record ID) used for deduplication.
+          example: msg-abc123
+        manualRetryCount:
+          type: number
+          description: Number of times this task has been manually retried.
+          example: 0
+        isSuccess:
+          type: boolean
+          description: Whether the task completed successfully.
+          example: false
+        isViewed:
+          type: boolean
+          description: Whether the task results have been viewed by the user.
+          example: false
+        canRerunTaskNode:
+          type: boolean
+          description: Whether nodes in this task can be re-run.
+          example: true
+        startedAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+          description: Timestamp when task execution started.
+          example: '2024-01-15T10:00:00Z'
+        endedAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+          description: Timestamp when task execution completed.
+          example: '2024-01-15T10:05:30Z'
+        mode:
+          type: string
+          enum:
+          - AUTO
+          description: Execution mode for the task.
+          example: AUTO
+        status:
+          enum:
+          - QUEUED
+          - IN_PROGRESS
+          - COMPLETED
+          - FAILED
+          - USER_INPUT_REQUIRED
+          - USER_CONSENT_REQUIRED
+          - STOPPED
+          - AUTHENTICATION_REQUIRED
+          - INSUFFICIENT_CREDITS
+          - WAITING
+          type: string
+          description: Current status of the task.
+          example: QUEUED
+        userFeedback:
+          type: string
+          description: Feedback provided by the user about task results.
+          example: The report was accurate and well-formatted
+        rating:
+          enum:
+          - positive
+          - negative
+          type: string
+          description: User rating for the task results.
+        averageEvaluationScore:
+          type:
+          - number
+          - 'null'
+          description: Average evaluation score across all task nodes.
+          example: 0.85
+        taskState:
+          description: Current execution state of the task.
+          allOf:
+          - $ref: '#/components/schemas/TaskExecutionState'
+        graphState:
+          type:
+          - object
+          - 'null'
+          description: State of the graph during task execution.
+        totalExecutionTime:
+          type:
+          - number
+          - 'null'
+          description: Total time taken to execute the task in seconds.
+          example: 330.5
+        tokensUsed:
+          type:
+          - number
+          - 'null'
+          description: Total number of tokens consumed during task execution.
+          example: 15000
+        totalCost:
+          type:
+          - number
+          - 'null'
+          description: Total cost incurred for executing this task.
+          example: 0.0225
+        taskReceiveAt:
+          type:
+          - number
+          - 'null'
+        tokenUsages:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskNodeTokenUsage'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentGraphId
+      - manualRetryCount
+      - isSuccess
+      - isViewed
+      - canRerunTaskNode
+      - mode
+      - status
+      - taskReceiveAt
+      - id
+      - createdAt
+      - updatedAt
+    LinkParamsDto:
+      type: object
+      properties:
+        toolId:
+          type: string
+        toolFunctionName:
+          type: string
+        outputParam:
+          type: string
+        outputId:
+          type: string
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

@@ -1,23 +1,350 @@
 aid: beam-ai
+
 name: Beam AI
-description: 'Beam AI is a company surfaced via the API Evangelist harvest backlog (source: tag-qc) and
-  added to the network as a stub for full-pipeline profiling.'
+
+image: https://framerusercontent.com/assets/K1wsaUBWV7twBiKRliuySFqiHE.png
+
+description: Beam AI provides a leading platform for agentic automation and AI agents, enabling enterprises to create self‑learning AI agents
+  that automate operations, reduce costs, and improve efficiency. Their solutions include AI‑driven workflows, integrations with databases and
+  SaaS tools, and a suite of industry‑specific applications for finance, healthcare, and customer service. Beam AI serves Fortune 500 companies
+  and scale‑ups, offering a no‑code interface, robust security, and customizable agents that can learn from SOPs and execute tasks autonomously.
+
 url: https://raw.githubusercontent.com/api-evangelist/beam-ai/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:tag-qc
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-14 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-13'
+
 modified: '2026-10-13'
+
 tags:
 - Company
-apis: []
+- AI
+- Automation
+- Enterprise
+- Platform
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/beam-ai-agentic-access.yml
+- type: Spectral
+  url: rules/beam-ai-rules.yml
+- type: JSONLD
+  url: json-ld/beam-ai-context.jsonld
+- type: Vocabulary
+  url: vocabulary/beam-ai-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/beam-ai-data-model.yml
+- type: ChangeLog
+  url: changelog/beam-ai-changelog.yml
+- type: Authentication
+  url: authentication/beam-ai-authentication.yml
+- type: ErrorCatalog
+  url: errors/beam-ai-problem-types.yml
+- type: Conformance
+  url: conformance/beam-ai-conformance.yml
+- type: LLMsTxt
+  url: llms/beam-ai-llms.txt
+- type: AgentCard
+  url: a2a/beam-ai-a2a.yml
+- type: WellKnown
+  url: well-known/beam-ai-well-known.yml
+- type: Hosts
+  url: hosts/beam-ai-hosts.yml
+- type: Vendors
+  url: vendors/beam-ai-vendors.yml
+- type: TrustCenter
+  url: https://beam.ai/integrations/trust
+- type: TermsOfService
+  url: https://beam.ai/legal/terms-of-use
+- type: Security
+  url: https://beam.ai/legal/security
+- type: PrivacyPolicy
+  url: https://beam.ai/legal/privacy-policy
+- type: Newsroom
+  url: https://beam.ai/media
+- type: ChangeLog
+  url: https://beam.ai/resources/changelog
+- type: APIReference
+  url: https://docs.beam.ai/llms.txt
+- type: DomainSecurity
+  url: security/beam-ai-domain-security.yml
 - type: Website
   url: https://beam.ai
+- type: DeveloperPortal
+  url: https://docs.beam.ai
+- type: Documentation
+  url: https://docs.beam.ai
+- type: GettingStarted
+  url: https://docs.beam.ai/01-getting-started/welcome/welcome
+- type: Support
+  url: https://beam.ai/contact
+- type: Blog
+  url: https://beam.ai/articles
+- type: Pricing
+  url: https://beam.ai/roi-calculator
+
+apis:
+- aid: beam-ai:beam-ai-agent-context-files-api
+  name: Beam AI Agent Context Files API
+  description: The Agent Context Files API from Beam AI — 3 operation(s) for agent context files.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agent Context Files
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agent-context-files-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-agent-graph-api
+  name: Beam AI Agent Graph API
+  description: The Agent Graph API from Beam AI — 12 operation(s) for agent graph.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agent Graph
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agent-graph-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-agent-setup-api
+  name: Beam AI Agent Setup API
+  description: The Agent Setup API from Beam AI — 6 operation(s) for agent setup.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agent Setup
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agent-setup-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-agent-skills-api
+  name: Beam AI Agent Skills API
+  description: The Agent Skills API from Beam AI — 1 operation(s) for agent skills.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agent Skills
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agent-skills-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-agent-task-api
+  name: Beam AI Agent Task API
+  description: The Agent Task API from Beam AI — 12 operation(s) for agent task.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agent Task
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agent-task-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-agent-views-api
+  name: Beam AI Agent Views API
+  description: The Agent Views API from Beam AI — 4 operation(s) for agent views.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agent Views
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agent-views-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-agents-api
+  name: Beam AI Agents API
+  description: The Agents API from Beam AI — 2 operation(s) for agents.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-agents-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-complete-agent-graph-api
+  name: Beam AI Complete Agent Graph API
+  description: The Complete Agent Graph API from Beam AI — 2 operation(s) for complete agent graph.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Complete Agent Graph
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-complete-agent-graph-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-custom-tool-api
+  name: Beam AI Custom Tool API
+  description: The Custom Tool API from Beam AI — 1 operation(s) for custom tool.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Custom Tool
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-custom-tool-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-tool-api
+  name: Beam AI Tool API
+  description: The Tool API from Beam AI — 3 operation(s) for tool.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - Tool
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-tool-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+- aid: beam-ai:beam-ai-user-api
+  name: Beam AI User API
+  description: The User API from Beam AI — 1 operation(s) for user.
+  humanURL: https://docs.beam.ai/08-reference/api/overview/overview.md
+  baseURL: https://api.beamstudio.ai
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/beam-ai-user-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-graph-node-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-graph-node-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-tool-configuration-output-params-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-agent-task-with-url-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-setup-beam-agent-dto-schema.json
+  - type: JSONSchema
+    url: json-schema/beam-ai-minimal-agent-task-dto-schema.json
+x-enrichment:
+  date: '2026-10-14'
+  status: enriched
+  artifacts_added: 30
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

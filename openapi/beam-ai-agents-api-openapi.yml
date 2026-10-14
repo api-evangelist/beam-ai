@@ -1,0 +1,347 @@
+openapi: 3.2.0
+info:
+  title: Public Agents API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: Agents
+paths:
+  /agent:
+    get:
+      operationId: AgentController_findMany
+      summary: List Agents
+      description: Retrieve a paginated list of agents available in your workspace. Filter by type, category, or search query.
+      parameters:
+      - name: pageNum
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          type: number
+      - name: pageSize
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 100
+          type: number
+      - name: type
+        required: false
+        in: query
+        description: Filter agents by type (beam-os, user-agent, pre-configured-agent)
+        schema:
+          example: beam-os
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+      - name: searchQuery
+        required: false
+        in: query
+        description: Search agents by name or description
+        schema:
+          example: customer support
+          type: string
+      - name: agentCategoryId
+        required: false
+        in: query
+        description: Filter agents by category ID
+        schema:
+          example: cat_123456
+          type: string
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of agents retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptimizedAgentListResponseDto'
+      tags:
+      - Agents
+      security:
+      - bearer: []
+      - x-api-key: []
+  /agent/{agentId}:
+    put:
+      operationId: AgentController_updateAgent
+      summary: Update Agent
+      description: Update an agent by id within the current workspace.
+      parameters:
+      - name: agentId
+        required: true
+        in: path
+        schema:
+          type: string
+        description: The unique identifier of the agent to update
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAgentDto'
+      responses:
+        '200':
+          description: Agent updated successfully
+      tags:
+      - Agents
+      security:
+      - x-api-key: []
+components:
+  schemas:
+    OptimizedAgentListResponseDto:
+      type: object
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentDto'
+        count:
+          type: number
+      required:
+      - agents
+      - count
+    AgentTaskTemplateStep:
+      type: object
+      properties:
+        step:
+          type: string
+          description: Step description.
+        toolId:
+          type: string
+          description: Tool ID.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        iconUrl:
+          type: string
+          description: Icon URL.
+        beamTool:
+          type: boolean
+          description: Whether this is a Beam tool.
+        gptTool:
+          type: boolean
+          description: Whether this is a GPT tool.
+        consentRequired:
+          type: boolean
+          description: Whether consent is required.
+        integrationId:
+          type: string
+          description: Integration ID.
+        isIntegrationRequired:
+          type: boolean
+          description: Whether integration is required.
+        isIntegrationConnected:
+          type: boolean
+          description: Whether integration is connected.
+        integrationProvider:
+          type: string
+          description: Integration provider.
+        integrationIdentifier:
+          type: string
+          description: Integration identifier.
+        toolDetail:
+          type: object
+        integrationCustomAuthParameters:
+          type: object
+      required:
+      - step
+    MinimalAgentDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        themeIconUrl:
+          type: string
+        agentCategoryId:
+          type: string
+        category:
+          $ref: '#/components/schemas/MinimalAgentCategoryDto'
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+        workspaceId:
+          type: string
+        creatorId:
+          type: string
+        order:
+          type: number
+      required:
+      - id
+      - name
+      - type
+      - creatorId
+      - order
+    AgentTaskTemplateCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+    UpdateAgentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        settings:
+          $ref: '#/components/schemas/AgentSettingDto'
+        agentConfig:
+          $ref: '#/components/schemas/AgentConfig'
+        vectorDbId:
+          type: string
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+        workspaceId:
+          type: string
+        agentCategoryId:
+          type: string
+        themeIconUrl:
+          type: string
+        personality:
+          type: string
+        userAccessTokenId:
+          type: string
+        agentIntroMessage:
+          type: string
+        agentSetupMessage:
+          type: string
+        agentSetupSessionId:
+          type: string
+        skipAgentSetupSop:
+          type: boolean
+        isAttachmentDataPulledIn:
+          type: boolean
+        tools:
+          type: array
+          items:
+            type: string
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplate'
+        preferredModel:
+          type: string
+        instructions:
+          type: string
+    AgentSettingDto:
+      type: object
+      properties:
+        prompts:
+          description: Array of prompt templates used to guide the agent behavior.
+          example:
+          - You are a helpful customer support agent.
+          - Always be polite and professional.
+          type: array
+          items:
+            type: string
+        preferredModel:
+          type: string
+          description: Preferred AI model for this agent.
+          example: gpt-4
+        instructions:
+          type: string
+          description: Additional instructions for agent behavior.
+          example: Focus on providing concise answers.
+      required:
+      - prompts
+    MinimalAgentCategoryDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+      required:
+      - id
+      - title
+    AgentTaskTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Template ID.
+        objective:
+          type: string
+          description: Task objective.
+        description:
+          type: string
+          description: Task description.
+        steps:
+          description: Steps in this task template.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplateStep'
+        default:
+          type: boolean
+          description: Whether this is the default template.
+        category:
+          $ref: '#/components/schemas/AgentTaskTemplateCategory'
+        lastUpdatedAt:
+          format: date-time
+          type: string
+          description: Last updated timestamp.
+      required:
+      - id
+      - objective
+      - description
+      - steps
+    AgentConfig:
+      type: object
+      properties:
+        restrictions:
+          type: string
+        taskTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplate'
+        tools:
+          type: array
+          items:
+            type: string
+        llmTools:
+          type: array
+          items:
+            type: object
+        sop:
+          type: object
+        defaultTaskId:
+          type: string
+        workspaceId:
+          type: string
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

@@ -1,0 +1,115 @@
+openapi: 3.2.0
+info:
+  title: Public Custom Tool API
+  description: Public endpoints to interact with agents and orchestrate tasks
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: Custom Tool
+paths:
+  /custom-tool/preferred-models:
+    get:
+      operationId: CustomToolController_fetchPreferredModels
+      parameters:
+      - name: current-workspace-id
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GptModel'
+      tags:
+      - Custom Tool
+      security:
+      - bearer: []
+      - x-api-key: []
+      summary: Custom tool controller fetch preferred models
+      x-summary-source: derived
+components:
+  schemas:
+    LlmsGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        isActive:
+          type: boolean
+        llmModels:
+          type: array
+          items:
+            $ref: '#/components/schemas/GptModel'
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - icon
+      - isActive
+      - llmModels
+      - createdAt
+      - updatedAt
+    GptModel:
+      type: object
+      properties:
+        id:
+          type: string
+        modelName:
+          type: string
+        modelValue:
+          type: string
+        isDefault:
+          type: boolean
+        llmsGroupId:
+          type: string
+        creditsCost:
+          type: number
+        inputTokenPrice:
+          type: number
+        outputTokenPrice:
+          type: number
+        enableInChat:
+          type: boolean
+        isPremium:
+          type: boolean
+        llmsGroup:
+          $ref: '#/components/schemas/LlmsGroup'
+      required:
+      - id
+      - modelName
+      - modelValue
+      - isDefault
+      - llmsGroupId
+      - creditsCost
+      - inputTokenPrice
+      - outputTokenPrice
+      - enableInChat
+      - isPremium
+      - llmsGroup
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    x-api-key:
+      type: apiKey
+      in: header
+      name: x-api-key

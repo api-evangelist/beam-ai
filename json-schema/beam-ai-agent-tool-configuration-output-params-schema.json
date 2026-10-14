@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/beam-ai/main/json-schema/beam-ai-agent-tool-configuration-output-params-schema.json",
+  "title": "AgentToolConfigurationOutputParams",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/beam-ai-openapi.json#/components/schemas/AgentToolConfigurationOutputParams",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the output parameter."
+    },
+    "paramName": {
+      "type": "string",
+      "description": "Name of the output parameter."
+    },
+    "position": {
+      "type": "number",
+      "description": "Position/order of the parameter in the output list."
+    },
+    "paramDescription": {
+      "type": "string",
+      "description": "Human-readable description of what this output parameter represents."
+    },
+    "agentToolConfigurationId": {
+      "type": "string",
+      "description": "UUID of the parent tool configuration."
+    },
+    "parentId": {
+      "type": "string",
+      "description": "UUID of the parent parameter for nested structures."
+    },
+    "paramPath": {
+      "type": "string",
+      "description": "JSON path to this parameter in the output structure."
+    },
+    "outputExample": {
+      "type": "string",
+      "description": "Example value demonstrating the expected output format."
+    },
+    "dataType": {
+      "enum": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "enum"
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Data type of the output parameter."
+    },
+    "isArray": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this parameter returns an array of values."
+    },
+    "typeOptions": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Additional type-specific configuration options."
+    },
+    "createdAt": {
+      "format": "date-time",
+      "type": "string",
+      "description": "Timestamp when the parameter was created."
+    },
+    "updatedAt": {
+      "format": "date-time",
+      "type": "string",
+      "description": "Timestamp when the parameter was last updated."
+    }
+  },
+  "required": [
+    "id",
+    "agentToolConfigurationId",
+    "isArray",
+    "createdAt",
+    "updatedAt"
+  ]
+}

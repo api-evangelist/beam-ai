@@ -1,0 +1,429 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/beam-ai-openapi.json
+vocabulary:
+  name: Beam AI Domain Vocabulary
+  description: 'Terms declared by Beam AI''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-14'
+  terms:
+  - term: Workspace
+    definition: 'Object declared by the contract with fields: name, iconSrc, domain, isPremium, allowNegativeCredits, creatorId, notificationUserEmails,
+      id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/Workspace
+  - term: Member
+    definition: 'Object declared by the contract with fields: profileImageSrc.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/Member
+  - term: FindInvitedWorkspacesResponseDtoWorkspace
+    definition: 'Object declared by the contract with fields: id, name, iconSrc, code, members, remainingMembersCount.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/FindInvitedWorkspacesResponseDtoWorkspace
+  - term: FindInvitedWorkspacesResponseDto
+    definition: 'Object declared by the contract with fields: workspaces, count.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/FindInvitedWorkspacesResponseDto
+  - term: UpsertWorkspaceReqBodyDto
+    definition: 'Object declared by the contract with fields: name, iconSrc, domain.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UpsertWorkspaceReqBodyDto
+  - term: WorkspaceRole
+    definition: 'Object declared by the contract with fields: isOwner, isAdmin.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceRole
+  - term: WorkspaceCreditBalance
+    definition: 'Object declared by the contract with fields: totalCredits, usedCredits, lastUpdatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceCreditBalance
+  - term: ProductMetaDataType
+    definition: 'Object declared by the contract with fields: isPremium, isFree, creditsAmount, unlimitedCredits.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ProductMetaDataType
+  - term: SubscriptionProduct
+    definition: 'Object declared by the contract with fields: id, name, description, productType, priceAmount, currency, creditsAmount, billingPeriod,
+      isActive, iconSrc, orderNumber, metadata.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/SubscriptionProduct
+  - term: WorkspaceSubscription
+    definition: 'Object declared by the contract with fields: id, status, currentPeriodStart, currentPeriodEnd, cancelAtPeriodEnd, paymentProvider,
+      productId, product.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceSubscription
+  - term: WorkspaceResponseDto
+    definition: 'Object declared by the contract with fields: id, name, iconSrc, domain, role, isPremium, allowNegativeCredits, creditBalance,
+      subscription, createdAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceResponseDto
+  - term: OwnershipTransferDto
+    definition: 'Object declared by the contract with fields: id, ownerUserId, ownerName, targetUserId, targetUserName, status, createdAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/OwnershipTransferDto
+  - term: MembershipStatus
+    definition: 'Enumeration declared by the contract with values: invited, active.'
+    tags:
+    - Enumeration
+    source: openapi/beam-ai-openapi.json#/components/schemas/MembershipStatus
+  - term: WorkspaceMemberResponseDto
+    definition: 'Object declared by the contract with fields: id, userId, name, email, profileImageSrc, membershipStatus, isOwner, isAdmin.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceMemberResponseDto
+  - term: FindWorkspaceMembersResponseDto
+    definition: 'Object declared by the contract with fields: pendingOwnershipTransfer, members, count.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/FindWorkspaceMembersResponseDto
+  - term: GetWorkspaceUsersWithContextFilesCountDto
+    definition: 'Object declared by the contract with fields: id, name, count.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/GetWorkspaceUsersWithContextFilesCountDto
+  - term: InviteMemberReqBodyDto
+    definition: 'Object declared by the contract with fields: workspaceId, emails.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/InviteMemberReqBodyDto
+  - term: InviteMemberResponseDto
+    definition: 'Object declared by the contract with fields: message.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/InviteMemberResponseDto
+  - term: ManageOwnershipRequestDto
+    definition: 'Object declared by the contract with fields: action, targetUserEmail, transferId, token.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ManageOwnershipRequestDto
+  - term: ManageOwnershipResponseDto
+    definition: 'Object declared by the contract with fields: message, transferId, status.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ManageOwnershipResponseDto
+  - term: UpdateNotificationUserEmailsDto
+    definition: 'Object declared by the contract with fields: emails.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UpdateNotificationUserEmailsDto
+  - term: WorkspaceUpdateUserAccessLevelRequestDto
+    definition: 'Object declared by the contract with fields: userEmail, isAdmin.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceUpdateUserAccessLevelRequestDto
+  - term: RequestJoinToWorkspaceResponseDto
+    definition: 'Object declared by the contract with fields: message.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/RequestJoinToWorkspaceResponseDto
+  - term: User
+    definition: 'Object declared by the contract with fields: name, avatarSrc, email, cognitoUserId, socialProvider, socialProviderId, password,
+      paymentProviderCustomerId, rememberToken, emailVerified, referralCode, role_name. (4 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/User
+  - term: WorkspaceOwnershipTransfer
+    definition: 'Object declared by the contract with fields: workspaceId, ownerUserId, targetUserId, ownerUser, targetUser, status, respondedAt,
+      token, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceOwnershipTransfer
+  - term: WorkspaceCreator
+    definition: 'Object declared by the contract with fields: name, avatarSrc, isOwner, isAdmin, email, cognitoUserId, socialProvider, socialProviderId,
+      password, paymentProviderCustomerId, rememberToken, emailVerified. (6 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceCreator
+  - term: WorkspaceInvitationWithRoles
+    definition: 'Object declared by the contract with fields: inviteeEmail, status, code, workspaceId, inviterUserId, avatarSrc, name, isAdmin,
+      isOwner, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/WorkspaceInvitationWithRoles
+  - term: GetWorkspaceInvitationsResponseDto
+    definition: 'Object declared by the contract with fields: pendingOwnershipTransfer, creator, workspaceInvitations, count.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/GetWorkspaceInvitationsResponseDto
+  - term: AcceptRequestBodyDto
+    definition: 'Object declared by the contract with fields: code, userId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AcceptRequestBodyDto
+  - term: AcceptInviteResponseDto
+    definition: 'Object declared by the contract with fields: workspace.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AcceptInviteResponseDto
+  - term: RejectInviteResponseDto
+    definition: 'Object declared by the contract with fields: workspaceId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/RejectInviteResponseDto
+  - term: AcceptInviteReqBodyDto
+    definition: 'Object declared by the contract with fields: code.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AcceptInviteReqBodyDto
+  - term: DeleteWorkspaceMemberResponseDto
+    definition: 'Object declared by the contract with fields: message.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/DeleteWorkspaceMemberResponseDto
+  - term: AdminTransferOwnershipDto
+    definition: 'Object declared by the contract with fields: newOwnerId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AdminTransferOwnershipDto
+  - term: AdminTransferOwnershipResponseDto
+    definition: 'Object declared by the contract with fields: message, workspace, oldOwnerId, newOwnerId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AdminTransferOwnershipResponseDto
+  - term: AgentSettingDto
+    definition: 'Object declared by the contract with fields: prompts, preferredModel, instructions.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentSettingDto
+  - term: AgentTaskTemplateStep
+    definition: 'Object declared by the contract with fields: step, toolId, iconSrc, iconUrl, beamTool, gptTool, consentRequired, integrationId,
+      isIntegrationRequired, isIntegrationConnected, integrationProvider, integrationIdentifier. (2 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentTaskTemplateStep
+  - term: AgentTaskTemplateCategory
+    definition: 'Object declared by the contract with fields: id, title.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentTaskTemplateCategory
+  - term: AgentTaskTemplate
+    definition: 'Object declared by the contract with fields: id, objective, description, steps, default, category, lastUpdatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentTaskTemplate
+  - term: AgentConfig
+    definition: 'Object declared by the contract with fields: restrictions, taskTemplates, tools, llmTools, sop, defaultTaskId, workspaceId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentConfig
+  - term: Agent
+    definition: 'Object declared by the contract with fields: id, name, description, settings, config, workspaceId, creatorId, type, vectorDbId,
+      defaultTaskId, themeIconUrl, agentCategoryId. (10 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/Agent
+  - term: UserResponseDtoWorkspace
+    definition: 'Object declared by the contract with fields: id, name, iconSrc, domain, role, isPremium, allowNegativeCredits, notificationUserEmails,
+      subscription, creditBalance, createdAt, agent.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserResponseDtoWorkspace
+  - term: FeatureFlag
+    definition: 'Object declared by the contract with fields: name, isGlobal, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/FeatureFlag
+  - term: UserResponseDto
+    definition: 'Object declared by the contract with fields: id, name, email, avatarSrc, accessToken, refreshToken, paymentProviderCustomerId,
+      workspaces, featureFlags, createdAt, isInternalUser.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserResponseDto
+  - term: UpdateUserReqBodyDto
+    definition: 'Object declared by the contract with fields: name, socialProvider, socialProviderId, avatarSrc, emailVerified, paymentProviderCustomerId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UpdateUserReqBodyDto
+  - term: SetupPasswordDto
+    definition: 'Object declared by the contract with fields: password.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/SetupPasswordDto
+  - term: IsPasswordResetResponseDto
+    definition: 'Object declared by the contract with fields: isPasswordSet.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/IsPasswordResetResponseDto
+  - term: ChangePasswordDto
+    definition: 'Object declared by the contract with fields: oldPassword, newPassword.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ChangePasswordDto
+  - term: UserRegisterReqDto
+    definition: 'Object declared by the contract with fields: email, name, password, avatarSrc, originUrl.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserRegisterReqDto
+  - term: UserLoginReqDto
+    definition: 'Object declared by the contract with fields: email, password.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserLoginReqDto
+  - term: AuthUserResponseDto
+    definition: 'Object declared by the contract with fields: user, idToken, refreshToken.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AuthUserResponseDto
+  - term: SocialLoginReqDto
+    definition: 'Object declared by the contract with fields: socialProvider, email, name, socialProviderId, avatarSrc.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/SocialLoginReqDto
+  - term: EmailVerificationTokenResDto
+    definition: 'Object declared by the contract with fields: token, user.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/EmailVerificationTokenResDto
+  - term: ChangesPasswordReqDto
+    definition: 'Object declared by the contract with fields: password, verificationToken.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ChangesPasswordReqDto
+  - term: ForgotPasswordReqDto
+    definition: 'Object declared by the contract with fields: email.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ForgotPasswordReqDto
+  - term: UserAccessTokenFetchReqDto
+    definition: 'Object declared by the contract with fields: apiKey.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserAccessTokenFetchReqDto
+  - term: TokenResponse
+    definition: 'Object declared by the contract with fields: idToken, refreshToken.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/TokenResponse
+  - term: UserTokenFetchReqWithRefreshTokenDto
+    definition: 'Object declared by the contract with fields: refreshToken.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserTokenFetchReqWithRefreshTokenDto
+  - term: InvokeToolformerRequestDto
+    definition: 'Object declared by the contract with fields: path, body.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/InvokeToolformerRequestDto
+  - term: TestToolDto
+    definition: 'Object declared by the contract with fields: preferredModel, fallbackModels, agentId, prompt, toolFunctionName, agentGraphNodeId,
+      params, outputParams.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/TestToolDto
+  - term: AgentBanner
+    definition: 'Object declared by the contract with fields: status, title, description, background, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentBanner
+  - term: AgentTheme
+    definition: 'Object declared by the contract with fields: status, title, icon, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentTheme
+  - term: AgentCategory
+    definition: 'Object declared by the contract with fields: title, publish, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentCategory
+  - term: AgentTemplate
+    definition: 'Object declared by the contract with fields: graph, title, status, longDescription, personality, shortDescription, agentCategoryId,
+      bannerId, themeId, sampleAgentTasks, agentBanner, agentTheme. (4 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentTemplate
+  - term: AgentRecommendationResponseDto
+    definition: 'Object declared by the contract with fields: templates.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentRecommendationResponseDto
+  - term: IntegrationProviderRequest
+    definition: 'Object declared by the contract with fields: endpoint, method, query, body, bypassTLS.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/IntegrationProviderRequest
+  - term: IntegrationProviderDetails
+    definition: 'Object declared by the contract with fields: request, response.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/IntegrationProviderDetails
+  - term: AgentCategoryInfo
+    definition: 'Object declared by the contract with fields: id, title.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentCategoryInfo
+  - term: GetToolsMetaDto
+    definition: 'Object declared by the contract with fields: integration_provider_details, agent_category, payload, tool_name, function_name,
+      requires_consent, requires_translation, description, required_extracted_args, optional_extracted_args, content, prompt. (18 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/GetToolsMetaDto
+  - term: LinkParamsDto
+    definition: 'Object declared by the contract with fields: toolId, toolFunctionName, outputParam, outputId.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/LinkParamsDto
+  - term: LinkedOutputParamRuleDto
+    definition: 'Object declared by the contract with fields: elementKey, operator, comparisonValueType, comparisonValue, nextRuleOperator.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/LinkedOutputParamRuleDto
+  - term: ParamRuleConditionConfig
+    definition: 'Object declared by the contract with fields: conditionType.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/ParamRuleConditionConfig
+  - term: LinkedOutputParamRulesDto
+    definition: 'Object declared by the contract with fields: rules, linkedParamRulePrompt, linkedParamConfigurations.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/LinkedOutputParamRulesDto
+  - term: UserInputParamConfigDto
+    definition: 'Object declared by the contract with fields: position, paramName, fillType, question, linkParams, linkParamOutputId, paramDescription,
+      paramTip, staticValue, required, dataType, isArray. (6 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/UserInputParamConfigDto
+  - term: CustomToolOutput
+    definition: 'Object declared by the contract with fields: position, paramName, paramDescription, id, agentToolConfigurationId, dataType, isArray,
+      typeOptions, parentId, paramPath, outputExample.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/CustomToolOutput
+  - term: CustomIntegrationToolQueryParamsDTO
+    definition: 'Object declared by the contract with fields: key, parameterHint, type, required.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/CustomIntegrationToolQueryParamsDTO
+  - term: CustomIntegrationToolBodyParamsDTO
+    definition: 'Object declared by the contract with fields: key, parameterHint, type, required.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/CustomIntegrationToolBodyParamsDTO
+  - term: CustomIntegrationToolUrlParamsDTO
+    definition: 'Object declared by the contract with fields: key, parameterHint, type, required.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/CustomIntegrationToolUrlParamsDTO
+  - term: AgentToolConfigurationOutputParams
+    definition: 'Object declared by the contract with fields: id, paramName, position, paramDescription, agentToolConfigurationId, parentId, paramPath,
+      outputExample, dataType, isArray, typeOptions, createdAt. (1 more)'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/AgentToolConfigurationOutputParams
+  - term: LinkedOutputParamRules
+    definition: 'Object declared by the contract with fields: elementKey, agentToolConfigurationInputParamsId, operator, comparisonValueType,
+      comparisonValue, nextRuleOperator, id, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/beam-ai-openapi.json#/components/schemas/LinkedOutputParamRules

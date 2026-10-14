@@ -1,0 +1,32 @@
+generated: '2026-10-14'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://beam.ai/legal/security
+sources:
+- https://beam.ai/legal/security
+- https://beam.ai/legal/privacy-policy
+- https://beam.ai/roi-calculator
+- https://beam.ai/legal/data-security
+standards:
+- id: soc2
+  conforms: true
+  evidence: Beam is an SOC 2 Type II compliant company.
+- id: gdpr
+  conforms: true
+  evidence: Beam abides by the General Data Protection Regulations.
+- id: hipaa
+  conforms: true
+  evidence: HIPAA Compliant Automating in healthcare requires us to be on top of the latest regulations and patient protection.
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.0
+- id: oauth2
+  conforms: false
+  evidence: 'securitySchemes: bearer (http), x-api-key (apiKey)'
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations
+docs: https://beam.ai/legal/security
