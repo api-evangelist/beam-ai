@@ -1,0 +1,23 @@
+aid: beam-ai
+name: Beam AI
+description: 'Beam AI is a company surfaced via the API Evangelist harvest backlog (source: tag-qc) and
+  added to the network as a stub for full-pipeline profiling.'
+url: https://raw.githubusercontent.com/api-evangelist/beam-ai/refs/heads/main/apis.yml
+x-type: company
+x-source: harvest:tag-qc
+x-tier: stub
+x-tier-reason: harvest
+specificationVersion: '0.20'
+created: '2026-10-13'
+modified: '2026-10-13'
+tags:
+- Company
+apis: []
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+common:
+- type: Website
+  url: https://beam.ai
