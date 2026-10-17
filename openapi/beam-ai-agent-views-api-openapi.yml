@@ -215,6 +215,42 @@ paths:
       - x-api-key: []
 components:
   schemas:
+    AgentInfoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        iconUrl:
+          type: string
+      required:
+      - id
+      - name
+    ListRecordsResponseDto:
+      type: object
+      properties:
+        list:
+          type: array
+          description: Array of record objects
+          items:
+            type: object
+            additionalProperties: true
+        pageInfo:
+          $ref: '#/components/schemas/RecordsPageInfoDto'
+      required:
+      - list
+      - pageInfo
+    LinkedViewInfoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
     ViewResponseDto:
       type: object
       properties:
@@ -247,24 +283,17 @@ components:
       - isActive
       - createdAt
       - updatedAt
-    AgentInfoDto:
+    LinkedColumnInfoDto:
       type: object
       properties:
         id:
           type: string
         name:
           type: string
-        iconUrl:
-          type: string
-      required:
-      - id
-      - name
-    LinkedViewInfoDto:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
+        paramType:
+          enum:
+          - input
+          - output
           type: string
       required:
       - id
@@ -345,35 +374,6 @@ components:
       required:
       - views
       - total
-    ListRecordsResponseDto:
-      type: object
-      properties:
-        list:
-          type: array
-          description: Array of record objects
-          items:
-            type: object
-            additionalProperties: true
-        pageInfo:
-          $ref: '#/components/schemas/RecordsPageInfoDto'
-      required:
-      - list
-      - pageInfo
-    LinkedColumnInfoDto:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        paramType:
-          enum:
-          - input
-          - output
-          type: string
-      required:
-      - id
-      - name
     RecordsPageInfoDto:
       type: object
       properties:

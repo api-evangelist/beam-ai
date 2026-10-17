@@ -1,7 +1,7 @@
 {
   "provider": "beam-ai",
   "sources": [
-    "beam-ai-openapi.json"
+    "_original/beam-ai-openapi.json"
   ],
   "outputs": [
     "beam-ai-agent-context-files-api-openapi.yml",
@@ -16,12 +16,11 @@
     "beam-ai-tool-api-openapi.yml",
     "beam-ai-user-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/beam-ai-openapi.json"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "beam-ai-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "beam-ai-openapi.json: declared missing tag: Agent Context Files",
     "beam-ai-openapi.json: declared missing tag: Agent Graph",
@@ -34,7 +33,19 @@
     "beam-ai-openapi.json: declared missing tag: Custom Tool",
     "beam-ai-openapi.json: declared missing tag: Tool",
     "beam-ai-openapi.json: declared missing tag: User",
-    "apis.yml register: written (+11 apis, 11 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "beam-ai-agent-context-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-agent-graph-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-agent-setup-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-agent-skills-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-agent-task-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-agent-views-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-complete-agent-graph-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-custom-tool-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-tool-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "beam-ai-user-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -276,84 +276,45 @@ paths:
       - x-api-key: []
 components:
   schemas:
-    AgentTaskTemplateStep:
-      type: object
-      properties:
-        step:
-          type: string
-          description: Step description.
-        toolId:
-          type: string
-          description: Tool ID.
-        iconSrc:
-          type: string
-          description: Icon source URL.
-        iconUrl:
-          type: string
-          description: Icon URL.
-        beamTool:
-          type: boolean
-          description: Whether this is a Beam tool.
-        gptTool:
-          type: boolean
-          description: Whether this is a GPT tool.
-        consentRequired:
-          type: boolean
-          description: Whether consent is required.
-        integrationId:
-          type: string
-          description: Integration ID.
-        isIntegrationRequired:
-          type: boolean
-          description: Whether integration is required.
-        isIntegrationConnected:
-          type: boolean
-          description: Whether integration is connected.
-        integrationProvider:
-          type: string
-          description: Integration provider.
-        integrationIdentifier:
-          type: string
-          description: Integration identifier.
-        toolDetail:
-          type: object
-        integrationCustomAuthParameters:
-          type: object
-      required:
-      - step
-    AgentSetupProcessResponseDto:
-      type: object
-      properties:
-        nextStep:
-          enum:
-          - GENERATE_SOP
-          - GRAPH_GENERATION
-          - TOOL_MATCHING
-          - TOOL_GENERATION
-          - TOOL_INTEGRATION
-          - UPDATE_AGENT
-          - AGENT_UPDATED
-          - CREATE_TASK
-          type: string
-          description: The next step in the agent setup workflow. Use this value to determine which step to call next.
-          example: SOP_GENERATION
-        agentResponse:
-          description: Agent creation response containing the created agent details and associated context files.
-          allOf:
-          - $ref: '#/components/schemas/SaveAgentResponseDto'
-      required:
-      - nextStep
-      - agentResponse
-    AgentCategoryDto:
+    UploadContextFileResponseDto:
       type: object
       properties:
         id:
           type: string
-        title:
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        name:
+          type: string
+        src:
+          type: string
+        agentId:
+          type: string
+        fileKey:
+          type: string
+        uploadStatus:
+          type: string
+        uploadSource:
+          enum:
+          - file_upload
+          - text_snippet
+          - url_upload
+          type: string
+        taskId:
           type: string
       required:
       - id
-      - title
+      - createdAt
+      - updatedAt
+      - name
+      - src
+      - agentId
+      - fileKey
+      - uploadStatus
+      - uploadSource
     LinkedOutputParamRuleDto:
       type: object
       properties:
@@ -395,27 +356,6 @@ components:
       - elementKey
       - operator
       - comparisonValueType
-    AgentSettingDto:
-      type: object
-      properties:
-        prompts:
-          description: Array of prompt templates used to guide the agent behavior.
-          example:
-          - You are a helpful customer support agent.
-          - Always be polite and professional.
-          type: array
-          items:
-            type: string
-        preferredModel:
-          type: string
-          description: Preferred AI model for this agent.
-          example: gpt-4
-        instructions:
-          type: string
-          description: Additional instructions for agent behavior.
-          example: Focus on providing concise answers.
-      required:
-      - prompts
     CustomToolOutput:
       type: object
       properties:
@@ -452,59 +392,86 @@ components:
           type: string
         outputExample:
           type: string
-    SetupBeamAgentDTO:
+    AgentToolResponseDto:
       type: object
       properties:
-        query:
+        name:
           type: string
-          maxLength: 50000
-          description: User input or instructions for the current setup step. Use this to provide context about what the agent should do, describe its purpose, or give feedback during the setup process.
-          example: I want to create an agent that helps users with customer support inquiries
-        contextFileIds:
-          description: Array of context file UUIDs to attach to the agent. These files provide additional knowledge or reference materials that the agent can use when processing requests.
-          example:
-          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
-          - b2c3d4e5-f6a7-8901-bcde-f12345678901
+          description: The name of the agent.
+          example: Customer Support Agent
+        description:
+          type: string
+          description: A brief description of what the agent does and its purpose.
+          example: An AI agent that handles customer inquiries and provides support.
+        agentWelcomeMessage:
+          type: string
+          description: The welcome message displayed when users first interact with the agent.
+          example: Hello! I am your customer support assistant. How can I help you today?
+        agentSetupMessage:
+          type: string
+          description: The setup message providing instructions or context during agent configuration.
+          example: This agent is configured to handle billing inquiries and technical support.
+        agentPersonality:
+          type: string
+          description: The personality traits and communication style of the agent.
+          example: Friendly, professional, and helpful with a focus on resolving issues quickly.
+        agentCategory:
+          description: The category the agent belongs to.
+          allOf:
+          - $ref: '#/components/schemas/AgentCategoryDto'
+        themeIconUrl:
+          type: string
+          description: URL of the theme icon for the agent.
+          example: https://example.com/icons/support-agent.png
+      required:
+      - name
+      - description
+      - agentWelcomeMessage
+      - agentSetupMessage
+      - agentPersonality
+      - agentCategory
+    ParamRuleConditionConfig:
+      type: object
+      properties:
+        conditionType:
+          type: string
+          enum:
+          - llm_based
+          - rule_based
+    AgentSetupGeneratedGraphDto:
+      type: object
+      properties:
+        preliminaryReasoning:
+          type: string
+          description: Initial reasoning and analysis used to determine the graph structure.
+          example: Based on the SOP, the agent needs to handle user inquiries through a multi-step verification process.
+        graphDescription:
+          type: string
+          description: Human-readable description of the workflow graph and its purpose.
+          example: This graph handles customer support requests by routing them through identification, verification, and resolution nodes.
+        trigger:
+          type: string
+          description: The event or condition that initiates the workflow execution.
+          example: User sends a message to the agent
+        graphSummary:
+          type: string
+          description: Brief summary of the graph structure and flow.
+          example: A 5-node workflow that processes customer inquiries from intake to resolution.
+        mermaidGraph:
+          type: string
+          description: Mermaid diagram syntax representing the visual workflow graph.
+          example: "graph TD\n  A[Start] --> B[Process]\n  B --> C[End]"
+        graphNodes:
+          description: List of nodes that make up the workflow graph.
           type: array
           items:
-            type: string
-            format: uuid
-        agentId:
-          type: string
-          format: uuid
-          description: UUID of the agent. Required for all setup steps (GENERATE_SOP and onwards) to identify which agent is being configured.
-          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-        agentSetupStep:
-          enum:
-          - GENERATE_SOP
-          - GRAPH_GENERATION
-          - TOOL_MATCHING
-          - TOOL_GENERATION
-          - TOOL_INTEGRATION
-          - UPDATE_AGENT
-          - AGENT_UPDATED
-          - CREATE_TASK
-          type: string
-          description: 'Current step in the agent setup workflow. Use /agent-context and /agent-creation first, then use this endpoint for the remaining steps:
-
-
-            • GENERATE_SOP - Generate Standard Operating Procedures for the agent (requires query)
-
-            • GRAPH_GENERATION - Create the agent''s workflow graph
-
-            • TOOL_MATCHING - Match existing tools to the agent''s needs
-
-            • TOOL_GENERATION - Generate new custom tools if needed
-
-            • TOOL_INTEGRATION - Integrate selected tools with the agent
-
-            • UPDATE_AGENT - Finalize and update the agent configuration
-
-            • AGENT_UPDATED - Confirmation that setup is complete'
-          example: GENERATE_SOP
+            $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeDto'
       required:
-      - agentId
-      - agentSetupStep
+      - preliminaryReasoning
+      - graphDescription
+      - trigger
+      - graphSummary
+      - mermaidGraph
     SaveAgentResponseDto:
       type: object
       properties:
@@ -517,149 +484,6 @@ components:
       required:
       - agent
       - contextFiles
-    AgentTaskTemplateCategory:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-    NodeEdge:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the edge.
-          example: edge-123e4567-e89b-12d3-a456-426614174000
-        targetAgentGraphNodeId:
-          type: string
-          description: ID of the target node this edge connects to.
-          example: node-target-123e4567-e89b-12d3-a456-426614174000
-        sourceAgentGraphNodeId:
-          type: string
-          description: ID of the source node this edge originates from.
-          example: node-source-123e4567-e89b-12d3-a456-426614174000
-        name:
-          type:
-          - string
-          - 'null'
-          description: Human-readable name or label for this edge.
-          example: On Success
-        condition:
-          type:
-          - string
-          - 'null'
-          description: Condition that must be met for this edge to be traversed.
-          example: userVerified === true
-        isAttachmentDataPulledIn:
-          type: boolean
-          default: true
-          description: Whether attachment data should be passed along this edge to the target node.
-          example: true
-      required:
-      - id
-      - targetAgentGraphNodeId
-      - sourceAgentGraphNodeId
-      - name
-      - condition
-      - isAttachmentDataPulledIn
-    ParamRuleConditionConfig:
-      type: object
-      properties:
-        conditionType:
-          type: string
-          enum:
-          - llm_based
-          - rule_based
-    Agent:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the agent.
-          example: agent-123e4567-e89b-12d3-a456-426614174000
-        name:
-          type: string
-          description: Name of the agent.
-          example: Customer Support Agent
-        description:
-          type: string
-          description: Description of the agent.
-        settings:
-          description: Agent settings.
-          allOf:
-          - $ref: '#/components/schemas/AgentSettingDto'
-        config:
-          description: Agent configuration.
-          allOf:
-          - $ref: '#/components/schemas/AgentConfig'
-        workspaceId:
-          type: string
-          description: UUID of the workspace.
-        creatorId:
-          type: string
-          description: UUID of the creator.
-        type:
-          enum:
-          - beam-os
-          - user-agent
-          - pre-configured-agent
-          type: string
-          description: Type of the agent.
-        vectorDbId:
-          type: string
-          description: UUID of the vector database.
-        defaultTaskId:
-          type: string
-          description: Default task ID.
-        themeIconUrl:
-          type: string
-          description: URL of the theme icon for the agent.
-          example: https://example.com/icons/support-agent.png
-        agentCategoryId:
-          type: string
-          description: UUID of the agent category.
-        userAccessTokenId:
-          type: string
-          description: UUID of the user access token.
-        agentSetupSessionId:
-          type: string
-          description: UUID of the agent setup session.
-        agentIntroMessage:
-          type: string
-          description: Agent introduction message.
-        agentSetupMessage:
-          type: string
-          description: Agent setup message.
-        skipAgentSetupSop:
-          type: boolean
-          description: Whether to skip agent setup SOP.
-        isAttachmentDataPulledIn:
-          type: boolean
-          description: Whether attachment data from tasks should be pulled into the agent context.
-        creditUsage:
-          type: number
-          description: Total credit usage for this agent.
-          example: 12.5
-        order:
-          type: number
-          description: Display order of the agent.
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - id
-      - name
-      - creatorId
-      - type
-      - vectorDbId
-      - creditUsage
-      - order
-      - createdAt
-      - updatedAt
     AgentSetupResponseDto:
       type: object
       properties:
@@ -693,206 +517,6 @@ components:
       - agentSop
       - status
       - step
-    FeedbackRequestDTO:
-      type: object
-      properties:
-        query:
-          type: string
-          description: Feedback text or query about the agent setup. Use this to provide context, suggestions, or describe what kind of agent you want to create.
-          example: I want to create an agent for invoice reconciliation
-        threadId:
-          type: string
-          format: uuid
-          description: UUID of the conversation thread to continue. This maintains context across multiple feedback requests.
-          example: 1a2036c0-d533-4636-8f51-2a811763ef5c
-      required:
-      - query
-      - threadId
-    UploadContextFileResponseDto:
-      type: object
-      properties:
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-        name:
-          type: string
-        src:
-          type: string
-        agentId:
-          type: string
-        fileKey:
-          type: string
-        uploadStatus:
-          type: string
-        uploadSource:
-          enum:
-          - file_upload
-          - text_snippet
-          - url_upload
-          type: string
-        taskId:
-          type: string
-      required:
-      - id
-      - createdAt
-      - updatedAt
-      - name
-      - src
-      - agentId
-      - fileKey
-      - uploadStatus
-      - uploadSource
-    AgentSetupGeneratedGraphNodeToolDto:
-      type: object
-      properties:
-        toolFunctionName:
-          type: string
-          description: The function name used to invoke this tool.
-          example: fetchCustomerData
-        fallbackModels:
-          type: string
-          description: The fallback model names used to invoke this tool.
-          example: gpt-3.5-turbo
-        actionType:
-          type: string
-          description: The type of action this tool performs.
-          example: api_call
-        inputParams:
-          description: List of input parameters required by this tool.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeToolInputParamsDto'
-        outputParams:
-          description: List of output parameters returned by this tool.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeToolOutputParamsDto'
-        originalTool:
-          description: Reference to the original tool definition.
-          allOf:
-          - $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeOriginalToolDto'
-        isMemoryTool:
-          type: boolean
-          description: Whether this tool accesses or stores data in memory.
-          example: false
-        isIntegrationRequired:
-          type: boolean
-          description: Whether this tool requires an external integration to function.
-          example: true
-        isIntegrationConnected:
-          type: boolean
-          description: Whether the required integration is currently connected and active.
-          example: true
-        memoryLookupInstruction:
-          type:
-          - string
-          - 'null'
-          description: Instructions for how the tool should look up data from memory.
-          example: Retrieve customer records matching the provided email address.
-        isBatchExecutionEnabled:
-          type: boolean
-          description: Whether this tool supports batch processing of multiple items.
-          example: false
-        isBackgroundTool:
-          type: boolean
-          description: Whether this tool runs in the background without blocking workflow execution.
-          example: false
-        requiresConsent:
-          type: boolean
-          description: Whether user consent is required before executing this tool.
-          example: false
-        consentRequired:
-          type: boolean
-          description: Whether consent from the user is required for this tool.
-          example: false
-        integrationProviderId:
-          type:
-          - string
-          - 'null'
-          description: ID of the integration provider associated with this tool.
-          example: provider-123e4567-e89b-12d3-a456-426614174000
-        dynamicPropsId:
-          type:
-          - string
-          - 'null'
-          description: ID for dynamic properties configuration.
-        code:
-          type:
-          - string
-          - 'null'
-        codeLanguage:
-          type:
-          - string
-          - 'null'
-        preferredModel:
-          type: string
-      required:
-      - toolFunctionName
-      - actionType
-      - inputParams
-      - outputParams
-      - originalTool
-      - isIntegrationRequired
-      - isIntegrationConnected
-    AgentTaskTemplate:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Template ID.
-        objective:
-          type: string
-          description: Task objective.
-        description:
-          type: string
-          description: Task description.
-        steps:
-          description: Steps in this task template.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTaskTemplateStep'
-        default:
-          type: boolean
-          description: Whether this is the default template.
-        category:
-          $ref: '#/components/schemas/AgentTaskTemplateCategory'
-        lastUpdatedAt:
-          format: date-time
-          type: string
-          description: Last updated timestamp.
-      required:
-      - id
-      - objective
-      - description
-      - steps
-    AgentConfig:
-      type: object
-      properties:
-        restrictions:
-          type: string
-        taskTemplates:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTaskTemplate'
-        tools:
-          type: array
-          items:
-            type: string
-        llmTools:
-          type: array
-          items:
-            type: object
-        sop:
-          type: object
-        defaultTaskId:
-          type: string
-        workspaceId:
-          type: string
     User:
       type: object
       properties:
@@ -943,407 +567,6 @@ components:
       - id
       - createdAt
       - updatedAt
-    LinkedOutputParamRulesDto:
-      type: object
-      properties:
-        rules:
-          description: Array of linked output param rules.
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
-        linkedParamRulePrompt:
-          type: string
-          description: Prompt for the linked param rule.
-        linkedParamConfigurations:
-          description: Configuration for linked param nodes.
-          allOf:
-          - $ref: '#/components/schemas/ParamRuleConditionConfig'
-      required:
-      - linkedParamConfigurations
-    AgentContextResponseDto:
-      type: object
-      properties:
-        threadId:
-          type: string
-          description: UUID of the conversation thread. Use this threadId in subsequent requests to maintain context across the agent setup process.
-          example: 1a2036c0-d533-4636-8f51-2a811763ef5c
-          format: uuid
-        response:
-          description: Generated agent suggestions including name, description, welcome message, setup message, personality, and category based on the provided query.
-          allOf:
-          - $ref: '#/components/schemas/AgentToolResponseDto'
-      required:
-      - threadId
-    AgentSetupGeneratedGraphDto:
-      type: object
-      properties:
-        preliminaryReasoning:
-          type: string
-          description: Initial reasoning and analysis used to determine the graph structure.
-          example: Based on the SOP, the agent needs to handle user inquiries through a multi-step verification process.
-        graphDescription:
-          type: string
-          description: Human-readable description of the workflow graph and its purpose.
-          example: This graph handles customer support requests by routing them through identification, verification, and resolution nodes.
-        trigger:
-          type: string
-          description: The event or condition that initiates the workflow execution.
-          example: User sends a message to the agent
-        graphSummary:
-          type: string
-          description: Brief summary of the graph structure and flow.
-          example: A 5-node workflow that processes customer inquiries from intake to resolution.
-        mermaidGraph:
-          type: string
-          description: Mermaid diagram syntax representing the visual workflow graph.
-          example: "graph TD\n  A[Start] --> B[Process]\n  B --> C[End]"
-        graphNodes:
-          description: List of nodes that make up the workflow graph.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeDto'
-      required:
-      - preliminaryReasoning
-      - graphDescription
-      - trigger
-      - graphSummary
-      - mermaidGraph
-    QueryDTO:
-      type: object
-      properties:
-        query:
-          type: string
-          description: The feedback or query text to submit. This can be user feedback on the current step, questions about the agent configuration, or instructions for modifications.
-          example: The agent should also handle refund requests in addition to general inquiries.
-        contextFileIds:
-          description: Array of context file UUIDs to include with the feedback. These files provide additional reference materials or examples to support the feedback.
-          example:
-          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
-          - b2c3d4e5-f6a7-8901-bcde-f12345678901
-          type: array
-          items:
-            type: string
-            format: uuid
-      required:
-      - query
-    UserInputParamConfigDto:
-      type: object
-      properties:
-        position:
-          type: number
-          description: Position/order of the parameter in the input list.
-          example: 1
-        paramName:
-          type: string
-          description: Name of the input parameter.
-          example: customerId
-        fillType:
-          default: ai_fill
-          enum:
-          - ai_fill
-          - static
-          - user_fill
-          - from_memory
-          - from_task_attachment
-          - linked
-          type: string
-          description: How the parameter value should be filled.
-          example: ai_fill
-        question:
-          type:
-          - string
-          - 'null'
-          description: Question to ask the user when fillType is USER_FILL.
-          example: What is the customer ID?
-        linkParams:
-          description: Configuration for linking this parameter to another tool output.
-          allOf:
-          - $ref: '#/components/schemas/LinkParamsDto'
-        linkParamOutputId:
-          type:
-          - string
-          - 'null'
-          description: ID of the linked output parameter for data flow.
-        paramDescription:
-          type: string
-          description: Human-readable description of what this parameter represents.
-          example: The unique identifier for the customer record.
-        paramTip:
-          type:
-          - string
-          - 'null'
-          description: Helpful tip or hint for providing this parameter value.
-          example: Enter the 8-digit customer ID from their account.
-        staticValue:
-          type:
-          - string
-          - 'null'
-          description: Static value to use when fillType is STATIC.
-          example: default_value
-        required:
-          type: boolean
-          default: true
-          description: Whether this parameter is required.
-          example: true
-        dataType:
-          type: string
-          default: string
-          description: Data type of the parameter.
-          example: string
-        isArray:
-          type: boolean
-          default: false
-          description: Whether this parameter accepts an array of values.
-          example: false
-        typeOptions:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-          description: Additional type-specific configuration options.
-        outputExample:
-          type: string
-          description: Example value demonstrating the expected input format.
-          example: CUST-12345678
-        reloadProps:
-          type: boolean
-          description: Whether to reload dynamic properties when this parameter changes.
-          example: false
-        remoteOptions:
-          type: boolean
-          description: Whether options are loaded from a remote source.
-          example: false
-        options:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              label:
-                type: string
-              value:
-                type: string
-          description: Available options for selection-type parameters.
-        linkedOutputParamRulesData:
-          description: Rules for linked output parameters.
-          allOf:
-          - $ref: '#/components/schemas/LinkedOutputParamRulesDto'
-      required:
-      - paramName
-      - fillType
-    AgentSetupGeneratedGraphNodeOriginalToolDto:
-      type: object
-      properties:
-        id:
-          type: string
-        toolFunctionName:
-          type: string
-        toolName:
-          type: string
-        iconSrc:
-          type: string
-        type:
-          enum:
-          - beam_tool
-          - gpt_tool
-          - custom_gpt_tool
-          - custom_integration_tool
-          - code_executor_tool
-          type: string
-        prompt:
-          type: string
-        integrationId:
-          type: string
-        inputParams:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserInputParamConfigDto'
-        outputParams:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomToolOutput'
-        preferredModel:
-          type: string
-        description:
-          type: string
-        shortDescription:
-          type: string
-        isIntegrationConnected:
-          type: boolean
-        isIntegrationRequired:
-          type: boolean
-      required:
-      - id
-      - toolFunctionName
-      - toolName
-      - iconSrc
-      - type
-    AgentChatFile:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the chat file.
-        src:
-          type: string
-          description: Source path of the file.
-        fileKey:
-          type: string
-          description: Storage key for the file.
-        threadId:
-          type: string
-          description: UUID of the associated thread.
-        url:
-          type: string
-          description: URL of the file.
-        mimeType:
-          type: string
-          description: MIME type of the file.
-        uploadStatus:
-          enum:
-          - processing
-          - uploaded
-          - failed
-          type: string
-          description: Upload status of the file.
-        uploadSource:
-          enum:
-          - file_upload
-          - text_snippet
-          - url_upload
-          type: string
-          description: Source of the upload.
-        userId:
-          type: string
-          description: UUID of the user.
-        user:
-          $ref: '#/components/schemas/User'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - name
-      - threadId
-      - uploadStatus
-      - uploadSource
-      - id
-      - createdAt
-      - updatedAt
-    AgentSetupGeneratedGraphNodeToolOutputParamsDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the output parameter.
-          example: param-123e4567-e89b-12d3-a456-426614174000
-        paramName:
-          type: string
-          description: Name of the output parameter.
-          example: customerData
-        dataType:
-          type: string
-          description: Data type of the output parameter.
-          example: string
-        position:
-          type: number
-          description: Position/order of the parameter in the output list.
-          example: 1
-        agentToolConfigurationId:
-          type:
-          - string
-          - 'null'
-          description: ID of the associated agent tool configuration.
-          example: config-123e4567-e89b-12d3-a456-426614174000
-        outputExample:
-          type: string
-          description: Example value demonstrating the expected output format.
-          example: '{"name": "John Doe", "email": "john@example.com"}'
-        linkParamOutputId:
-          type:
-          - string
-          - 'null'
-          description: ID linking this parameter to another output parameter for data flow.
-        required:
-          type: boolean
-          description: Whether this output parameter is required.
-          example: true
-        typeOptions:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-          description: Additional type-specific configuration options.
-        isArray:
-          type: boolean
-          default: false
-          description: Whether this parameter returns an array of values.
-          example: false
-        paramDescription:
-          type: string
-          description: Human-readable description of what this output parameter represents.
-          example: The customer data retrieved from the database including name and contact information.
-      required:
-      - paramName
-      - dataType
-      - paramDescription
-    AgentSetupGeneratedGraphNodeToolInputParamsDto:
-      type: object
-      properties:
-        id:
-          type: string
-        paramName:
-          type: string
-        dataType:
-          type: string
-        paramDescription:
-          type: string
-        paramTip:
-          type:
-          - string
-          - 'null'
-        fillType:
-          enum:
-          - ai_fill
-          - static
-          - user_fill
-          - from_memory
-          - from_task_attachment
-          - linked
-          type: string
-        staticValue:
-          type:
-          - string
-          - 'null'
-        question:
-          type:
-          - string
-          - 'null'
-        reloadProps:
-          type: boolean
-        remoteOptions:
-          type: boolean
-        options:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              label:
-                type: string
-              value:
-                type: string
-      required:
-      - paramName
-      - dataType
-      - paramDescription
-      - fillType
     AgentSetupGeneratedGraphNodeDto:
       type: object
       properties:
@@ -1456,6 +679,821 @@ components:
       - toolConfiguration
       - isExitNode
       - nodeConfigurations
+    AgentSetupGeneratedGraphNodeToolOutputParamsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the output parameter.
+          example: param-123e4567-e89b-12d3-a456-426614174000
+        paramName:
+          type: string
+          description: Name of the output parameter.
+          example: customerData
+        dataType:
+          type: string
+          description: Data type of the output parameter.
+          example: string
+        position:
+          type: number
+          description: Position/order of the parameter in the output list.
+          example: 1
+        agentToolConfigurationId:
+          type:
+          - string
+          - 'null'
+          description: ID of the associated agent tool configuration.
+          example: config-123e4567-e89b-12d3-a456-426614174000
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected output format.
+          example: '{"name": "John Doe", "email": "john@example.com"}'
+        linkParamOutputId:
+          type:
+          - string
+          - 'null'
+          description: ID linking this parameter to another output parameter for data flow.
+        required:
+          type: boolean
+          description: Whether this output parameter is required.
+          example: true
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Additional type-specific configuration options.
+        isArray:
+          type: boolean
+          default: false
+          description: Whether this parameter returns an array of values.
+          example: false
+        paramDescription:
+          type: string
+          description: Human-readable description of what this output parameter represents.
+          example: The customer data retrieved from the database including name and contact information.
+      required:
+      - paramName
+      - dataType
+      - paramDescription
+    SetupBeamAgentDTO:
+      type: object
+      properties:
+        query:
+          type: string
+          maxLength: 50000
+          description: User input or instructions for the current setup step. Use this to provide context about what the agent should do, describe its purpose, or give feedback during the setup process.
+          example: I want to create an agent that helps users with customer support inquiries
+        contextFileIds:
+          description: Array of context file UUIDs to attach to the agent. These files provide additional knowledge or reference materials that the agent can use when processing requests.
+          example:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+          - b2c3d4e5-f6a7-8901-bcde-f12345678901
+          type: array
+          items:
+            type: string
+            format: uuid
+        agentId:
+          type: string
+          format: uuid
+          description: UUID of the agent. Required for all setup steps (GENERATE_SOP and onwards) to identify which agent is being configured.
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        agentSetupStep:
+          enum:
+          - GENERATE_SOP
+          - GRAPH_GENERATION
+          - TOOL_MATCHING
+          - TOOL_GENERATION
+          - TOOL_INTEGRATION
+          - UPDATE_AGENT
+          - AGENT_UPDATED
+          - CREATE_TASK
+          type: string
+          description: 'Current step in the agent setup workflow. Use /agent-context and /agent-creation first, then use this endpoint for the remaining steps:
+
+
+            • GENERATE_SOP - Generate Standard Operating Procedures for the agent (requires query)
+
+            • GRAPH_GENERATION - Create the agent''s workflow graph
+
+            • TOOL_MATCHING - Match existing tools to the agent''s needs
+
+            • TOOL_GENERATION - Generate new custom tools if needed
+
+            • TOOL_INTEGRATION - Integrate selected tools with the agent
+
+            • UPDATE_AGENT - Finalize and update the agent configuration
+
+            • AGENT_UPDATED - Confirmation that setup is complete'
+          example: GENERATE_SOP
+      required:
+      - agentId
+      - agentSetupStep
+    AgentSetupProcessResponseDto:
+      type: object
+      properties:
+        nextStep:
+          enum:
+          - GENERATE_SOP
+          - GRAPH_GENERATION
+          - TOOL_MATCHING
+          - TOOL_GENERATION
+          - TOOL_INTEGRATION
+          - UPDATE_AGENT
+          - AGENT_UPDATED
+          - CREATE_TASK
+          type: string
+          description: The next step in the agent setup workflow. Use this value to determine which step to call next.
+          example: SOP_GENERATION
+        agentResponse:
+          description: Agent creation response containing the created agent details and associated context files.
+          allOf:
+          - $ref: '#/components/schemas/SaveAgentResponseDto'
+      required:
+      - nextStep
+      - agentResponse
+    AgentTaskTemplateCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+    FeedbackRequestDTO:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Feedback text or query about the agent setup. Use this to provide context, suggestions, or describe what kind of agent you want to create.
+          example: I want to create an agent for invoice reconciliation
+        threadId:
+          type: string
+          format: uuid
+          description: UUID of the conversation thread to continue. This maintains context across multiple feedback requests.
+          example: 1a2036c0-d533-4636-8f51-2a811763ef5c
+      required:
+      - query
+      - threadId
+    AgentSetupGeneratedGraphNodeToolDto:
+      type: object
+      properties:
+        toolFunctionName:
+          type: string
+          description: The function name used to invoke this tool.
+          example: fetchCustomerData
+        fallbackModels:
+          type: string
+          description: The fallback model names used to invoke this tool.
+          example: gpt-3.5-turbo
+        actionType:
+          type: string
+          description: The type of action this tool performs.
+          example: api_call
+        inputParams:
+          description: List of input parameters required by this tool.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeToolInputParamsDto'
+        outputParams:
+          description: List of output parameters returned by this tool.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeToolOutputParamsDto'
+        originalTool:
+          description: Reference to the original tool definition.
+          allOf:
+          - $ref: '#/components/schemas/AgentSetupGeneratedGraphNodeOriginalToolDto'
+        isMemoryTool:
+          type: boolean
+          description: Whether this tool accesses or stores data in memory.
+          example: false
+        isIntegrationRequired:
+          type: boolean
+          description: Whether this tool requires an external integration to function.
+          example: true
+        isIntegrationConnected:
+          type: boolean
+          description: Whether the required integration is currently connected and active.
+          example: true
+        memoryLookupInstruction:
+          type:
+          - string
+          - 'null'
+          description: Instructions for how the tool should look up data from memory.
+          example: Retrieve customer records matching the provided email address.
+        isBatchExecutionEnabled:
+          type: boolean
+          description: Whether this tool supports batch processing of multiple items.
+          example: false
+        isBackgroundTool:
+          type: boolean
+          description: Whether this tool runs in the background without blocking workflow execution.
+          example: false
+        requiresConsent:
+          type: boolean
+          description: Whether user consent is required before executing this tool.
+          example: false
+        consentRequired:
+          type: boolean
+          description: Whether consent from the user is required for this tool.
+          example: false
+        integrationProviderId:
+          type:
+          - string
+          - 'null'
+          description: ID of the integration provider associated with this tool.
+          example: provider-123e4567-e89b-12d3-a456-426614174000
+        dynamicPropsId:
+          type:
+          - string
+          - 'null'
+          description: ID for dynamic properties configuration.
+        code:
+          type:
+          - string
+          - 'null'
+        codeLanguage:
+          type:
+          - string
+          - 'null'
+        preferredModel:
+          type: string
+      required:
+      - toolFunctionName
+      - actionType
+      - inputParams
+      - outputParams
+      - originalTool
+      - isIntegrationRequired
+      - isIntegrationConnected
+    AgentCategoryDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+      required:
+      - id
+      - title
+    AgentContextResponseDto:
+      type: object
+      properties:
+        threadId:
+          type: string
+          description: UUID of the conversation thread. Use this threadId in subsequent requests to maintain context across the agent setup process.
+          example: 1a2036c0-d533-4636-8f51-2a811763ef5c
+          format: uuid
+        response:
+          description: Generated agent suggestions including name, description, welcome message, setup message, personality, and category based on the provided query.
+          allOf:
+          - $ref: '#/components/schemas/AgentToolResponseDto'
+      required:
+      - threadId
+    NodeEdge:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the edge.
+          example: edge-123e4567-e89b-12d3-a456-426614174000
+        targetAgentGraphNodeId:
+          type: string
+          description: ID of the target node this edge connects to.
+          example: node-target-123e4567-e89b-12d3-a456-426614174000
+        sourceAgentGraphNodeId:
+          type: string
+          description: ID of the source node this edge originates from.
+          example: node-source-123e4567-e89b-12d3-a456-426614174000
+        name:
+          type:
+          - string
+          - 'null'
+          description: Human-readable name or label for this edge.
+          example: On Success
+        condition:
+          type:
+          - string
+          - 'null'
+          description: Condition that must be met for this edge to be traversed.
+          example: userVerified === true
+        isAttachmentDataPulledIn:
+          type: boolean
+          default: true
+          description: Whether attachment data should be passed along this edge to the target node.
+          example: true
+      required:
+      - id
+      - targetAgentGraphNodeId
+      - sourceAgentGraphNodeId
+      - name
+      - condition
+      - isAttachmentDataPulledIn
+    AgentChatFile:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the chat file.
+        src:
+          type: string
+          description: Source path of the file.
+        fileKey:
+          type: string
+          description: Storage key for the file.
+        threadId:
+          type: string
+          description: UUID of the associated thread.
+        url:
+          type: string
+          description: URL of the file.
+        mimeType:
+          type: string
+          description: MIME type of the file.
+        uploadStatus:
+          enum:
+          - processing
+          - uploaded
+          - failed
+          type: string
+          description: Upload status of the file.
+        uploadSource:
+          enum:
+          - file_upload
+          - text_snippet
+          - url_upload
+          type: string
+          description: Source of the upload.
+        userId:
+          type: string
+          description: UUID of the user.
+        user:
+          $ref: '#/components/schemas/User'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - threadId
+      - uploadStatus
+      - uploadSource
+      - id
+      - createdAt
+      - updatedAt
+    AgentSetupGeneratedGraphNodeToolInputParamsDto:
+      type: object
+      properties:
+        id:
+          type: string
+        paramName:
+          type: string
+        dataType:
+          type: string
+        paramDescription:
+          type: string
+        paramTip:
+          type:
+          - string
+          - 'null'
+        fillType:
+          enum:
+          - ai_fill
+          - static
+          - user_fill
+          - from_memory
+          - from_task_attachment
+          - linked
+          type: string
+        staticValue:
+          type:
+          - string
+          - 'null'
+        question:
+          type:
+          - string
+          - 'null'
+        reloadProps:
+          type: boolean
+        remoteOptions:
+          type: boolean
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+      required:
+      - paramName
+      - dataType
+      - paramDescription
+      - fillType
+    AgentSettingDto:
+      type: object
+      properties:
+        prompts:
+          description: Array of prompt templates used to guide the agent behavior.
+          example:
+          - You are a helpful customer support agent.
+          - Always be polite and professional.
+          type: array
+          items:
+            type: string
+        preferredModel:
+          type: string
+          description: Preferred AI model for this agent.
+          example: gpt-4
+        instructions:
+          type: string
+          description: Additional instructions for agent behavior.
+          example: Focus on providing concise answers.
+      required:
+      - prompts
+    QueryDTO:
+      type: object
+      properties:
+        query:
+          type: string
+          description: The feedback or query text to submit. This can be user feedback on the current step, questions about the agent configuration, or instructions for modifications.
+          example: The agent should also handle refund requests in addition to general inquiries.
+        contextFileIds:
+          description: Array of context file UUIDs to include with the feedback. These files provide additional reference materials or examples to support the feedback.
+          example:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+          - b2c3d4e5-f6a7-8901-bcde-f12345678901
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - query
+    AgentSetupGeneratedGraphNodeOriginalToolDto:
+      type: object
+      properties:
+        id:
+          type: string
+        toolFunctionName:
+          type: string
+        toolName:
+          type: string
+        iconSrc:
+          type: string
+        type:
+          enum:
+          - beam_tool
+          - gpt_tool
+          - custom_gpt_tool
+          - custom_integration_tool
+          - code_executor_tool
+          type: string
+        prompt:
+          type: string
+        integrationId:
+          type: string
+        inputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInputParamConfigDto'
+        outputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomToolOutput'
+        preferredModel:
+          type: string
+        description:
+          type: string
+        shortDescription:
+          type: string
+        isIntegrationConnected:
+          type: boolean
+        isIntegrationRequired:
+          type: boolean
+      required:
+      - id
+      - toolFunctionName
+      - toolName
+      - iconSrc
+      - type
+    AgentConfig:
+      type: object
+      properties:
+        restrictions:
+          type: string
+        taskTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplate'
+        tools:
+          type: array
+          items:
+            type: string
+        llmTools:
+          type: array
+          items:
+            type: object
+        sop:
+          type: object
+        defaultTaskId:
+          type: string
+        workspaceId:
+          type: string
+    AgentTaskTemplateStep:
+      type: object
+      properties:
+        step:
+          type: string
+          description: Step description.
+        toolId:
+          type: string
+          description: Tool ID.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        iconUrl:
+          type: string
+          description: Icon URL.
+        beamTool:
+          type: boolean
+          description: Whether this is a Beam tool.
+        gptTool:
+          type: boolean
+          description: Whether this is a GPT tool.
+        consentRequired:
+          type: boolean
+          description: Whether consent is required.
+        integrationId:
+          type: string
+          description: Integration ID.
+        isIntegrationRequired:
+          type: boolean
+          description: Whether integration is required.
+        isIntegrationConnected:
+          type: boolean
+          description: Whether integration is connected.
+        integrationProvider:
+          type: string
+          description: Integration provider.
+        integrationIdentifier:
+          type: string
+          description: Integration identifier.
+        toolDetail:
+          type: object
+        integrationCustomAuthParameters:
+          type: object
+      required:
+      - step
+    LinkedOutputParamRulesDto:
+      type: object
+      properties:
+        rules:
+          description: Array of linked output param rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
+        linkedParamRulePrompt:
+          type: string
+          description: Prompt for the linked param rule.
+        linkedParamConfigurations:
+          description: Configuration for linked param nodes.
+          allOf:
+          - $ref: '#/components/schemas/ParamRuleConditionConfig'
+      required:
+      - linkedParamConfigurations
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the agent.
+          example: agent-123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Name of the agent.
+          example: Customer Support Agent
+        description:
+          type: string
+          description: Description of the agent.
+        settings:
+          description: Agent settings.
+          allOf:
+          - $ref: '#/components/schemas/AgentSettingDto'
+        config:
+          description: Agent configuration.
+          allOf:
+          - $ref: '#/components/schemas/AgentConfig'
+        workspaceId:
+          type: string
+          description: UUID of the workspace.
+        creatorId:
+          type: string
+          description: UUID of the creator.
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+          description: Type of the agent.
+        vectorDbId:
+          type: string
+          description: UUID of the vector database.
+        defaultTaskId:
+          type: string
+          description: Default task ID.
+        themeIconUrl:
+          type: string
+          description: URL of the theme icon for the agent.
+          example: https://example.com/icons/support-agent.png
+        agentCategoryId:
+          type: string
+          description: UUID of the agent category.
+        userAccessTokenId:
+          type: string
+          description: UUID of the user access token.
+        agentSetupSessionId:
+          type: string
+          description: UUID of the agent setup session.
+        agentIntroMessage:
+          type: string
+          description: Agent introduction message.
+        agentSetupMessage:
+          type: string
+          description: Agent setup message.
+        skipAgentSetupSop:
+          type: boolean
+          description: Whether to skip agent setup SOP.
+        isAttachmentDataPulledIn:
+          type: boolean
+          description: Whether attachment data from tasks should be pulled into the agent context.
+        creditUsage:
+          type: number
+          description: Total credit usage for this agent.
+          example: 12.5
+        order:
+          type: number
+          description: Display order of the agent.
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - id
+      - name
+      - creatorId
+      - type
+      - vectorDbId
+      - creditUsage
+      - order
+      - createdAt
+      - updatedAt
+    UserInputParamConfigDto:
+      type: object
+      properties:
+        position:
+          type: number
+          description: Position/order of the parameter in the input list.
+          example: 1
+        paramName:
+          type: string
+          description: Name of the input parameter.
+          example: customerId
+        fillType:
+          default: ai_fill
+          enum:
+          - ai_fill
+          - static
+          - user_fill
+          - from_memory
+          - from_task_attachment
+          - linked
+          type: string
+          description: How the parameter value should be filled.
+          example: ai_fill
+        question:
+          type:
+          - string
+          - 'null'
+          description: Question to ask the user when fillType is USER_FILL.
+          example: What is the customer ID?
+        linkParams:
+          description: Configuration for linking this parameter to another tool output.
+          allOf:
+          - $ref: '#/components/schemas/LinkParamsDto'
+        linkParamOutputId:
+          type:
+          - string
+          - 'null'
+          description: ID of the linked output parameter for data flow.
+        paramDescription:
+          type: string
+          description: Human-readable description of what this parameter represents.
+          example: The unique identifier for the customer record.
+        paramTip:
+          type:
+          - string
+          - 'null'
+          description: Helpful tip or hint for providing this parameter value.
+          example: Enter the 8-digit customer ID from their account.
+        staticValue:
+          type:
+          - string
+          - 'null'
+          description: Static value to use when fillType is STATIC.
+          example: default_value
+        required:
+          type: boolean
+          default: true
+          description: Whether this parameter is required.
+          example: true
+        dataType:
+          type: string
+          default: string
+          description: Data type of the parameter.
+          example: string
+        isArray:
+          type: boolean
+          default: false
+          description: Whether this parameter accepts an array of values.
+          example: false
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Additional type-specific configuration options.
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected input format.
+          example: CUST-12345678
+        reloadProps:
+          type: boolean
+          description: Whether to reload dynamic properties when this parameter changes.
+          example: false
+        remoteOptions:
+          type: boolean
+          description: Whether options are loaded from a remote source.
+          example: false
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+          description: Available options for selection-type parameters.
+        linkedOutputParamRulesData:
+          description: Rules for linked output parameters.
+          allOf:
+          - $ref: '#/components/schemas/LinkedOutputParamRulesDto'
+      required:
+      - paramName
+      - fillType
+    AgentTaskTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Template ID.
+        objective:
+          type: string
+          description: Task objective.
+        description:
+          type: string
+          description: Task description.
+        steps:
+          description: Steps in this task template.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplateStep'
+        default:
+          type: boolean
+          description: Whether this is the default template.
+        category:
+          $ref: '#/components/schemas/AgentTaskTemplateCategory'
+        lastUpdatedAt:
+          format: date-time
+          type: string
+          description: Last updated timestamp.
+      required:
+      - id
+      - objective
+      - description
+      - steps
     LinkParamsDto:
       type: object
       properties:
@@ -1467,44 +1505,6 @@ components:
           type: string
         outputId:
           type: string
-    AgentToolResponseDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the agent.
-          example: Customer Support Agent
-        description:
-          type: string
-          description: A brief description of what the agent does and its purpose.
-          example: An AI agent that handles customer inquiries and provides support.
-        agentWelcomeMessage:
-          type: string
-          description: The welcome message displayed when users first interact with the agent.
-          example: Hello! I am your customer support assistant. How can I help you today?
-        agentSetupMessage:
-          type: string
-          description: The setup message providing instructions or context during agent configuration.
-          example: This agent is configured to handle billing inquiries and technical support.
-        agentPersonality:
-          type: string
-          description: The personality traits and communication style of the agent.
-          example: Friendly, professional, and helpful with a focus on resolving issues quickly.
-        agentCategory:
-          description: The category the agent belongs to.
-          allOf:
-          - $ref: '#/components/schemas/AgentCategoryDto'
-        themeIconUrl:
-          type: string
-          description: URL of the theme icon for the agent.
-          example: https://example.com/icons/support-agent.png
-      required:
-      - name
-      - description
-      - agentWelcomeMessage
-      - agentSetupMessage
-      - agentPersonality
-      - agentCategory
   securitySchemes:
     bearer:
       scheme: bearer

@@ -415,22 +415,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CustomIntegrationToolBodyParamsDTO:
-      type: object
-      properties:
-        key:
-          type: string
-        parameterHint:
-          type: string
-        type:
-          type: string
-        required:
-          type: boolean
-      required:
-      - key
-      - parameterHint
-      - type
-      - required
     AgentTaskNode:
       type: object
       properties:
@@ -541,6 +525,45 @@ components:
       - id
       - createdAt
       - updatedAt
+    CustomIntegrationToolBodyParamsDTO:
+      type: object
+      properties:
+        key:
+          type: string
+        parameterHint:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+      required:
+      - key
+      - parameterHint
+      - type
+      - required
+    MinimalAgentGraphEdgeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        sourceAgentGraphNodeId:
+          type: string
+        targetAgentGraphNodeId:
+          type: string
+        condition:
+          type: string
+        isAttachmentDataPulledIn:
+          type: boolean
+        conditionGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
+      required:
+      - id
+      - sourceAgentGraphNodeId
+      - targetAgentGraphNodeId
+      - isAttachmentDataPulledIn
+      - conditionGroups
     TaskStepUserInput:
       type: object
       properties:
@@ -559,22 +582,6 @@ components:
       required:
       - question
       - answer
-    CreateConditionGroupDto:
-      type: object
-      properties:
-        nextGroupOperator:
-          enum:
-          - AND
-          - OR
-          type:
-          - string
-          - 'null'
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateConditionRuleDto'
-      required:
-      - rules
     LinkedOutputParamRuleDto:
       type: object
       properties:
@@ -616,36 +623,769 @@ components:
       - elementKey
       - operator
       - comparisonValueType
-    AgentGraphNode:
+    NodeLiteDto:
       type: object
       properties:
+        id:
+          type: string
+          description: Unique identifier of the node
+        objective:
+          type: string
+          description: Objective or purpose of the node
+      required:
+      - id
+      - objective
+    FoodForThought:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+      required:
+      - question
+      - answer
+    UpdateEdgeDto:
+      type: object
+      properties:
+        condition:
+          type: string
+        isAttachmentDataPulledIn:
+          type: boolean
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateConditionGroupDto'
+      required:
+      - isAttachmentDataPulledIn
+    ParamRuleConditionConfig:
+      type: object
+      properties:
+        conditionType:
+          type: string
+          enum:
+          - llm_based
+          - rule_based
+    CustomToolOutput:
+      type: object
+      properties:
+        position:
+          type: number
+        paramName:
+          type: string
+        paramDescription:
+          type: string
+        id:
+          type: string
+        agentToolConfigurationId:
+          type: string
+        dataType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - string
+          - number
+          - boolean
+          - object
+          - enum
+        isArray:
+          type: boolean
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        parentId:
+          type: string
+        paramPath:
+          type: string
+        outputExample:
+          type: string
+    UpdateInputOutputParamsDto:
+      type: object
+      properties:
+        outputParams:
+          description: Output parameters configuration for the node tool
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomToolOutput'
+        inputParams:
+          description: Input parameters configuration for the node tool
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInputParamConfigDto'
+    AgentGraphNodesResponseDto:
+      type: object
+      properties:
+        graphId:
+          type: string
+          description: Graph ID
+        agentId:
+          type: string
+          description: Agent ID
+        agentName:
+          type: string
+          description: Agent name
+        nodes:
+          description: List of graph nodes
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeLiteDto'
+      required:
+      - graphId
+      - agentId
+      - agentName
+      - nodes
+    IntegrationsViewEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the integration.
+        name:
+          type: string
+          description: Name of the integration.
+        description:
+          type: string
+          description: Description of the integration.
+        systemIntegrationIdentifier:
+          type: string
+          description: System integration identifier.
+        integrationCategoryId:
+          type: string
+          description: UUID of the integration category.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        type:
+          enum:
+          - integration
+          - custom_integration
+          type: string
+          description: Type of integration.
+        userId:
+          type: string
+          description: UUID of the user.
+        workspaceId:
+          type: string
+          description: UUID of the workspace.
+        privacyPolicyUrl:
+          type: string
+          description: Privacy policy URL.
+        shortDescription:
+          type: string
+          description: Short description of the integration.
+        longDescription:
+          type: string
+          description: Detailed description of the integration.
+        systemIntegrationProvider:
+          type: string
+          description: System integration provider.
+        customAuthParameters:
+          type: object
+          description: Custom authentication parameters.
+        category:
+          type: string
+          description: Category of the integration.
+        authenticationMeta:
+          description: Authentication metadata.
+          allOf:
+          - $ref: '#/components/schemas/CustomIntegrationAuthenticationMetaDTO'
+        syncModels:
+          type: object
+          description: Sync models configuration.
+        isPublished:
+          type: boolean
+          description: Whether the integration is published.
+        attributes:
+          type: object
+          description: Integration attributes.
+        status:
+          type: string
+          description: Current status of the integration.
+        customHeaders:
+          type: object
+          description: Custom headers for API requests.
+        allowWaiting:
+          type: boolean
+          description: Whether the integration allows waiting.
+        authType:
+          type: string
+        provider:
+          $ref: '#/components/schemas/IntegrationProvider'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationProvider'
+        integrationCategory:
+          $ref: '#/components/schemas/IntegrationCategory'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+      required:
+      - id
+      - type
+      - provider
+      - providers
+      - integrationCategory
+      - actions
+    AgentGraphEdge:
+      type: object
+      properties:
+        sourceAgentGraphNodeId:
+          type: string
+        targetAgentGraphNodeId:
+          type: string
+        condition:
+          type: string
+        isAttachmentDataPulledIn:
+          type: boolean
+        conditionGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - sourceAgentGraphNodeId
+      - targetAgentGraphNodeId
+      - isAttachmentDataPulledIn
+      - conditionGroups
+      - id
+      - createdAt
+      - updatedAt
+    UpdateNodeDto:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/AgentGraphNodeDto'
+        agentId:
+          type: string
+        graphId:
+          type: string
+      required:
+      - node
+      - agentId
+      - graphId
+    UpdateConditionRuleDto:
+      type: object
+      properties:
+        id:
+          type: string
+        sourceAgentToolConfigurationOutputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type:
+          - string
+          - 'null'
+        comparisonAgentToolConfigurationOutputParamsId:
+          type:
+          - string
+          - 'null'
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type:
+          - string
+          - 'null'
+      required:
+      - sourceAgentToolConfigurationOutputParamsId
+      - operator
+      - comparisonValueType
+    UpdateNodePromptDto:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: The prompt text for the node tool configuration
+      required:
+      - prompt
+    AgentTriggerConfigurationFiltersConditions:
+      type: object
+      properties:
+        condition:
+          enum:
+          - is
+          - is_not
+          - contain
+          - does_not_contain
+          - any
+          - all
+          - less_than
+          - GREATER_than
+          - count
+          - exist
+          - does_not_exist
+          type: string
+        operator:
+          enum:
+          - AND
+          - OR
+          type: string
+        property:
+          type: string
+        value:
+          type: string
+      required:
+      - condition
+      - operator
+      - property
+      - value
+    OptimizedAgentGraphResponseDto:
+      type: object
+      properties:
+        graph:
+          $ref: '#/components/schemas/OptimizedAgentGraphDto'
+      required:
+      - graph
+    CreateAgentGraphEdgeDto:
+      type: object
+      properties:
+        sourceNodeId:
+          type: string
+        targetNodeId:
+          type: string
+        agentId:
+          type: string
+        agentGraphId:
+          type: string
+        condition:
+          type: string
+        isAttachmentDataPulledIn:
+          type: boolean
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateConditionGroupDto'
+      required:
+      - sourceNodeId
+      - targetNodeId
+      - agentId
+      - agentGraphId
+      - isAttachmentDataPulledIn
+    IntegrationProviderRequest:
+      type: object
+      properties:
+        endpoint:
+          type: string
+        method:
+          type: string
+        query:
+          type: array
+          items:
+            type: string
+        body:
+          type: object
+        bypassTLS:
+          type: boolean
+    TaskNodeOutput:
+      type: object
+      properties:
+        value:
+          type: object
+      required:
+      - value
+    TaskNodeTokenUsage:
+      type: object
+      properties:
+        agentTaskId:
+          type: string
+        agentGraphNodeId:
+          type:
+          - string
+          - 'null'
+        creditTransactionId:
+          type:
+          - string
+          - 'null'
+        promptSlug:
+          type:
+          - string
+          - 'null'
+        executionStage:
+          enum:
+          - QUERY_REFORMULATION
+          - NODE_SELECTION
+          - NODE_GENERATION
+          - TOOL_SELECTION
+          - NODE_RETRIEVAL
+          - PARAMETER_EXTRACTION
+          - TOOL_EXECUTION
+          - NODE_EVALUATION
+          type: string
+        iteration:
+          type: number
+        model:
+          type: string
+        operation:
+          enum:
+          - NORMAL
+          - PROVIDER_ERROR
+          - PARSER_ERROR
+          - TIMEOUT
+          - HIGH_TOKEN_FALLBACK
+          - MODEL_FALLBACK
+          - AUTO_FIX
+          - RATE_LIMIT
+          type: string
+        inputToken:
+          type: number
+        outputToken:
+          type: number
+        reasoningToken:
+          type:
+          - number
+          - 'null'
+        totalToken:
+          type: number
+        isLatest:
+          type: boolean
+        agentTask:
+          $ref: '#/components/schemas/AgentTask'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentTaskId
+      - agentGraphNodeId
+      - creditTransactionId
+      - promptSlug
+      - executionStage
+      - iteration
+      - model
+      - operation
+      - inputToken
+      - outputToken
+      - reasoningToken
+      - totalToken
+      - isLatest
+      - agentTask
+      - id
+      - createdAt
+      - updatedAt
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of the user.
+          example: John Doe
+        avatarSrc:
+          type: string
+          description: URL to the user profile avatar image.
+          example: https://example.com/avatars/user123.png
+        email:
+          type: string
+        cognitoUserId:
+          type: string
+        socialProvider:
+          type: string
+        socialProviderId:
+          type: string
+        password:
+          type: string
+        paymentProviderCustomerId:
+          type: string
+        rememberToken:
+          type: string
+        emailVerified:
+          type: boolean
+        referralCode:
+          type: string
+        role_name:
+          type: string
+        isInternalUser:
+          type: boolean
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - email
+      - cognitoUserId
+      - role_name
+      - isInternalUser
+      - id
+      - createdAt
+      - updatedAt
+    NodeConfigurations:
+      type: object
+      properties:
+        conditionType:
+          enum:
+          - llm_based
+          - rule_based
+          type: string
+        llmModel:
+          type: string
+        fallbackModels:
+          type: string
+        waitType:
+          enum:
+          - time_based
+          - condition_based
+          type: string
+        timeToWaitValue:
+          type: number
+        timeToWaitUnit:
+          enum:
+          - minutes
+          - hours
+          - days
+          - months
+          type: string
+        linkedAgentGraphNodeId:
+          type: string
+        rule:
+          type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTriggerConfigurationFiltersGroup'
+        timeoutType:
+          enum:
+          - no_timeout
+          - set_timeout
+          type: string
+        timeoutValue:
+          type: number
+        timeoutUnit:
+          enum:
+          - minutes
+          - hours
+          - days
+          - months
+          type: string
+        onTimeout:
+          enum:
+          - continue
+          - fail
+          type: string
+    AgentGraphEdgeConditionRule:
+      type: object
+      properties:
+        agentGraphEdgeConditionGroupId:
+          type: string
+        sourceAgentToolConfigurationOutputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type: string
+        comparisonAgentToolConfigurationOutputParamsId:
+          type: string
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        group:
+          $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
+        sourceOutputParam:
+          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        comparisonOutputParam:
+          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentGraphEdgeConditionGroupId
+      - sourceAgentToolConfigurationOutputParamsId
+      - operator
+      - comparisonValueType
+      - group
+      - sourceOutputParam
+      - id
+      - createdAt
+      - updatedAt
+    MinimalAgentDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        themeIconUrl:
+          type: string
+        agentCategoryId:
+          type: string
+        category:
+          $ref: '#/components/schemas/MinimalAgentCategoryDto'
+        type:
+          enum:
+          - beam-os
+          - user-agent
+          - pre-configured-agent
+          type: string
+        workspaceId:
+          type: string
+        creatorId:
+          type: string
+        order:
+          type: number
+      required:
+      - id
+      - name
+      - type
+      - creatorId
+      - order
+    LinkedOutputParamRules:
+      type: object
+      properties:
+        elementKey:
+          type: string
+        agentToolConfigurationInputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type: string
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - elementKey
+      - agentToolConfigurationInputParamsId
+      - operator
+      - comparisonValueType
+      - id
+      - createdAt
+      - updatedAt
+    IntegrationProviderDetails:
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/IntegrationProviderRequest'
+        response:
+          type: object
+    NodeSelection:
+      type: object
+      properties:
+        edgeId:
+          type: string
+        condition:
+          type: string
+        selected:
+          type: boolean
+        reasoning:
+          type: string
+        otherEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeSelection'
+      required:
+      - edgeId
+      - condition
+      - selected
+      - reasoning
+      - otherEdges
+    MinimalAgentGraphNodeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        customId:
+          type: string
+        objective:
+          type: string
         evaluationCriteria:
           type: array
           items:
             type: string
-        agentToolConfigurationId:
-          type: string
-        toolConfiguration:
-          $ref: '#/components/schemas/AgentToolConfiguration'
-        objective:
-          type: string
-        customId:
-          type: string
-        isExitNode:
-          type: boolean
         isEntryNode:
           type: boolean
-        agentGraphId:
-          type: string
+        isExitNode:
+          type: boolean
         xCoordinate:
           type: number
         yCoordinate:
           type: number
-        onError:
-          enum:
-          - CONTINUE
-          - STOP
-          type: string
         isEvaluationEnabled:
           type: boolean
         autoRetryWhenAccuracyLessThan:
@@ -656,12 +1396,28 @@ components:
           type: boolean
         enableAutoRetryWhenFailure:
           type: boolean
+        autoRetryDescription:
+          type: string
+          default: null
+        enableAutoRetryDescription:
+          type: boolean
+          default: false
         autoRetryCountWhenFailure:
           type: number
         autoRetryWaitTimeWhenFailureInMs:
           type: number
         isAttachmentDataPulledIn:
           type: boolean
+        isEdited:
+          type: boolean
+        createdAt:
+          format: date-time
+          type: string
+        onError:
+          type: string
+          enum:
+          - CONTINUE
+          - STOP
         nodeType:
           enum:
           - executionNode
@@ -672,58 +1428,213 @@ components:
           type: string
         nodeConfigurations:
           $ref: '#/components/schemas/NodeConfigurations'
-        saveAsVersion:
-          type: boolean
-        isEdited:
-          type: boolean
-        isActiveNodeVersion:
-          type: boolean
-        userId:
-          type: string
-        autoRetryDescription:
-          type: string
-        enableAutoRetryDescription:
-          type: boolean
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
+        toolConfiguration:
+          $ref: '#/components/schemas/MinimalToolConfigurationDto'
+        childEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentGraphEdgeDto'
+        parentEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentGraphEdgeDto'
       required:
-      - evaluationCriteria
-      - toolConfiguration
-      - objective
+      - id
       - customId
-      - isExitNode
+      - objective
+      - evaluationCriteria
       - isEntryNode
-      - agentGraphId
-      - onError
+      - isExitNode
       - isEvaluationEnabled
       - autoRetryWhenAccuracyLessThan
       - autoRetryLimitWhenAccuracyIsLow
       - enableAutoRetryWhenAccuracyIsLow
       - enableAutoRetryWhenFailure
+      - autoRetryDescription
+      - enableAutoRetryDescription
       - autoRetryCountWhenFailure
       - autoRetryWaitTimeWhenFailureInMs
       - isAttachmentDataPulledIn
-      - nodeType
-      - saveAsVersion
       - isEdited
-      - isActiveNodeVersion
-      - autoRetryDescription
-      - enableAutoRetryDescription
-      - id
       - createdAt
-      - updatedAt
-    IntegrationCategory:
+      - toolConfiguration
+      - childEdges
+      - parentEdges
+    AgentGraphNodeDto:
       type: object
       properties:
-        title:
+        onError:
+          default: STOP
+          enum:
+          - CONTINUE
+          - STOP
           type: string
-          description: Title of the integration category.
+        isEvaluationEnabled:
+          type: boolean
+          default: false
+        autoRetryLimitWhenAccuracyIsLow:
+          type: number
+          default: 1
+        enableAutoRetryWhenAccuracyIsLow:
+          type: boolean
+          default: false
+        enableAutoRetryWhenFailure:
+          type: boolean
+          default: false
+        autoRetryWhenAccuracyLessThan:
+          type: number
+          default: 80
+          minimum: 50
+          maximum: 100
+        autoRetryCountWhenFailure:
+          type: number
+          default: 1
+        autoRetryWaitTimeWhenFailureInMs:
+          type: number
+          default: 1000
+        isAttachmentDataPulledIn:
+          type: boolean
+        nodeType:
+          default: executionNode
+          enum:
+          - executionNode
+          - conditionNode
+          - waitingNode
+          - entryNode
+          - exitNode
+          type: string
+        nodeConfigurations:
+          default: null
+          allOf:
+          - $ref: '#/components/schemas/NodeConfigurations'
+        autoRetryDescription:
+          type:
+          - string
+          - 'null'
+          default: null
+        enableAutoRetryDescription:
+          type: boolean
+          default: false
+        toolConfiguration:
+          allOf:
+          - $ref: '#/components/schemas/AddToolAndConfigurationDto'
+        evaluationCriteria:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        customId:
+          type: string
+        isExitNode:
+          type: boolean
+          default: false
+        xCoordinate:
+          type: number
+        yCoordinate:
+          type: number
+        objective:
+          type: string
+      required:
+      - isAttachmentDataPulledIn
+      - evaluationCriteria
+      - objective
+    NodeEvaluation:
+      type: object
+      properties:
+        name:
+          type: string
+        score:
+          type: number
+        success:
+          type: boolean
+        objective:
+          type: string
+        reasoning:
+          type: string
+        evaluationCategory:
+          type: string
+        evaluationReasoning:
+          type: string
+        improvementSuggestions:
+          type: string
+    AgentToolConfiguration:
+      type: object
+      properties:
+        toolFunctionName:
+          type: string
+          description: Function name used to invoke this tool.
+          example: fetchCustomerData
+        integrationProviderId:
+          type: string
+          description: UUID of the integration provider for this tool.
+          example: provider-123e4567-e89b-12d3-a456-426614174000
+        inputParams:
+          description: Input parameter configurations for this tool.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentToolConfigurationInputParams'
+        outputParamsData:
+          description: JSON representation of output parameters.
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomToolOutput'
+        inputParamsData:
+          description: JSON representation of input parameters.
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInputParamConfigDto'
+        agentId:
+          type: string
+          description: UUID of the agent this tool configuration belongs to.
+          example: agent-123e4567-e89b-12d3-a456-426614174000
+        requiresConsent:
+          type: boolean
+          description: Whether user consent is required before executing this tool.
+          example: false
+        isBackgroundTool:
+          type: boolean
+          description: Whether this tool runs in the background without blocking workflow execution.
+          example: false
+        isMemoryTool:
+          type: boolean
+          description: Whether this tool accesses or stores data in memory.
+          example: false
+        isBatchExecutionEnabled:
+          type: boolean
+          description: Whether this tool supports batch processing of multiple items.
+          example: false
+        accuracyScore:
+          type: number
+          description: Accuracy score for this tool configuration.
+          example: 0.95
+        memoryLookupInstruction:
+          type: string
+          description: Instructions for how the tool should look up data from memory.
+          example: Retrieve customer records matching the provided email address.
+        preferredModel:
+          type: string
+          description: Preferred LLM model for this tool configuration
+          example: GPT4O
+        fallbackModels:
+          type: string
+          description: Comma-separated list of fallback models to use if preferred model fails
+          example: DEEP_SEEK,BEDROCK_CLAUDE_3_7_SONNET,BEDROCK_CLAUDE_OPUS_4_5
+        dynamicPropsId:
+          type:
+          - string
+          - 'null'
+          description: ID for dynamic properties configuration.
+        outputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        codeLanguage:
+          type: string
+        code:
+          type: string
+        originalTool:
+          $ref: '#/components/schemas/ToolsViewWithIntegrationConnectionStatus'
         id:
           type: string
         createdAt:
@@ -733,10 +1644,272 @@ components:
           format: date-time
           type: string
       required:
-      - title
+      - toolFunctionName
+      - inputParams
+      - agentId
+      - outputParams
+      - originalTool
       - id
       - createdAt
       - updatedAt
+    AgentTask:
+      type: object
+      properties:
+        agentGraphId:
+          type: string
+          description: UUID of the agent graph this task is associated with.
+          example: graph-123e4567-e89b-12d3-a456-426614174000
+        customId:
+          type: string
+          description: Custom identifier for external reference or tracking.
+          example: TASK-2024-001
+        originalTaskQuery:
+          type:
+          - string
+          - 'null'
+          description: The original query or request that initiated this task.
+          example: Generate a quarterly sales report for Q4 2024
+        taskObjective:
+          type: string
+          description: The main objective or goal of this task.
+          example: Analyze sales data and create comprehensive report
+        taskInstructions:
+          type:
+          - string
+          - 'null'
+          description: Detailed instructions for executing this task.
+          example: Include revenue breakdown by region and product category
+        taskContext:
+          type: object
+          description: Additional context data for task execution.
+        taskSuccessCriteria:
+          type:
+          - string
+          - 'null'
+          description: Criteria that define successful completion of this task.
+          example: Report must include all regions and be formatted as PDF
+        taskQuery:
+          type:
+          - string
+          - 'null'
+          description: The processed query used for task execution.
+          example: Generate sales report for Q4 2024 with regional breakdown
+        taskSummary:
+          type:
+          - string
+          - 'null'
+          description: Summary of the task results after completion.
+          example: Successfully generated Q4 sales report with 15 pages
+        initiationDetail:
+          type:
+          - object
+          - 'null'
+          description: Details about how this task was initiated.
+        triggerRecordId:
+          type:
+          - string
+          - 'null'
+          description: Record ID from the trigger source (e.g., Nango sync record ID) used for deduplication.
+          example: msg-abc123
+        manualRetryCount:
+          type: number
+          description: Number of times this task has been manually retried.
+          example: 0
+        isSuccess:
+          type: boolean
+          description: Whether the task completed successfully.
+          example: false
+        isViewed:
+          type: boolean
+          description: Whether the task results have been viewed by the user.
+          example: false
+        canRerunTaskNode:
+          type: boolean
+          description: Whether nodes in this task can be re-run.
+          example: true
+        startedAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+          description: Timestamp when task execution started.
+          example: '2024-01-15T10:00:00Z'
+        endedAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+          description: Timestamp when task execution completed.
+          example: '2024-01-15T10:05:30Z'
+        mode:
+          type: string
+          enum:
+          - AUTO
+          description: Execution mode for the task.
+          example: AUTO
+        status:
+          enum:
+          - QUEUED
+          - IN_PROGRESS
+          - COMPLETED
+          - FAILED
+          - USER_INPUT_REQUIRED
+          - USER_CONSENT_REQUIRED
+          - STOPPED
+          - AUTHENTICATION_REQUIRED
+          - INSUFFICIENT_CREDITS
+          - WAITING
+          type: string
+          description: Current status of the task.
+          example: QUEUED
+        userFeedback:
+          type: string
+          description: Feedback provided by the user about task results.
+          example: The report was accurate and well-formatted
+        rating:
+          enum:
+          - positive
+          - negative
+          type: string
+          description: User rating for the task results.
+        averageEvaluationScore:
+          type:
+          - number
+          - 'null'
+          description: Average evaluation score across all task nodes.
+          example: 0.85
+        taskState:
+          description: Current execution state of the task.
+          allOf:
+          - $ref: '#/components/schemas/TaskExecutionState'
+        graphState:
+          type:
+          - object
+          - 'null'
+          description: State of the graph during task execution.
+        totalExecutionTime:
+          type:
+          - number
+          - 'null'
+          description: Total time taken to execute the task in seconds.
+          example: 330.5
+        tokensUsed:
+          type:
+          - number
+          - 'null'
+          description: Total number of tokens consumed during task execution.
+          example: 15000
+        totalCost:
+          type:
+          - number
+          - 'null'
+          description: Total cost incurred for executing this task.
+          example: 0.0225
+        taskReceiveAt:
+          type:
+          - number
+          - 'null'
+        tokenUsages:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskNodeTokenUsage'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentGraphId
+      - manualRetryCount
+      - isSuccess
+      - isViewed
+      - canRerunTaskNode
+      - mode
+      - status
+      - taskReceiveAt
+      - id
+      - createdAt
+      - updatedAt
+    AddNodeDto:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/AgentGraphNodeDto'
+        agentId:
+          type: string
+        graphId:
+          type: string
+      required:
+      - node
+      - agentId
+      - graphId
+    CustomIntegrationAuthenticationMetaDTO:
+      type: object
+      properties:
+        clientId:
+          type: string
+        customOAuthUrl:
+          type: string
+        clientSecret:
+          type: string
+        authorizationUrl:
+          type: string
+        accessTokenUrl:
+          type: string
+        refreshTokenUrl:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        apiKeyType:
+          type: string
+          enum:
+          - default
+          - bearer
+          - header
+          - query
+        grantType:
+          type: string
+          enum:
+          - client_credentials
+          - authorization_code
+        parameter:
+          type: string
+        clientAuthentication:
+          type: string
+          enum:
+          - headers
+          - body
+      required:
+      - clientId
+      - clientSecret
+      - authorizationUrl
+      - accessTokenUrl
+      - refreshTokenUrl
+      - scopes
+      - apiKeyType
+      - grantType
+      - parameter
+      - clientAuthentication
+    CustomIntegrationToolUrlParamsDTO:
+      type: object
+      properties:
+        key:
+          type: string
+        parameterHint:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+      required:
+      - key
+      - parameterHint
+      - required
     Tool:
       type: object
       properties:
@@ -938,778 +2111,6 @@ components:
       - createdAt
       - updatedAt
       - id
-    GetNodeDetailsDto:
-      type: object
-      properties:
-        agentId:
-          type: string
-        nodeId:
-          type: string
-        graphId:
-          type: string
-        params:
-          type: object
-      required:
-      - agentId
-      - nodeId
-      - graphId
-    AgentTriggerConfigurationFiltersGroup:
-      type: object
-      properties:
-        operator:
-          enum:
-          - AND
-          - OR
-          type: string
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTriggerConfigurationFiltersConditions'
-      required:
-      - operator
-      - conditions
-    AgentGraphEdge:
-      type: object
-      properties:
-        sourceAgentGraphNodeId:
-          type: string
-        targetAgentGraphNodeId:
-          type: string
-        condition:
-          type: string
-        isAttachmentDataPulledIn:
-          type: boolean
-        conditionGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - sourceAgentGraphNodeId
-      - targetAgentGraphNodeId
-      - isAttachmentDataPulledIn
-      - conditionGroups
-      - id
-      - createdAt
-      - updatedAt
-    IntegrationProviderRequest:
-      type: object
-      properties:
-        endpoint:
-          type: string
-        method:
-          type: string
-        query:
-          type: array
-          items:
-            type: string
-        body:
-          type: object
-        bypassTLS:
-          type: boolean
-    OptimizedAgentGraphDto:
-      type: object
-      properties:
-        id:
-          type: string
-        agentId:
-          type: string
-        isActive:
-          type: boolean
-        isDraft:
-          type: boolean
-        isPublished:
-          type: boolean
-        isEdited:
-          type: boolean
-        publishedAt:
-          type: object
-        isEverExecuted:
-          type: boolean
-        isEverUsedForTemplate:
-          type: boolean
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/MinimalAgentGraphNodeDto'
-        agent:
-          $ref: '#/components/schemas/MinimalAgentDto'
-      required:
-      - id
-      - agentId
-      - isActive
-      - isDraft
-      - isPublished
-      - isEdited
-      - isEverExecuted
-      - isEverUsedForTemplate
-      - nodes
-      - agent
-    TaskNodeInput:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        value:
-          type: string
-        answer:
-          type: string
-        question:
-          type:
-          - string
-          - 'null'
-        reasoning:
-          type:
-          - string
-          - 'null'
-        found:
-          type: boolean
-        required:
-          type: boolean
-      required:
-      - id
-      - name
-      - value
-      - question
-      - reasoning
-      - found
-      - required
-    UpdateConditionRuleDto:
-      type: object
-      properties:
-        id:
-          type: string
-        sourceAgentToolConfigurationOutputParamsId:
-          type: string
-        operator:
-          enum:
-          - equals
-          - not_equals
-          - greater_than
-          - less_than
-          - contains
-          - does_not_contain
-          - starts_with
-          - ends_with
-          - is_empty
-          - is_not_empty
-          type: string
-        comparisonValueType:
-          enum:
-          - static
-          - output_param
-          type: string
-        comparisonValue:
-          type:
-          - string
-          - 'null'
-        comparisonAgentToolConfigurationOutputParamsId:
-          type:
-          - string
-          - 'null'
-        nextRuleOperator:
-          enum:
-          - AND
-          - OR
-          type:
-          - string
-          - 'null'
-      required:
-      - sourceAgentToolConfigurationOutputParamsId
-      - operator
-      - comparisonValueType
-    CustomIntegrationToolUrlParamsDTO:
-      type: object
-      properties:
-        key:
-          type: string
-        parameterHint:
-          type: string
-        type:
-          type: string
-        required:
-          type: boolean
-      required:
-      - key
-      - parameterHint
-      - required
-    FoodForThought:
-      type: object
-      properties:
-        question:
-          type: string
-        answer:
-          type: string
-      required:
-      - question
-      - answer
-    MinimalAgentDto:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        themeIconUrl:
-          type: string
-        agentCategoryId:
-          type: string
-        category:
-          $ref: '#/components/schemas/MinimalAgentCategoryDto'
-        type:
-          enum:
-          - beam-os
-          - user-agent
-          - pre-configured-agent
-          type: string
-        workspaceId:
-          type: string
-        creatorId:
-          type: string
-        order:
-          type: number
-      required:
-      - id
-      - name
-      - type
-      - creatorId
-      - order
-    CustomToolOutput:
-      type: object
-      properties:
-        position:
-          type: number
-        paramName:
-          type: string
-        paramDescription:
-          type: string
-        id:
-          type: string
-        agentToolConfigurationId:
-          type: string
-        dataType:
-          type:
-          - string
-          - 'null'
-          enum:
-          - string
-          - number
-          - boolean
-          - object
-          - enum
-        isArray:
-          type: boolean
-        typeOptions:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-        parentId:
-          type: string
-        paramPath:
-          type: string
-        outputExample:
-          type: string
-    NodeConfigurations:
-      type: object
-      properties:
-        conditionType:
-          enum:
-          - llm_based
-          - rule_based
-          type: string
-        llmModel:
-          type: string
-        fallbackModels:
-          type: string
-        waitType:
-          enum:
-          - time_based
-          - condition_based
-          type: string
-        timeToWaitValue:
-          type: number
-        timeToWaitUnit:
-          enum:
-          - minutes
-          - hours
-          - days
-          - months
-          type: string
-        linkedAgentGraphNodeId:
-          type: string
-        rule:
-          type: string
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTriggerConfigurationFiltersGroup'
-        timeoutType:
-          enum:
-          - no_timeout
-          - set_timeout
-          type: string
-        timeoutValue:
-          type: number
-        timeoutUnit:
-          enum:
-          - minutes
-          - hours
-          - days
-          - months
-          type: string
-        onTimeout:
-          enum:
-          - continue
-          - fail
-          type: string
-    UpdateEdgeDto:
-      type: object
-      properties:
-        condition:
-          type: string
-        isAttachmentDataPulledIn:
-          type: boolean
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateConditionGroupDto'
-      required:
-      - isAttachmentDataPulledIn
-    MinimalIntegrationDto:
-      type: object
-      properties:
-        systemIntegrationProvider:
-          type: string
-        systemIntegrationIdentifier:
-          type: string
-        customAuthParameters:
-          type: object
-    ParamRuleConditionConfig:
-      type: object
-      properties:
-        conditionType:
-          type: string
-          enum:
-          - llm_based
-          - rule_based
-    AgentGraphNodesResponseDto:
-      type: object
-      properties:
-        graphId:
-          type: string
-          description: Graph ID
-        agentId:
-          type: string
-          description: Agent ID
-        agentName:
-          type: string
-          description: Agent name
-        nodes:
-          description: List of graph nodes
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeLiteDto'
-      required:
-      - graphId
-      - agentId
-      - agentName
-      - nodes
-    TaskExecutionState:
-      type: object
-      properties:
-        nodeSelections:
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeSelection'
-    NodeSelection:
-      type: object
-      properties:
-        edgeId:
-          type: string
-        condition:
-          type: string
-        selected:
-          type: boolean
-        reasoning:
-          type: string
-        otherEdges:
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeSelection'
-      required:
-      - edgeId
-      - condition
-      - selected
-      - reasoning
-      - otherEdges
-    IntegrationsViewEntity:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the integration.
-        name:
-          type: string
-          description: Name of the integration.
-        description:
-          type: string
-          description: Description of the integration.
-        systemIntegrationIdentifier:
-          type: string
-          description: System integration identifier.
-        integrationCategoryId:
-          type: string
-          description: UUID of the integration category.
-        iconSrc:
-          type: string
-          description: Icon source URL.
-        type:
-          enum:
-          - integration
-          - custom_integration
-          type: string
-          description: Type of integration.
-        userId:
-          type: string
-          description: UUID of the user.
-        workspaceId:
-          type: string
-          description: UUID of the workspace.
-        privacyPolicyUrl:
-          type: string
-          description: Privacy policy URL.
-        shortDescription:
-          type: string
-          description: Short description of the integration.
-        longDescription:
-          type: string
-          description: Detailed description of the integration.
-        systemIntegrationProvider:
-          type: string
-          description: System integration provider.
-        customAuthParameters:
-          type: object
-          description: Custom authentication parameters.
-        category:
-          type: string
-          description: Category of the integration.
-        authenticationMeta:
-          description: Authentication metadata.
-          allOf:
-          - $ref: '#/components/schemas/CustomIntegrationAuthenticationMetaDTO'
-        syncModels:
-          type: object
-          description: Sync models configuration.
-        isPublished:
-          type: boolean
-          description: Whether the integration is published.
-        attributes:
-          type: object
-          description: Integration attributes.
-        status:
-          type: string
-          description: Current status of the integration.
-        customHeaders:
-          type: object
-          description: Custom headers for API requests.
-        allowWaiting:
-          type: boolean
-          description: Whether the integration allows waiting.
-        authType:
-          type: string
-        provider:
-          $ref: '#/components/schemas/IntegrationProvider'
-        providers:
-          type: array
-          items:
-            $ref: '#/components/schemas/IntegrationProvider'
-        integrationCategory:
-          $ref: '#/components/schemas/IntegrationCategory'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tool'
-      required:
-      - id
-      - type
-      - provider
-      - providers
-      - integrationCategory
-      - actions
-    MinimalOriginalToolDto:
-      type: object
-      properties:
-        toolName:
-          type: string
-        toolFunctionName:
-          type: string
-        iconSrc:
-          type: string
-        type:
-          type: string
-        prompt:
-          type: string
-        description:
-          type: string
-        preferredModel:
-          type: string
-        meta:
-          type: object
-        integrationId:
-          type: string
-        isIntegrationRequired:
-          type: boolean
-        isIntegrationConnected:
-          type: boolean
-        allowWaiting:
-          type: boolean
-        integration:
-          $ref: '#/components/schemas/MinimalIntegrationDto'
-        inputParams:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserInputParamConfigDto'
-        outputParams:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomToolOutput'
-      required:
-      - toolName
-      - toolFunctionName
-      - allowWaiting
-    OptimizedAgentGraphResponseDto:
-      type: object
-      properties:
-        graph:
-          $ref: '#/components/schemas/OptimizedAgentGraphDto'
-      required:
-      - graph
-    IntegrationProviderDetails:
-      type: object
-      properties:
-        request:
-          $ref: '#/components/schemas/IntegrationProviderRequest'
-        response:
-          type: object
-    AgentToolConfigurationOutputParams:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the output parameter.
-          example: param-123e4567-e89b-12d3-a456-426614174000
-        paramName:
-          type: string
-          description: Name of the output parameter.
-          example: customerData
-        position:
-          type: number
-          description: Position/order of the parameter in the output list.
-          example: 1
-        paramDescription:
-          type: string
-          description: Human-readable description of what this output parameter represents.
-          example: The customer data retrieved from the database.
-        agentToolConfigurationId:
-          type: string
-          description: UUID of the parent tool configuration.
-          example: config-123e4567-e89b-12d3-a456-426614174000
-        parentId:
-          type: string
-          description: UUID of the parent parameter for nested structures.
-        paramPath:
-          type: string
-          description: JSON path to this parameter in the output structure.
-          example: response.data.customer
-        outputExample:
-          type: string
-          description: Example value demonstrating the expected output format.
-          example: '{"name": "John Doe", "email": "john@example.com"}'
-        dataType:
-          enum:
-          - string
-          - number
-          - boolean
-          - object
-          - enum
-          type:
-          - string
-          - 'null'
-          description: Data type of the output parameter.
-          example: string
-        isArray:
-          type: boolean
-          default: false
-          description: Whether this parameter returns an array of values.
-          example: false
-        typeOptions:
-          type:
-          - object
-          - 'null'
-          description: Additional type-specific configuration options.
-        createdAt:
-          format: date-time
-          type: string
-          description: Timestamp when the parameter was created.
-        updatedAt:
-          format: date-time
-          type: string
-          description: Timestamp when the parameter was last updated.
-      required:
-      - id
-      - agentToolConfigurationId
-      - isArray
-      - createdAt
-      - updatedAt
-    MinimalAgentGraphNodeDto:
-      type: object
-      properties:
-        id:
-          type: string
-        customId:
-          type: string
-        objective:
-          type: string
-        evaluationCriteria:
-          type: array
-          items:
-            type: string
-        isEntryNode:
-          type: boolean
-        isExitNode:
-          type: boolean
-        xCoordinate:
-          type: number
-        yCoordinate:
-          type: number
-        isEvaluationEnabled:
-          type: boolean
-        autoRetryWhenAccuracyLessThan:
-          type: number
-        autoRetryLimitWhenAccuracyIsLow:
-          type: number
-        enableAutoRetryWhenAccuracyIsLow:
-          type: boolean
-        enableAutoRetryWhenFailure:
-          type: boolean
-        autoRetryDescription:
-          type: string
-          default: null
-        enableAutoRetryDescription:
-          type: boolean
-          default: false
-        autoRetryCountWhenFailure:
-          type: number
-        autoRetryWaitTimeWhenFailureInMs:
-          type: number
-        isAttachmentDataPulledIn:
-          type: boolean
-        isEdited:
-          type: boolean
-        createdAt:
-          format: date-time
-          type: string
-        onError:
-          type: string
-          enum:
-          - CONTINUE
-          - STOP
-        nodeType:
-          enum:
-          - executionNode
-          - conditionNode
-          - waitingNode
-          - entryNode
-          - exitNode
-          type: string
-        nodeConfigurations:
-          $ref: '#/components/schemas/NodeConfigurations'
-        toolConfiguration:
-          $ref: '#/components/schemas/MinimalToolConfigurationDto'
-        childEdges:
-          type: array
-          items:
-            $ref: '#/components/schemas/MinimalAgentGraphEdgeDto'
-        parentEdges:
-          type: array
-          items:
-            $ref: '#/components/schemas/MinimalAgentGraphEdgeDto'
-      required:
-      - id
-      - customId
-      - objective
-      - evaluationCriteria
-      - isEntryNode
-      - isExitNode
-      - isEvaluationEnabled
-      - autoRetryWhenAccuracyLessThan
-      - autoRetryLimitWhenAccuracyIsLow
-      - enableAutoRetryWhenAccuracyIsLow
-      - enableAutoRetryWhenFailure
-      - autoRetryDescription
-      - enableAutoRetryDescription
-      - autoRetryCountWhenFailure
-      - autoRetryWaitTimeWhenFailureInMs
-      - isAttachmentDataPulledIn
-      - isEdited
-      - createdAt
-      - toolConfiguration
-      - childEdges
-      - parentEdges
-    CreateConditionRuleDto:
-      type: object
-      properties:
-        sourceAgentToolConfigurationOutputParamsId:
-          type: string
-        operator:
-          enum:
-          - equals
-          - not_equals
-          - greater_than
-          - less_than
-          - contains
-          - does_not_contain
-          - starts_with
-          - ends_with
-          - is_empty
-          - is_not_empty
-          type: string
-        comparisonValueType:
-          enum:
-          - static
-          - output_param
-          type: string
-        comparisonValue:
-          type:
-          - string
-          - 'null'
-        comparisonAgentToolConfigurationOutputParamsId:
-          type:
-          - string
-          - 'null'
-        nextRuleOperator:
-          enum:
-          - AND
-          - OR
-          type:
-          - string
-          - 'null'
-      required:
-      - sourceAgentToolConfigurationOutputParamsId
-      - operator
-      - comparisonValueType
     MinimalToolConfigurationDto:
       type: object
       properties:
@@ -1777,418 +2178,6 @@ components:
       - isBatchExecutionEnabled
       - inputParams
       - outputParams
-    LinkedOutputParamRules:
-      type: object
-      properties:
-        elementKey:
-          type: string
-        agentToolConfigurationInputParamsId:
-          type: string
-        operator:
-          enum:
-          - equals
-          - not_equals
-          - greater_than
-          - less_than
-          - contains
-          - does_not_contain
-          - starts_with
-          - ends_with
-          - is_empty
-          - is_not_empty
-          type: string
-        comparisonValueType:
-          enum:
-          - static
-          - output_param
-          type: string
-        comparisonValue:
-          type: string
-        nextRuleOperator:
-          enum:
-          - AND
-          - OR
-          type: string
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - elementKey
-      - agentToolConfigurationInputParamsId
-      - operator
-      - comparisonValueType
-      - id
-      - createdAt
-      - updatedAt
-    AgentToolConfiguration:
-      type: object
-      properties:
-        toolFunctionName:
-          type: string
-          description: Function name used to invoke this tool.
-          example: fetchCustomerData
-        integrationProviderId:
-          type: string
-          description: UUID of the integration provider for this tool.
-          example: provider-123e4567-e89b-12d3-a456-426614174000
-        inputParams:
-          description: Input parameter configurations for this tool.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentToolConfigurationInputParams'
-        outputParamsData:
-          description: JSON representation of output parameters.
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomToolOutput'
-        inputParamsData:
-          description: JSON representation of input parameters.
-          type: array
-          items:
-            $ref: '#/components/schemas/UserInputParamConfigDto'
-        agentId:
-          type: string
-          description: UUID of the agent this tool configuration belongs to.
-          example: agent-123e4567-e89b-12d3-a456-426614174000
-        requiresConsent:
-          type: boolean
-          description: Whether user consent is required before executing this tool.
-          example: false
-        isBackgroundTool:
-          type: boolean
-          description: Whether this tool runs in the background without blocking workflow execution.
-          example: false
-        isMemoryTool:
-          type: boolean
-          description: Whether this tool accesses or stores data in memory.
-          example: false
-        isBatchExecutionEnabled:
-          type: boolean
-          description: Whether this tool supports batch processing of multiple items.
-          example: false
-        accuracyScore:
-          type: number
-          description: Accuracy score for this tool configuration.
-          example: 0.95
-        memoryLookupInstruction:
-          type: string
-          description: Instructions for how the tool should look up data from memory.
-          example: Retrieve customer records matching the provided email address.
-        preferredModel:
-          type: string
-          description: Preferred LLM model for this tool configuration
-          example: GPT4O
-        fallbackModels:
-          type: string
-          description: Comma-separated list of fallback models to use if preferred model fails
-          example: DEEP_SEEK,BEDROCK_CLAUDE_3_7_SONNET,BEDROCK_CLAUDE_OPUS_4_5
-        dynamicPropsId:
-          type:
-          - string
-          - 'null'
-          description: ID for dynamic properties configuration.
-        outputParams:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
-        codeLanguage:
-          type: string
-        code:
-          type: string
-        originalTool:
-          $ref: '#/components/schemas/ToolsViewWithIntegrationConnectionStatus'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - toolFunctionName
-      - inputParams
-      - agentId
-      - outputParams
-      - originalTool
-      - id
-      - createdAt
-      - updatedAt
-    AgentGraphNodeDto:
-      type: object
-      properties:
-        onError:
-          default: STOP
-          enum:
-          - CONTINUE
-          - STOP
-          type: string
-        isEvaluationEnabled:
-          type: boolean
-          default: false
-        autoRetryLimitWhenAccuracyIsLow:
-          type: number
-          default: 1
-        enableAutoRetryWhenAccuracyIsLow:
-          type: boolean
-          default: false
-        enableAutoRetryWhenFailure:
-          type: boolean
-          default: false
-        autoRetryWhenAccuracyLessThan:
-          type: number
-          default: 80
-          minimum: 50
-          maximum: 100
-        autoRetryCountWhenFailure:
-          type: number
-          default: 1
-        autoRetryWaitTimeWhenFailureInMs:
-          type: number
-          default: 1000
-        isAttachmentDataPulledIn:
-          type: boolean
-        nodeType:
-          default: executionNode
-          enum:
-          - executionNode
-          - conditionNode
-          - waitingNode
-          - entryNode
-          - exitNode
-          type: string
-        nodeConfigurations:
-          default: null
-          allOf:
-          - $ref: '#/components/schemas/NodeConfigurations'
-        autoRetryDescription:
-          type:
-          - string
-          - 'null'
-          default: null
-        enableAutoRetryDescription:
-          type: boolean
-          default: false
-        toolConfiguration:
-          allOf:
-          - $ref: '#/components/schemas/AddToolAndConfigurationDto'
-        evaluationCriteria:
-          type: array
-          items:
-            type: string
-        id:
-          type: string
-        customId:
-          type: string
-        isExitNode:
-          type: boolean
-          default: false
-        xCoordinate:
-          type: number
-        yCoordinate:
-          type: number
-        objective:
-          type: string
-      required:
-      - isAttachmentDataPulledIn
-      - evaluationCriteria
-      - objective
-    TaskNodeTokenUsage:
-      type: object
-      properties:
-        agentTaskId:
-          type: string
-        agentGraphNodeId:
-          type:
-          - string
-          - 'null'
-        creditTransactionId:
-          type:
-          - string
-          - 'null'
-        promptSlug:
-          type:
-          - string
-          - 'null'
-        executionStage:
-          enum:
-          - QUERY_REFORMULATION
-          - NODE_SELECTION
-          - NODE_GENERATION
-          - TOOL_SELECTION
-          - NODE_RETRIEVAL
-          - PARAMETER_EXTRACTION
-          - TOOL_EXECUTION
-          - NODE_EVALUATION
-          type: string
-        iteration:
-          type: number
-        model:
-          type: string
-        operation:
-          enum:
-          - NORMAL
-          - PROVIDER_ERROR
-          - PARSER_ERROR
-          - TIMEOUT
-          - HIGH_TOKEN_FALLBACK
-          - MODEL_FALLBACK
-          - AUTO_FIX
-          - RATE_LIMIT
-          type: string
-        inputToken:
-          type: number
-        outputToken:
-          type: number
-        reasoningToken:
-          type:
-          - number
-          - 'null'
-        totalToken:
-          type: number
-        isLatest:
-          type: boolean
-        agentTask:
-          $ref: '#/components/schemas/AgentTask'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - agentTaskId
-      - agentGraphNodeId
-      - creditTransactionId
-      - promptSlug
-      - executionStage
-      - iteration
-      - model
-      - operation
-      - inputToken
-      - outputToken
-      - reasoningToken
-      - totalToken
-      - isLatest
-      - agentTask
-      - id
-      - createdAt
-      - updatedAt
-    MinimalAgentGraphEdgeDto:
-      type: object
-      properties:
-        id:
-          type: string
-        sourceAgentGraphNodeId:
-          type: string
-        targetAgentGraphNodeId:
-          type: string
-        condition:
-          type: string
-        isAttachmentDataPulledIn:
-          type: boolean
-        conditionGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
-      required:
-      - id
-      - sourceAgentGraphNodeId
-      - targetAgentGraphNodeId
-      - isAttachmentDataPulledIn
-      - conditionGroups
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Full name of the user.
-          example: John Doe
-        avatarSrc:
-          type: string
-          description: URL to the user profile avatar image.
-          example: https://example.com/avatars/user123.png
-        email:
-          type: string
-        cognitoUserId:
-          type: string
-        socialProvider:
-          type: string
-        socialProviderId:
-          type: string
-        password:
-          type: string
-        paymentProviderCustomerId:
-          type: string
-        rememberToken:
-          type: string
-        emailVerified:
-          type: boolean
-        referralCode:
-          type: string
-        role_name:
-          type: string
-        isInternalUser:
-          type: boolean
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - name
-      - email
-      - cognitoUserId
-      - role_name
-      - isInternalUser
-      - id
-      - createdAt
-      - updatedAt
-    UpdateConditionGroupDto:
-      type: object
-      properties:
-        id:
-          type: string
-        nextGroupOperator:
-          enum:
-          - AND
-          - OR
-          type:
-          - string
-          - 'null'
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateConditionRuleDto'
-      required:
-      - rules
-    LinkedOutputParamRulesDto:
-      type: object
-      properties:
-        rules:
-          description: Array of linked output param rules.
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
-        linkedParamRulePrompt:
-          type: string
-          description: Prompt for the linked param rule.
-        linkedParamConfigurations:
-          description: Configuration for linked param nodes.
-          allOf:
-          - $ref: '#/components/schemas/ParamRuleConditionConfig'
-      required:
-      - linkedParamConfigurations
     AgentToolConfigurationInputParams:
       type: object
       properties:
@@ -2299,62 +2288,211 @@ components:
       - updatedAt
       - linkOutputParam
       - linkedOutputParamRules
-    CustomIntegrationAuthenticationMetaDTO:
+    AgentCategoryInfo:
       type: object
       properties:
-        clientId:
+        id:
           type: string
-        customOAuthUrl:
+        title:
           type: string
-        clientSecret:
+    ToolDataDto:
+      type: object
+      properties:
+        tool_id:
           type: string
-        authorizationUrl:
+        tool_parameters:
+          type: array
+          items:
+            type: object
+        tool_output:
+          type: array
+          items:
+            type: object
+        required_parameters:
+          type: object
+          additionalProperties: true
+        optional_parameters:
+          type: object
+          additionalProperties: true
+        reasoning:
+          type: object
+          additionalProperties: true
+        filled_prompt:
           type: string
-        accessTokenUrl:
-          type: string
-        refreshTokenUrl:
-          type: string
-        scopes:
+        skip_param_extraction:
           type: array
           items:
             type: string
-        apiKeyType:
+        integration_identifier:
           type: string
-          enum:
-          - default
-          - bearer
-          - header
-          - query
-        grantType:
-          type: string
-          enum:
-          - client_credentials
-          - authorization_code
-        parameter:
-          type: string
-        clientAuthentication:
-          type: string
-          enum:
-          - headers
-          - body
+        integration_error:
+          type: boolean
+          default: false
       required:
-      - clientId
-      - clientSecret
-      - authorizationUrl
-      - accessTokenUrl
-      - refreshTokenUrl
-      - scopes
-      - apiKeyType
-      - grantType
-      - parameter
-      - clientAuthentication
-    TaskNodeOutput:
+      - tool_id
+      - tool_parameters
+    GetPaginatedAgentTaskNodeDto:
       type: object
       properties:
-        value:
-          type: object
+        agentTaskNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskNode'
+        count:
+          type: number
       required:
-      - value
+      - agentTaskNodes
+      - count
+    AgentGraphNode:
+      type: object
+      properties:
+        evaluationCriteria:
+          type: array
+          items:
+            type: string
+        agentToolConfigurationId:
+          type: string
+        toolConfiguration:
+          $ref: '#/components/schemas/AgentToolConfiguration'
+        objective:
+          type: string
+        customId:
+          type: string
+        isExitNode:
+          type: boolean
+        isEntryNode:
+          type: boolean
+        agentGraphId:
+          type: string
+        xCoordinate:
+          type: number
+        yCoordinate:
+          type: number
+        onError:
+          enum:
+          - CONTINUE
+          - STOP
+          type: string
+        isEvaluationEnabled:
+          type: boolean
+        autoRetryWhenAccuracyLessThan:
+          type: number
+        autoRetryLimitWhenAccuracyIsLow:
+          type: number
+        enableAutoRetryWhenAccuracyIsLow:
+          type: boolean
+        enableAutoRetryWhenFailure:
+          type: boolean
+        autoRetryCountWhenFailure:
+          type: number
+        autoRetryWaitTimeWhenFailureInMs:
+          type: number
+        isAttachmentDataPulledIn:
+          type: boolean
+        nodeType:
+          enum:
+          - executionNode
+          - conditionNode
+          - waitingNode
+          - entryNode
+          - exitNode
+          type: string
+        nodeConfigurations:
+          $ref: '#/components/schemas/NodeConfigurations'
+        saveAsVersion:
+          type: boolean
+        isEdited:
+          type: boolean
+        isActiveNodeVersion:
+          type: boolean
+        userId:
+          type: string
+        autoRetryDescription:
+          type: string
+        enableAutoRetryDescription:
+          type: boolean
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - evaluationCriteria
+      - toolConfiguration
+      - objective
+      - customId
+      - isExitNode
+      - isEntryNode
+      - agentGraphId
+      - onError
+      - isEvaluationEnabled
+      - autoRetryWhenAccuracyLessThan
+      - autoRetryLimitWhenAccuracyIsLow
+      - enableAutoRetryWhenAccuracyIsLow
+      - enableAutoRetryWhenFailure
+      - autoRetryCountWhenFailure
+      - autoRetryWaitTimeWhenFailureInMs
+      - isAttachmentDataPulledIn
+      - nodeType
+      - saveAsVersion
+      - isEdited
+      - isActiveNodeVersion
+      - autoRetryDescription
+      - enableAutoRetryDescription
+      - id
+      - createdAt
+      - updatedAt
+    IntegrationCategory:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the integration category.
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - title
+      - id
+      - createdAt
+      - updatedAt
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        keywordInPrompt:
+          type: string
+      required:
+      - id
+      - question
+      - keywordInPrompt
+    CreateConditionGroupDto:
+      type: object
+      properties:
+        nextGroupOperator:
+          enum:
+          - AND
+          - OR
+          type:
+          - string
+          - 'null'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateConditionRuleDto'
+      required:
+      - rules
     AddToolAndConfigurationDto:
       type: object
       properties:
@@ -2439,66 +2577,69 @@ components:
           - 'null'
       required:
       - toolFunctionName
-    ToolDataDto:
+    OptimizedAgentGraphDto:
       type: object
       properties:
-        tool_id:
+        id:
           type: string
-        tool_parameters:
-          type: array
-          items:
-            type: object
-        tool_output:
-          type: array
-          items:
-            type: object
-        required_parameters:
-          type: object
-          additionalProperties: true
-        optional_parameters:
-          type: object
-          additionalProperties: true
-        reasoning:
-          type: object
-          additionalProperties: true
-        filled_prompt:
+        agentId:
           type: string
-        skip_param_extraction:
-          type: array
-          items:
-            type: string
-        integration_identifier:
-          type: string
-        integration_error:
+        isActive:
           type: boolean
-          default: false
+        isDraft:
+          type: boolean
+        isPublished:
+          type: boolean
+        isEdited:
+          type: boolean
+        publishedAt:
+          type: object
+        isEverExecuted:
+          type: boolean
+        isEverUsedForTemplate:
+          type: boolean
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinimalAgentGraphNodeDto'
+        agent:
+          $ref: '#/components/schemas/MinimalAgentDto'
       required:
-      - tool_id
-      - tool_parameters
-    EdgeEvaluationDto:
+      - id
+      - agentId
+      - isActive
+      - isDraft
+      - isPublished
+      - isEdited
+      - isEverExecuted
+      - isEverUsedForTemplate
+      - nodes
+      - agent
+    MinimalAgentCategoryDto:
       type: object
       properties:
-        target_node_id:
+        id:
           type: string
-          description: Target Node Id
-        eval_criteria:
+        title:
           type: string
-          description: Evaluation Criteria
-        branch_name:
-          type: string
-          description: branch name
-        reason:
-          type: string
-          description: Evaluation Reasoning
-        selected:
-          type: boolean
-          description: Is the edge selected
       required:
-      - target_node_id
-      - eval_criteria
-      - branch_name
-      - reason
-      - selected
+      - id
+      - title
+    GetNodeDetailsDto:
+      type: object
+      properties:
+        agentId:
+          type: string
+        nodeId:
+          type: string
+        graphId:
+          type: string
+        params:
+          type: object
+      required:
+      - agentId
+      - nodeId
+      - graphId
     CustomIntegrationToolQueryParamsDTO:
       type: object
       properties:
@@ -2514,6 +2655,79 @@ components:
       - key
       - parameterHint
       - required
+    TaskNodeInput:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+        answer:
+          type: string
+        question:
+          type:
+          - string
+          - 'null'
+        reasoning:
+          type:
+          - string
+          - 'null'
+        found:
+          type: boolean
+        required:
+          type: boolean
+      required:
+      - id
+      - name
+      - value
+      - question
+      - reasoning
+      - found
+      - required
+    CreateConditionRuleDto:
+      type: object
+      properties:
+        sourceAgentToolConfigurationOutputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type:
+          - string
+          - 'null'
+        comparisonAgentToolConfigurationOutputParamsId:
+          type:
+          - string
+          - 'null'
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type:
+          - string
+          - 'null'
+      required:
+      - sourceAgentToolConfigurationOutputParamsId
+      - operator
+      - comparisonValueType
     ToolsViewWithIntegrationConnectionStatus:
       type: object
       properties:
@@ -2727,6 +2941,212 @@ components:
       - createdAt
       - updatedAt
       - id
+    EdgeEvaluationDto:
+      type: object
+      properties:
+        target_node_id:
+          type: string
+          description: Target Node Id
+        eval_criteria:
+          type: string
+          description: Evaluation Criteria
+        branch_name:
+          type: string
+          description: branch name
+        reason:
+          type: string
+          description: Evaluation Reasoning
+        selected:
+          type: boolean
+          description: Is the edge selected
+      required:
+      - target_node_id
+      - eval_criteria
+      - branch_name
+      - reason
+      - selected
+    MinimalIntegrationDto:
+      type: object
+      properties:
+        systemIntegrationProvider:
+          type: string
+        systemIntegrationIdentifier:
+          type: string
+        customAuthParameters:
+          type: object
+    UpdateConditionGroupDto:
+      type: object
+      properties:
+        id:
+          type: string
+        nextGroupOperator:
+          enum:
+          - AND
+          - OR
+          type:
+          - string
+          - 'null'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateConditionRuleDto'
+      required:
+      - rules
+    AgentTriggerConfigurationFiltersGroup:
+      type: object
+      properties:
+        operator:
+          enum:
+          - AND
+          - OR
+          type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTriggerConfigurationFiltersConditions'
+      required:
+      - operator
+      - conditions
+    AgentGraphEdgeConditionGroup:
+      type: object
+      properties:
+        agentGraphEdgeId:
+          type: string
+        nextGroupOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        edge:
+          $ref: '#/components/schemas/AgentGraphEdge'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentGraphEdgeConditionRule'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - agentGraphEdgeId
+      - edge
+      - rules
+      - id
+      - createdAt
+      - updatedAt
+    LinkedOutputParamRulesDto:
+      type: object
+      properties:
+        rules:
+          description: Array of linked output param rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
+        linkedParamRulePrompt:
+          type: string
+          description: Prompt for the linked param rule.
+        linkedParamConfigurations:
+          description: Configuration for linked param nodes.
+          allOf:
+          - $ref: '#/components/schemas/ParamRuleConditionConfig'
+      required:
+      - linkedParamConfigurations
+    GetToolsMetaDto:
+      type: object
+      properties:
+        integration_provider_details:
+          $ref: '#/components/schemas/IntegrationProviderDetails'
+        agent_category:
+          $ref: '#/components/schemas/AgentCategoryInfo'
+        payload:
+          type: string
+        tool_name:
+          type: string
+        function_name:
+          type: string
+        requires_consent:
+          type: boolean
+        requires_translation:
+          type: boolean
+        description:
+          type: string
+        required_extracted_args:
+          type: array
+          items:
+            type: string
+        optional_extracted_args:
+          type: array
+          items:
+            type: string
+        content:
+          type: string
+        prompt:
+          type: string
+        type:
+          enum:
+          - beam_tool
+          - gpt_tool
+          - custom_gpt_tool
+          - custom_integration_tool
+          - code_executor_tool
+          type: string
+        integrationIdentifier:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        icon_src:
+          type: string
+        integration_provider_auth:
+          type: string
+        integration_provider_executor:
+          type: string
+        preferred_model:
+          type: string
+        integration_id:
+          type: string
+        apiKeyType:
+          type: string
+        parameter:
+          type: string
+        tool_category_id:
+          type: string
+        isActive:
+          type: boolean
+        agent_categories:
+          type: array
+          items:
+            type: string
+        required_generated_args:
+          type: array
+          items:
+            type: string
+        optional_generated_args:
+          type: array
+          items:
+            type: string
+        is_memory_tool:
+          type: boolean
+        memory_lookup_instruction:
+          type: string
+        workspace_id:
+          type: string
+      required:
+      - tool_name
+      - function_name
+      - requires_consent
+      - requires_translation
+      - description
+      - required_extracted_args
+      - content
+      - prompt
+      - type
+      - isActive
     UserInputParamConfigDto:
       type: object
       properties:
@@ -2833,44 +3253,13 @@ components:
       required:
       - paramName
       - fillType
-    AgentCategoryInfo:
+    TaskExecutionState:
       type: object
       properties:
-        id:
-          type: string
-        title:
-          type: string
-    AgentTriggerConfigurationFiltersConditions:
-      type: object
-      properties:
-        condition:
-          enum:
-          - is
-          - is_not
-          - contain
-          - does_not_contain
-          - any
-          - all
-          - less_than
-          - GREATER_than
-          - count
-          - exist
-          - does_not_exist
-          type: string
-        operator:
-          enum:
-          - AND
-          - OR
-          type: string
-        property:
-          type: string
-        value:
-          type: string
-      required:
-      - condition
-      - operator
-      - property
-      - value
+        nodeSelections:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeSelection'
     IntegrationProvider:
       type: object
       properties:
@@ -2930,491 +3319,115 @@ components:
       - id
       - createdAt
       - updatedAt
-    NodeLiteDto:
+    MinimalOriginalToolDto:
       type: object
       properties:
-        id:
+        toolName:
           type: string
-          description: Unique identifier of the node
-        objective:
+        toolFunctionName:
           type: string
-          description: Objective or purpose of the node
-      required:
-      - id
-      - objective
-    GetPaginatedAgentTaskNodeDto:
-      type: object
-      properties:
-        agentTaskNodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTaskNode'
-        count:
-          type: number
-      required:
-      - agentTaskNodes
-      - count
-    NodeEvaluation:
-      type: object
-      properties:
-        name:
+        iconSrc:
           type: string
-        score:
-          type: number
-        success:
+        type:
+          type: string
+        prompt:
+          type: string
+        description:
+          type: string
+        preferredModel:
+          type: string
+        meta:
+          type: object
+        integrationId:
+          type: string
+        isIntegrationRequired:
           type: boolean
-        objective:
-          type: string
-        reasoning:
-          type: string
-        evaluationCategory:
-          type: string
-        evaluationReasoning:
-          type: string
-        improvementSuggestions:
-          type: string
-    UpdateNodeDto:
-      type: object
-      properties:
-        node:
-          $ref: '#/components/schemas/AgentGraphNodeDto'
-        agentId:
-          type: string
-        graphId:
-          type: string
-      required:
-      - node
-      - agentId
-      - graphId
-    UpdateInputOutputParamsDto:
-      type: object
-      properties:
-        outputParams:
-          description: Output parameters configuration for the node tool
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomToolOutput'
+        isIntegrationConnected:
+          type: boolean
+        allowWaiting:
+          type: boolean
+        integration:
+          $ref: '#/components/schemas/MinimalIntegrationDto'
         inputParams:
-          description: Input parameters configuration for the node tool
           type: array
           items:
             $ref: '#/components/schemas/UserInputParamConfigDto'
-    AddNodeDto:
-      type: object
-      properties:
-        node:
-          $ref: '#/components/schemas/AgentGraphNodeDto'
-        agentId:
-          type: string
-        graphId:
-          type: string
+        outputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomToolOutput'
       required:
-      - node
-      - agentId
-      - graphId
-    GetToolsMetaDto:
-      type: object
-      properties:
-        integration_provider_details:
-          $ref: '#/components/schemas/IntegrationProviderDetails'
-        agent_category:
-          $ref: '#/components/schemas/AgentCategoryInfo'
-        payload:
-          type: string
-        tool_name:
-          type: string
-        function_name:
-          type: string
-        requires_consent:
-          type: boolean
-        requires_translation:
-          type: boolean
-        description:
-          type: string
-        required_extracted_args:
-          type: array
-          items:
-            type: string
-        optional_extracted_args:
-          type: array
-          items:
-            type: string
-        content:
-          type: string
-        prompt:
-          type: string
-        type:
-          enum:
-          - beam_tool
-          - gpt_tool
-          - custom_gpt_tool
-          - custom_integration_tool
-          - code_executor_tool
-          type: string
-        integrationIdentifier:
-          type: string
-        categories:
-          type: array
-          items:
-            type: string
-        icon_src:
-          type: string
-        integration_provider_auth:
-          type: string
-        integration_provider_executor:
-          type: string
-        preferred_model:
-          type: string
-        integration_id:
-          type: string
-        apiKeyType:
-          type: string
-        parameter:
-          type: string
-        tool_category_id:
-          type: string
-        isActive:
-          type: boolean
-        agent_categories:
-          type: array
-          items:
-            type: string
-        required_generated_args:
-          type: array
-          items:
-            type: string
-        optional_generated_args:
-          type: array
-          items:
-            type: string
-        is_memory_tool:
-          type: boolean
-        memory_lookup_instruction:
-          type: string
-        workspace_id:
-          type: string
-      required:
-      - tool_name
-      - function_name
-      - requires_consent
-      - requires_translation
-      - description
-      - required_extracted_args
-      - content
-      - prompt
-      - type
-      - isActive
-    AgentGraphEdgeConditionRule:
-      type: object
-      properties:
-        agentGraphEdgeConditionGroupId:
-          type: string
-        sourceAgentToolConfigurationOutputParamsId:
-          type: string
-        operator:
-          enum:
-          - equals
-          - not_equals
-          - greater_than
-          - less_than
-          - contains
-          - does_not_contain
-          - starts_with
-          - ends_with
-          - is_empty
-          - is_not_empty
-          type: string
-        comparisonValueType:
-          enum:
-          - static
-          - output_param
-          type: string
-        comparisonValue:
-          type: string
-        comparisonAgentToolConfigurationOutputParamsId:
-          type: string
-        nextRuleOperator:
-          enum:
-          - AND
-          - OR
-          type: string
-        group:
-          $ref: '#/components/schemas/AgentGraphEdgeConditionGroup'
-        sourceOutputParam:
-          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
-        comparisonOutputParam:
-          $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - agentGraphEdgeConditionGroupId
-      - sourceAgentToolConfigurationOutputParamsId
-      - operator
-      - comparisonValueType
-      - group
-      - sourceOutputParam
-      - id
-      - createdAt
-      - updatedAt
-    CreateAgentGraphEdgeDto:
-      type: object
-      properties:
-        sourceNodeId:
-          type: string
-        targetNodeId:
-          type: string
-        agentId:
-          type: string
-        agentGraphId:
-          type: string
-        condition:
-          type: string
-        isAttachmentDataPulledIn:
-          type: boolean
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateConditionGroupDto'
-      required:
-      - sourceNodeId
-      - targetNodeId
-      - agentId
-      - agentGraphId
-      - isAttachmentDataPulledIn
-    UpdateNodePromptDto:
-      type: object
-      properties:
-        prompt:
-          type: string
-          description: The prompt text for the node tool configuration
-      required:
-      - prompt
-    AgentGraphEdgeConditionGroup:
-      type: object
-      properties:
-        agentGraphEdgeId:
-          type: string
-        nextGroupOperator:
-          enum:
-          - AND
-          - OR
-          type: string
-        edge:
-          $ref: '#/components/schemas/AgentGraphEdge'
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentGraphEdgeConditionRule'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - agentGraphEdgeId
-      - edge
-      - rules
-      - id
-      - createdAt
-      - updatedAt
-    MinimalAgentCategoryDto:
+      - toolName
+      - toolFunctionName
+      - allowWaiting
+    AgentToolConfigurationOutputParams:
       type: object
       properties:
         id:
           type: string
-        title:
+          description: Unique identifier for the output parameter.
+          example: param-123e4567-e89b-12d3-a456-426614174000
+        paramName:
           type: string
-      required:
-      - id
-      - title
-    AgentTask:
-      type: object
-      properties:
-        agentGraphId:
-          type: string
-          description: UUID of the agent graph this task is associated with.
-          example: graph-123e4567-e89b-12d3-a456-426614174000
-        customId:
-          type: string
-          description: Custom identifier for external reference or tracking.
-          example: TASK-2024-001
-        originalTaskQuery:
-          type:
-          - string
-          - 'null'
-          description: The original query or request that initiated this task.
-          example: Generate a quarterly sales report for Q4 2024
-        taskObjective:
-          type: string
-          description: The main objective or goal of this task.
-          example: Analyze sales data and create comprehensive report
-        taskInstructions:
-          type:
-          - string
-          - 'null'
-          description: Detailed instructions for executing this task.
-          example: Include revenue breakdown by region and product category
-        taskContext:
-          type: object
-          description: Additional context data for task execution.
-        taskSuccessCriteria:
-          type:
-          - string
-          - 'null'
-          description: Criteria that define successful completion of this task.
-          example: Report must include all regions and be formatted as PDF
-        taskQuery:
-          type:
-          - string
-          - 'null'
-          description: The processed query used for task execution.
-          example: Generate sales report for Q4 2024 with regional breakdown
-        taskSummary:
-          type:
-          - string
-          - 'null'
-          description: Summary of the task results after completion.
-          example: Successfully generated Q4 sales report with 15 pages
-        initiationDetail:
-          type:
-          - object
-          - 'null'
-          description: Details about how this task was initiated.
-        triggerRecordId:
-          type:
-          - string
-          - 'null'
-          description: Record ID from the trigger source (e.g., Nango sync record ID) used for deduplication.
-          example: msg-abc123
-        manualRetryCount:
+          description: Name of the output parameter.
+          example: customerData
+        position:
           type: number
-          description: Number of times this task has been manually retried.
-          example: 0
-        isSuccess:
-          type: boolean
-          description: Whether the task completed successfully.
-          example: false
-        isViewed:
-          type: boolean
-          description: Whether the task results have been viewed by the user.
-          example: false
-        canRerunTaskNode:
-          type: boolean
-          description: Whether nodes in this task can be re-run.
-          example: true
-        startedAt:
-          format: date-time
-          type:
+          description: Position/order of the parameter in the output list.
+          example: 1
+        paramDescription:
+          type: string
+          description: Human-readable description of what this output parameter represents.
+          example: The customer data retrieved from the database.
+        agentToolConfigurationId:
+          type: string
+          description: UUID of the parent tool configuration.
+          example: config-123e4567-e89b-12d3-a456-426614174000
+        parentId:
+          type: string
+          description: UUID of the parent parameter for nested structures.
+        paramPath:
+          type: string
+          description: JSON path to this parameter in the output structure.
+          example: response.data.customer
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected output format.
+          example: '{"name": "John Doe", "email": "john@example.com"}'
+        dataType:
+          enum:
           - string
-          - 'null'
-          description: Timestamp when task execution started.
-          example: '2024-01-15T10:00:00Z'
-        endedAt:
-          format: date-time
-          type:
-          - string
-          - 'null'
-          description: Timestamp when task execution completed.
-          example: '2024-01-15T10:05:30Z'
-        mode:
-          type: string
-          enum:
-          - AUTO
-          description: Execution mode for the task.
-          example: AUTO
-        status:
-          enum:
-          - QUEUED
-          - IN_PROGRESS
-          - COMPLETED
-          - FAILED
-          - USER_INPUT_REQUIRED
-          - USER_CONSENT_REQUIRED
-          - STOPPED
-          - AUTHENTICATION_REQUIRED
-          - INSUFFICIENT_CREDITS
-          - WAITING
-          type: string
-          description: Current status of the task.
-          example: QUEUED
-        userFeedback:
-          type: string
-          description: Feedback provided by the user about task results.
-          example: The report was accurate and well-formatted
-        rating:
-          enum:
-          - positive
-          - negative
-          type: string
-          description: User rating for the task results.
-        averageEvaluationScore:
-          type:
           - number
+          - boolean
+          - object
+          - enum
+          type:
+          - string
           - 'null'
-          description: Average evaluation score across all task nodes.
-          example: 0.85
-        taskState:
-          description: Current execution state of the task.
-          allOf:
-          - $ref: '#/components/schemas/TaskExecutionState'
-        graphState:
+          description: Data type of the output parameter.
+          example: string
+        isArray:
+          type: boolean
+          default: false
+          description: Whether this parameter returns an array of values.
+          example: false
+        typeOptions:
           type:
           - object
           - 'null'
-          description: State of the graph during task execution.
-        totalExecutionTime:
-          type:
-          - number
-          - 'null'
-          description: Total time taken to execute the task in seconds.
-          example: 330.5
-        tokensUsed:
-          type:
-          - number
-          - 'null'
-          description: Total number of tokens consumed during task execution.
-          example: 15000
-        totalCost:
-          type:
-          - number
-          - 'null'
-          description: Total cost incurred for executing this task.
-          example: 0.0225
-        taskReceiveAt:
-          type:
-          - number
-          - 'null'
-        tokenUsages:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskNodeTokenUsage'
-        id:
-          type: string
+          description: Additional type-specific configuration options.
         createdAt:
           format: date-time
           type: string
+          description: Timestamp when the parameter was created.
         updatedAt:
           format: date-time
           type: string
+          description: Timestamp when the parameter was last updated.
       required:
-      - agentGraphId
-      - manualRetryCount
-      - isSuccess
-      - isViewed
-      - canRerunTaskNode
-      - mode
-      - status
-      - taskReceiveAt
       - id
+      - agentToolConfigurationId
+      - isArray
       - createdAt
       - updatedAt
     LinkParamsDto:
@@ -3428,19 +3441,6 @@ components:
           type: string
         outputId:
           type: string
-    Question:
-      type: object
-      properties:
-        id:
-          type: string
-        question:
-          type: string
-        keywordInPrompt:
-          type: string
-      required:
-      - id
-      - question
-      - keywordInPrompt
   securitySchemes:
     bearer:
       scheme: bearer

@@ -28,82 +28,6 @@ paths:
       - bearer: []
 components:
   schemas:
-    FeatureFlag:
-      type: object
-      properties:
-        name:
-          type: string
-        isGlobal:
-          type: boolean
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - name
-      - isGlobal
-      - id
-      - createdAt
-      - updatedAt
-    AgentTaskTemplateStep:
-      type: object
-      properties:
-        step:
-          type: string
-          description: Step description.
-        toolId:
-          type: string
-          description: Tool ID.
-        iconSrc:
-          type: string
-          description: Icon source URL.
-        iconUrl:
-          type: string
-          description: Icon URL.
-        beamTool:
-          type: boolean
-          description: Whether this is a Beam tool.
-        gptTool:
-          type: boolean
-          description: Whether this is a GPT tool.
-        consentRequired:
-          type: boolean
-          description: Whether consent is required.
-        integrationId:
-          type: string
-          description: Integration ID.
-        isIntegrationRequired:
-          type: boolean
-          description: Whether integration is required.
-        isIntegrationConnected:
-          type: boolean
-          description: Whether integration is connected.
-        integrationProvider:
-          type: string
-          description: Integration provider.
-        integrationIdentifier:
-          type: string
-          description: Integration identifier.
-        toolDetail:
-          type: object
-        integrationCustomAuthParameters:
-          type: object
-      required:
-      - step
-    WorkspaceRole:
-      type: object
-      properties:
-        isOwner:
-          type: boolean
-        isAdmin:
-          type: boolean
-      required:
-      - isOwner
-      - isAdmin
     WorkspaceCreditBalance:
       type: object
       properties:
@@ -118,6 +42,43 @@ components:
       - totalCredits
       - usedCredits
       - lastUpdatedAt
+    UserResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatarSrc:
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        paymentProviderCustomerId:
+          type: string
+        workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponseDtoWorkspace'
+        featureFlags:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureFlag'
+        createdAt:
+          format: date-time
+          type: string
+        isInternalUser:
+          type: boolean
+      required:
+      - id
+      - name
+      - email
+      - featureFlags
+      - createdAt
+      - isInternalUser
     WorkspaceSubscription:
       type: object
       properties:
@@ -147,13 +108,66 @@ components:
       - cancelAtPeriodEnd
       - paymentProvider
       - productId
-    AgentTaskTemplateCategory:
+    ProductMetaDataType:
       type: object
       properties:
+        isPremium:
+          type: boolean
+        isFree:
+          type: boolean
+        creditsAmount:
+          type: number
+        unlimitedCredits:
+          type: boolean
+      required:
+      - isPremium
+      - isFree
+      - creditsAmount
+      - unlimitedCredits
+    AgentConfig:
+      type: object
+      properties:
+        restrictions:
+          type: string
+        taskTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTaskTemplate'
+        tools:
+          type: array
+          items:
+            type: string
+        llmTools:
+          type: array
+          items:
+            type: object
+        sop:
+          type: object
+        defaultTaskId:
+          type: string
+        workspaceId:
+          type: string
+    FeatureFlag:
+      type: object
+      properties:
+        name:
+          type: string
+        isGlobal:
+          type: boolean
         id:
           type: string
-        title:
+        createdAt:
+          format: date-time
           type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - isGlobal
+      - id
+      - createdAt
+      - updatedAt
     Agent:
       type: object
       properties:
@@ -243,27 +257,61 @@ components:
       - order
       - createdAt
       - updatedAt
-    AgentSettingDto:
+    AgentTaskTemplateStep:
       type: object
       properties:
-        prompts:
-          description: Array of prompt templates used to guide the agent behavior.
-          example:
-          - You are a helpful customer support agent.
-          - Always be polite and professional.
-          type: array
-          items:
-            type: string
-        preferredModel:
+        step:
           type: string
-          description: Preferred AI model for this agent.
-          example: gpt-4
-        instructions:
+          description: Step description.
+        toolId:
           type: string
-          description: Additional instructions for agent behavior.
-          example: Focus on providing concise answers.
+          description: Tool ID.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        iconUrl:
+          type: string
+          description: Icon URL.
+        beamTool:
+          type: boolean
+          description: Whether this is a Beam tool.
+        gptTool:
+          type: boolean
+          description: Whether this is a GPT tool.
+        consentRequired:
+          type: boolean
+          description: Whether consent is required.
+        integrationId:
+          type: string
+          description: Integration ID.
+        isIntegrationRequired:
+          type: boolean
+          description: Whether integration is required.
+        isIntegrationConnected:
+          type: boolean
+          description: Whether integration is connected.
+        integrationProvider:
+          type: string
+          description: Integration provider.
+        integrationIdentifier:
+          type: string
+          description: Integration identifier.
+        toolDetail:
+          type: object
+        integrationCustomAuthParameters:
+          type: object
       required:
-      - prompts
+      - step
+    WorkspaceRole:
+      type: object
+      properties:
+        isOwner:
+          type: boolean
+        isAdmin:
+          type: boolean
+      required:
+      - isOwner
+      - isAdmin
     SubscriptionProduct:
       type: object
       properties:
@@ -299,43 +347,65 @@ components:
       - currency
       - creditsAmount
       - isActive
-    UserResponseDto:
+    AgentSettingDto:
+      type: object
+      properties:
+        prompts:
+          description: Array of prompt templates used to guide the agent behavior.
+          example:
+          - You are a helpful customer support agent.
+          - Always be polite and professional.
+          type: array
+          items:
+            type: string
+        preferredModel:
+          type: string
+          description: Preferred AI model for this agent.
+          example: gpt-4
+        instructions:
+          type: string
+          description: Additional instructions for agent behavior.
+          example: Focus on providing concise answers.
+      required:
+      - prompts
+    AgentTaskTemplateCategory:
       type: object
       properties:
         id:
           type: string
-        name:
+        title:
           type: string
-        email:
+    AgentTaskTemplate:
+      type: object
+      properties:
+        id:
           type: string
-        avatarSrc:
+          description: Template ID.
+        objective:
           type: string
-        accessToken:
+          description: Task objective.
+        description:
           type: string
-        refreshToken:
-          type: string
-        paymentProviderCustomerId:
-          type: string
-        workspaces:
+          description: Task description.
+        steps:
+          description: Steps in this task template.
           type: array
           items:
-            $ref: '#/components/schemas/UserResponseDtoWorkspace'
-        featureFlags:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeatureFlag'
-        createdAt:
+            $ref: '#/components/schemas/AgentTaskTemplateStep'
+        default:
+          type: boolean
+          description: Whether this is the default template.
+        category:
+          $ref: '#/components/schemas/AgentTaskTemplateCategory'
+        lastUpdatedAt:
           format: date-time
           type: string
-        isInternalUser:
-          type: boolean
+          description: Last updated timestamp.
       required:
       - id
-      - name
-      - email
-      - featureFlags
-      - createdAt
-      - isInternalUser
+      - objective
+      - description
+      - steps
     UserResponseDtoWorkspace:
       type: object
       properties:
@@ -373,76 +443,6 @@ components:
       - creditBalance
       - createdAt
       - agent
-    ProductMetaDataType:
-      type: object
-      properties:
-        isPremium:
-          type: boolean
-        isFree:
-          type: boolean
-        creditsAmount:
-          type: number
-        unlimitedCredits:
-          type: boolean
-      required:
-      - isPremium
-      - isFree
-      - creditsAmount
-      - unlimitedCredits
-    AgentTaskTemplate:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Template ID.
-        objective:
-          type: string
-          description: Task objective.
-        description:
-          type: string
-          description: Task description.
-        steps:
-          description: Steps in this task template.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTaskTemplateStep'
-        default:
-          type: boolean
-          description: Whether this is the default template.
-        category:
-          $ref: '#/components/schemas/AgentTaskTemplateCategory'
-        lastUpdatedAt:
-          format: date-time
-          type: string
-          description: Last updated timestamp.
-      required:
-      - id
-      - objective
-      - description
-      - steps
-    AgentConfig:
-      type: object
-      properties:
-        restrictions:
-          type: string
-        taskTemplates:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentTaskTemplate'
-        tools:
-          type: array
-          items:
-            type: string
-        llmTools:
-          type: array
-          items:
-            type: object
-        sop:
-          type: object
-        defaultTaskId:
-          type: string
-        workspaceId:
-          type: string
   securitySchemes:
     bearer:
       scheme: bearer

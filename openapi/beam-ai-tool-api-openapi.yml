@@ -153,22 +153,6 @@ paths:
       - x-api-key: []
 components:
   schemas:
-    CustomIntegrationToolBodyParamsDTO:
-      type: object
-      properties:
-        key:
-          type: string
-        parameterHint:
-          type: string
-        type:
-          type: string
-        required:
-          type: boolean
-      required:
-      - key
-      - parameterHint
-      - type
-      - required
     LinkedOutputParamRuleDto:
       type: object
       properties:
@@ -210,25 +194,144 @@ components:
       - elementKey
       - operator
       - comparisonValueType
-    IntegrationCategory:
+    ParamRuleConditionConfig:
       type: object
       properties:
-        title:
+        conditionType:
           type: string
-          description: Title of the integration category.
+          enum:
+          - llm_based
+          - rule_based
+    CustomToolOutput:
+      type: object
+      properties:
+        position:
+          type: number
+        paramName:
+          type: string
+        paramDescription:
+          type: string
         id:
           type: string
-        createdAt:
-          format: date-time
+        agentToolConfigurationId:
           type: string
-        updatedAt:
-          format: date-time
+        dataType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - string
+          - number
+          - boolean
+          - object
+          - enum
+        isArray:
+          type: boolean
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        parentId:
           type: string
+        paramPath:
+          type: string
+        outputExample:
+          type: string
+    IntegrationsViewEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the integration.
+        name:
+          type: string
+          description: Name of the integration.
+        description:
+          type: string
+          description: Description of the integration.
+        systemIntegrationIdentifier:
+          type: string
+          description: System integration identifier.
+        integrationCategoryId:
+          type: string
+          description: UUID of the integration category.
+        iconSrc:
+          type: string
+          description: Icon source URL.
+        type:
+          enum:
+          - integration
+          - custom_integration
+          type: string
+          description: Type of integration.
+        userId:
+          type: string
+          description: UUID of the user.
+        workspaceId:
+          type: string
+          description: UUID of the workspace.
+        privacyPolicyUrl:
+          type: string
+          description: Privacy policy URL.
+        shortDescription:
+          type: string
+          description: Short description of the integration.
+        longDescription:
+          type: string
+          description: Detailed description of the integration.
+        systemIntegrationProvider:
+          type: string
+          description: System integration provider.
+        customAuthParameters:
+          type: object
+          description: Custom authentication parameters.
+        category:
+          type: string
+          description: Category of the integration.
+        authenticationMeta:
+          description: Authentication metadata.
+          allOf:
+          - $ref: '#/components/schemas/CustomIntegrationAuthenticationMetaDTO'
+        syncModels:
+          type: object
+          description: Sync models configuration.
+        isPublished:
+          type: boolean
+          description: Whether the integration is published.
+        attributes:
+          type: object
+          description: Integration attributes.
+        status:
+          type: string
+          description: Current status of the integration.
+        customHeaders:
+          type: object
+          description: Custom headers for API requests.
+        allowWaiting:
+          type: boolean
+          description: Whether the integration allows waiting.
+        authType:
+          type: string
+        provider:
+          $ref: '#/components/schemas/IntegrationProvider'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationProvider'
+        integrationCategory:
+          $ref: '#/components/schemas/IntegrationCategory'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
       required:
-      - title
       - id
-      - createdAt
-      - updatedAt
+      - type
+      - provider
+      - providers
+      - integrationCategory
+      - actions
     GetAllToolsViewDto:
       type: object
       properties:
@@ -241,6 +344,304 @@ components:
       required:
       - tools
       - count
+    ToolOptimizeRequestDTO:
+      type: object
+      properties:
+        taskNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolOptimizeTaskNodesDTO'
+        agentId:
+          type: string
+        autoUpdateTool:
+          type: boolean
+      required:
+      - agentId
+    IntegrationProviderRequest:
+      type: object
+      properties:
+        endpoint:
+          type: string
+        method:
+          type: string
+        query:
+          type: array
+          items:
+            type: string
+        body:
+          type: object
+        bypassTLS:
+          type: boolean
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of the user.
+          example: John Doe
+        avatarSrc:
+          type: string
+          description: URL to the user profile avatar image.
+          example: https://example.com/avatars/user123.png
+        email:
+          type: string
+        cognitoUserId:
+          type: string
+        socialProvider:
+          type: string
+        socialProviderId:
+          type: string
+        password:
+          type: string
+        paymentProviderCustomerId:
+          type: string
+        rememberToken:
+          type: string
+        emailVerified:
+          type: boolean
+        referralCode:
+          type: string
+        role_name:
+          type: string
+        isInternalUser:
+          type: boolean
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - name
+      - email
+      - cognitoUserId
+      - role_name
+      - isInternalUser
+      - id
+      - createdAt
+      - updatedAt
+    LinkedOutputParamRules:
+      type: object
+      properties:
+        elementKey:
+          type: string
+        agentToolConfigurationInputParamsId:
+          type: string
+        operator:
+          enum:
+          - equals
+          - not_equals
+          - greater_than
+          - less_than
+          - contains
+          - does_not_contain
+          - starts_with
+          - ends_with
+          - is_empty
+          - is_not_empty
+          type: string
+        comparisonValueType:
+          enum:
+          - static
+          - output_param
+          type: string
+        comparisonValue:
+          type: string
+        nextRuleOperator:
+          enum:
+          - AND
+          - OR
+          type: string
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - elementKey
+      - agentToolConfigurationInputParamsId
+      - operator
+      - comparisonValueType
+      - id
+      - createdAt
+      - updatedAt
+    IntegrationProviderDetails:
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/IntegrationProviderRequest'
+        response:
+          type: object
+    AgentToolConfiguration:
+      type: object
+      properties:
+        toolFunctionName:
+          type: string
+          description: Function name used to invoke this tool.
+          example: fetchCustomerData
+        integrationProviderId:
+          type: string
+          description: UUID of the integration provider for this tool.
+          example: provider-123e4567-e89b-12d3-a456-426614174000
+        inputParams:
+          description: Input parameter configurations for this tool.
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentToolConfigurationInputParams'
+        outputParamsData:
+          description: JSON representation of output parameters.
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomToolOutput'
+        inputParamsData:
+          description: JSON representation of input parameters.
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInputParamConfigDto'
+        agentId:
+          type: string
+          description: UUID of the agent this tool configuration belongs to.
+          example: agent-123e4567-e89b-12d3-a456-426614174000
+        requiresConsent:
+          type: boolean
+          description: Whether user consent is required before executing this tool.
+          example: false
+        isBackgroundTool:
+          type: boolean
+          description: Whether this tool runs in the background without blocking workflow execution.
+          example: false
+        isMemoryTool:
+          type: boolean
+          description: Whether this tool accesses or stores data in memory.
+          example: false
+        isBatchExecutionEnabled:
+          type: boolean
+          description: Whether this tool supports batch processing of multiple items.
+          example: false
+        accuracyScore:
+          type: number
+          description: Accuracy score for this tool configuration.
+          example: 0.95
+        memoryLookupInstruction:
+          type: string
+          description: Instructions for how the tool should look up data from memory.
+          example: Retrieve customer records matching the provided email address.
+        preferredModel:
+          type: string
+          description: Preferred LLM model for this tool configuration
+          example: GPT4O
+        fallbackModels:
+          type: string
+          description: Comma-separated list of fallback models to use if preferred model fails
+          example: DEEP_SEEK,BEDROCK_CLAUDE_3_7_SONNET,BEDROCK_CLAUDE_OPUS_4_5
+        dynamicPropsId:
+          type:
+          - string
+          - 'null'
+          description: ID for dynamic properties configuration.
+        outputParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
+        codeLanguage:
+          type: string
+        code:
+          type: string
+        originalTool:
+          $ref: '#/components/schemas/ToolsViewWithIntegrationConnectionStatus'
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - toolFunctionName
+      - inputParams
+      - agentId
+      - outputParams
+      - originalTool
+      - id
+      - createdAt
+      - updatedAt
+    ToolOptimizeResponseDTO:
+      type: object
+      properties:
+        threadId:
+          type: string
+      required:
+      - threadId
+    CustomIntegrationAuthenticationMetaDTO:
+      type: object
+      properties:
+        clientId:
+          type: string
+        customOAuthUrl:
+          type: string
+        clientSecret:
+          type: string
+        authorizationUrl:
+          type: string
+        accessTokenUrl:
+          type: string
+        refreshTokenUrl:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        apiKeyType:
+          type: string
+          enum:
+          - default
+          - bearer
+          - header
+          - query
+        grantType:
+          type: string
+          enum:
+          - client_credentials
+          - authorization_code
+        parameter:
+          type: string
+        clientAuthentication:
+          type: string
+          enum:
+          - headers
+          - body
+      required:
+      - clientId
+      - clientSecret
+      - authorizationUrl
+      - accessTokenUrl
+      - refreshTokenUrl
+      - scopes
+      - apiKeyType
+      - grantType
+      - parameter
+      - clientAuthentication
+    CustomIntegrationToolUrlParamsDTO:
+      type: object
+      properties:
+        key:
+          type: string
+        parameterHint:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+      required:
+      - key
+      - parameterHint
+      - required
     Tool:
       type: object
       properties:
@@ -442,470 +843,6 @@ components:
       - createdAt
       - updatedAt
       - id
-    IntegrationProviderRequest:
-      type: object
-      properties:
-        endpoint:
-          type: string
-        method:
-          type: string
-        query:
-          type: array
-          items:
-            type: string
-        body:
-          type: object
-        bypassTLS:
-          type: boolean
-    CustomIntegrationToolUrlParamsDTO:
-      type: object
-      properties:
-        key:
-          type: string
-        parameterHint:
-          type: string
-        type:
-          type: string
-        required:
-          type: boolean
-      required:
-      - key
-      - parameterHint
-      - required
-    CustomToolOutput:
-      type: object
-      properties:
-        position:
-          type: number
-        paramName:
-          type: string
-        paramDescription:
-          type: string
-        id:
-          type: string
-        agentToolConfigurationId:
-          type: string
-        dataType:
-          type:
-          - string
-          - 'null'
-          enum:
-          - string
-          - number
-          - boolean
-          - object
-          - enum
-        isArray:
-          type: boolean
-        typeOptions:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-        parentId:
-          type: string
-        paramPath:
-          type: string
-        outputExample:
-          type: string
-    ParamRuleConditionConfig:
-      type: object
-      properties:
-        conditionType:
-          type: string
-          enum:
-          - llm_based
-          - rule_based
-    IntegrationsViewEntity:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the integration.
-        name:
-          type: string
-          description: Name of the integration.
-        description:
-          type: string
-          description: Description of the integration.
-        systemIntegrationIdentifier:
-          type: string
-          description: System integration identifier.
-        integrationCategoryId:
-          type: string
-          description: UUID of the integration category.
-        iconSrc:
-          type: string
-          description: Icon source URL.
-        type:
-          enum:
-          - integration
-          - custom_integration
-          type: string
-          description: Type of integration.
-        userId:
-          type: string
-          description: UUID of the user.
-        workspaceId:
-          type: string
-          description: UUID of the workspace.
-        privacyPolicyUrl:
-          type: string
-          description: Privacy policy URL.
-        shortDescription:
-          type: string
-          description: Short description of the integration.
-        longDescription:
-          type: string
-          description: Detailed description of the integration.
-        systemIntegrationProvider:
-          type: string
-          description: System integration provider.
-        customAuthParameters:
-          type: object
-          description: Custom authentication parameters.
-        category:
-          type: string
-          description: Category of the integration.
-        authenticationMeta:
-          description: Authentication metadata.
-          allOf:
-          - $ref: '#/components/schemas/CustomIntegrationAuthenticationMetaDTO'
-        syncModels:
-          type: object
-          description: Sync models configuration.
-        isPublished:
-          type: boolean
-          description: Whether the integration is published.
-        attributes:
-          type: object
-          description: Integration attributes.
-        status:
-          type: string
-          description: Current status of the integration.
-        customHeaders:
-          type: object
-          description: Custom headers for API requests.
-        allowWaiting:
-          type: boolean
-          description: Whether the integration allows waiting.
-        authType:
-          type: string
-        provider:
-          $ref: '#/components/schemas/IntegrationProvider'
-        providers:
-          type: array
-          items:
-            $ref: '#/components/schemas/IntegrationProvider'
-        integrationCategory:
-          $ref: '#/components/schemas/IntegrationCategory'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tool'
-      required:
-      - id
-      - type
-      - provider
-      - providers
-      - integrationCategory
-      - actions
-    ToolOptimizeTaskNodesDTO:
-      type: object
-      properties:
-        feedback:
-          type: string
-        positive:
-          type: boolean
-        expectedOutput:
-          type: string
-        id:
-          type: string
-      required:
-      - positive
-      - id
-    ToolOptimizeRequestDTO:
-      type: object
-      properties:
-        taskNodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ToolOptimizeTaskNodesDTO'
-        agentId:
-          type: string
-        autoUpdateTool:
-          type: boolean
-      required:
-      - agentId
-    IntegrationProviderDetails:
-      type: object
-      properties:
-        request:
-          $ref: '#/components/schemas/IntegrationProviderRequest'
-        response:
-          type: object
-    AgentToolConfigurationOutputParams:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the output parameter.
-          example: param-123e4567-e89b-12d3-a456-426614174000
-        paramName:
-          type: string
-          description: Name of the output parameter.
-          example: customerData
-        position:
-          type: number
-          description: Position/order of the parameter in the output list.
-          example: 1
-        paramDescription:
-          type: string
-          description: Human-readable description of what this output parameter represents.
-          example: The customer data retrieved from the database.
-        agentToolConfigurationId:
-          type: string
-          description: UUID of the parent tool configuration.
-          example: config-123e4567-e89b-12d3-a456-426614174000
-        parentId:
-          type: string
-          description: UUID of the parent parameter for nested structures.
-        paramPath:
-          type: string
-          description: JSON path to this parameter in the output structure.
-          example: response.data.customer
-        outputExample:
-          type: string
-          description: Example value demonstrating the expected output format.
-          example: '{"name": "John Doe", "email": "john@example.com"}'
-        dataType:
-          enum:
-          - string
-          - number
-          - boolean
-          - object
-          - enum
-          type:
-          - string
-          - 'null'
-          description: Data type of the output parameter.
-          example: string
-        isArray:
-          type: boolean
-          default: false
-          description: Whether this parameter returns an array of values.
-          example: false
-        typeOptions:
-          type:
-          - object
-          - 'null'
-          description: Additional type-specific configuration options.
-        createdAt:
-          format: date-time
-          type: string
-          description: Timestamp when the parameter was created.
-        updatedAt:
-          format: date-time
-          type: string
-          description: Timestamp when the parameter was last updated.
-      required:
-      - id
-      - agentToolConfigurationId
-      - isArray
-      - createdAt
-      - updatedAt
-    AgentToolConfiguration:
-      type: object
-      properties:
-        toolFunctionName:
-          type: string
-          description: Function name used to invoke this tool.
-          example: fetchCustomerData
-        integrationProviderId:
-          type: string
-          description: UUID of the integration provider for this tool.
-          example: provider-123e4567-e89b-12d3-a456-426614174000
-        inputParams:
-          description: Input parameter configurations for this tool.
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentToolConfigurationInputParams'
-        outputParamsData:
-          description: JSON representation of output parameters.
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomToolOutput'
-        inputParamsData:
-          description: JSON representation of input parameters.
-          type: array
-          items:
-            $ref: '#/components/schemas/UserInputParamConfigDto'
-        agentId:
-          type: string
-          description: UUID of the agent this tool configuration belongs to.
-          example: agent-123e4567-e89b-12d3-a456-426614174000
-        requiresConsent:
-          type: boolean
-          description: Whether user consent is required before executing this tool.
-          example: false
-        isBackgroundTool:
-          type: boolean
-          description: Whether this tool runs in the background without blocking workflow execution.
-          example: false
-        isMemoryTool:
-          type: boolean
-          description: Whether this tool accesses or stores data in memory.
-          example: false
-        isBatchExecutionEnabled:
-          type: boolean
-          description: Whether this tool supports batch processing of multiple items.
-          example: false
-        accuracyScore:
-          type: number
-          description: Accuracy score for this tool configuration.
-          example: 0.95
-        memoryLookupInstruction:
-          type: string
-          description: Instructions for how the tool should look up data from memory.
-          example: Retrieve customer records matching the provided email address.
-        preferredModel:
-          type: string
-          description: Preferred LLM model for this tool configuration
-          example: GPT4O
-        fallbackModels:
-          type: string
-          description: Comma-separated list of fallback models to use if preferred model fails
-          example: DEEP_SEEK,BEDROCK_CLAUDE_3_7_SONNET,BEDROCK_CLAUDE_OPUS_4_5
-        dynamicPropsId:
-          type:
-          - string
-          - 'null'
-          description: ID for dynamic properties configuration.
-        outputParams:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentToolConfigurationOutputParams'
-        codeLanguage:
-          type: string
-        code:
-          type: string
-        originalTool:
-          $ref: '#/components/schemas/ToolsViewWithIntegrationConnectionStatus'
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - toolFunctionName
-      - inputParams
-      - agentId
-      - outputParams
-      - originalTool
-      - id
-      - createdAt
-      - updatedAt
-    LinkedOutputParamRules:
-      type: object
-      properties:
-        elementKey:
-          type: string
-        agentToolConfigurationInputParamsId:
-          type: string
-        operator:
-          enum:
-          - equals
-          - not_equals
-          - greater_than
-          - less_than
-          - contains
-          - does_not_contain
-          - starts_with
-          - ends_with
-          - is_empty
-          - is_not_empty
-          type: string
-        comparisonValueType:
-          enum:
-          - static
-          - output_param
-          type: string
-        comparisonValue:
-          type: string
-        nextRuleOperator:
-          enum:
-          - AND
-          - OR
-          type: string
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - elementKey
-      - agentToolConfigurationInputParamsId
-      - operator
-      - comparisonValueType
-      - id
-      - createdAt
-      - updatedAt
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Full name of the user.
-          example: John Doe
-        avatarSrc:
-          type: string
-          description: URL to the user profile avatar image.
-          example: https://example.com/avatars/user123.png
-        email:
-          type: string
-        cognitoUserId:
-          type: string
-        socialProvider:
-          type: string
-        socialProviderId:
-          type: string
-        password:
-          type: string
-        paymentProviderCustomerId:
-          type: string
-        rememberToken:
-          type: string
-        emailVerified:
-          type: boolean
-        referralCode:
-          type: string
-        role_name:
-          type: string
-        isInternalUser:
-          type: boolean
-        id:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-      - name
-      - email
-      - cognitoUserId
-      - role_name
-      - isInternalUser
-      - id
-      - createdAt
-      - updatedAt
     AgentToolConfigurationInputParams:
       type: object
       properties:
@@ -1016,79 +953,56 @@ components:
       - updatedAt
       - linkOutputParam
       - linkedOutputParamRules
-    LinkedOutputParamRulesDto:
+    AgentCategoryInfo:
       type: object
       properties:
-        rules:
-          description: Array of linked output param rules.
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
-        linkedParamRulePrompt:
+        id:
           type: string
-          description: Prompt for the linked param rule.
-        linkedParamConfigurations:
-          description: Configuration for linked param nodes.
-          allOf:
-          - $ref: '#/components/schemas/ParamRuleConditionConfig'
-      required:
-      - linkedParamConfigurations
-    ToolOptimizeResponseDTO:
+        title:
+          type: string
+    IntegrationCategory:
       type: object
       properties:
-        threadId:
+        title:
+          type: string
+          description: Title of the integration category.
+        id:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
           type: string
       required:
-      - threadId
-    CustomIntegrationAuthenticationMetaDTO:
+      - title
+      - id
+      - createdAt
+      - updatedAt
+    Question:
       type: object
       properties:
-        clientId:
+        id:
           type: string
-        customOAuthUrl:
+        question:
           type: string
-        clientSecret:
+        keywordInPrompt:
           type: string
-        authorizationUrl:
-          type: string
-        accessTokenUrl:
-          type: string
-        refreshTokenUrl:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        apiKeyType:
-          type: string
-          enum:
-          - default
-          - bearer
-          - header
-          - query
-        grantType:
-          type: string
-          enum:
-          - client_credentials
-          - authorization_code
-        parameter:
-          type: string
-        clientAuthentication:
-          type: string
-          enum:
-          - headers
-          - body
       required:
-      - clientId
-      - clientSecret
-      - authorizationUrl
-      - accessTokenUrl
-      - refreshTokenUrl
-      - scopes
-      - apiKeyType
-      - grantType
-      - parameter
-      - clientAuthentication
+      - id
+      - question
+      - keywordInPrompt
+    LinkParamsDto:
+      type: object
+      properties:
+        toolId:
+          type: string
+        toolFunctionName:
+          type: string
+        outputParam:
+          type: string
+        outputId:
+          type: string
     CustomIntegrationToolQueryParamsDTO:
       type: object
       properties:
@@ -1317,6 +1231,129 @@ components:
       - createdAt
       - updatedAt
       - id
+    ToolOptimizeTaskNodesDTO:
+      type: object
+      properties:
+        feedback:
+          type: string
+        positive:
+          type: boolean
+        expectedOutput:
+          type: string
+        id:
+          type: string
+      required:
+      - positive
+      - id
+    LinkedOutputParamRulesDto:
+      type: object
+      properties:
+        rules:
+          description: Array of linked output param rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedOutputParamRuleDto'
+        linkedParamRulePrompt:
+          type: string
+          description: Prompt for the linked param rule.
+        linkedParamConfigurations:
+          description: Configuration for linked param nodes.
+          allOf:
+          - $ref: '#/components/schemas/ParamRuleConditionConfig'
+      required:
+      - linkedParamConfigurations
+    GetToolsMetaDto:
+      type: object
+      properties:
+        integration_provider_details:
+          $ref: '#/components/schemas/IntegrationProviderDetails'
+        agent_category:
+          $ref: '#/components/schemas/AgentCategoryInfo'
+        payload:
+          type: string
+        tool_name:
+          type: string
+        function_name:
+          type: string
+        requires_consent:
+          type: boolean
+        requires_translation:
+          type: boolean
+        description:
+          type: string
+        required_extracted_args:
+          type: array
+          items:
+            type: string
+        optional_extracted_args:
+          type: array
+          items:
+            type: string
+        content:
+          type: string
+        prompt:
+          type: string
+        type:
+          enum:
+          - beam_tool
+          - gpt_tool
+          - custom_gpt_tool
+          - custom_integration_tool
+          - code_executor_tool
+          type: string
+        integrationIdentifier:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        icon_src:
+          type: string
+        integration_provider_auth:
+          type: string
+        integration_provider_executor:
+          type: string
+        preferred_model:
+          type: string
+        integration_id:
+          type: string
+        apiKeyType:
+          type: string
+        parameter:
+          type: string
+        tool_category_id:
+          type: string
+        isActive:
+          type: boolean
+        agent_categories:
+          type: array
+          items:
+            type: string
+        required_generated_args:
+          type: array
+          items:
+            type: string
+        optional_generated_args:
+          type: array
+          items:
+            type: string
+        is_memory_tool:
+          type: boolean
+        memory_lookup_instruction:
+          type: string
+        workspace_id:
+          type: string
+      required:
+      - tool_name
+      - function_name
+      - requires_consent
+      - requires_translation
+      - description
+      - required_extracted_args
+      - content
+      - prompt
+      - type
+      - isActive
     UserInputParamConfigDto:
       type: object
       properties:
@@ -1423,13 +1460,6 @@ components:
       required:
       - paramName
       - fillType
-    AgentCategoryInfo:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
     IntegrationProvider:
       type: object
       properties:
@@ -1489,122 +1519,92 @@ components:
       - id
       - createdAt
       - updatedAt
-    GetToolsMetaDto:
-      type: object
-      properties:
-        integration_provider_details:
-          $ref: '#/components/schemas/IntegrationProviderDetails'
-        agent_category:
-          $ref: '#/components/schemas/AgentCategoryInfo'
-        payload:
-          type: string
-        tool_name:
-          type: string
-        function_name:
-          type: string
-        requires_consent:
-          type: boolean
-        requires_translation:
-          type: boolean
-        description:
-          type: string
-        required_extracted_args:
-          type: array
-          items:
-            type: string
-        optional_extracted_args:
-          type: array
-          items:
-            type: string
-        content:
-          type: string
-        prompt:
-          type: string
-        type:
-          enum:
-          - beam_tool
-          - gpt_tool
-          - custom_gpt_tool
-          - custom_integration_tool
-          - code_executor_tool
-          type: string
-        integrationIdentifier:
-          type: string
-        categories:
-          type: array
-          items:
-            type: string
-        icon_src:
-          type: string
-        integration_provider_auth:
-          type: string
-        integration_provider_executor:
-          type: string
-        preferred_model:
-          type: string
-        integration_id:
-          type: string
-        apiKeyType:
-          type: string
-        parameter:
-          type: string
-        tool_category_id:
-          type: string
-        isActive:
-          type: boolean
-        agent_categories:
-          type: array
-          items:
-            type: string
-        required_generated_args:
-          type: array
-          items:
-            type: string
-        optional_generated_args:
-          type: array
-          items:
-            type: string
-        is_memory_tool:
-          type: boolean
-        memory_lookup_instruction:
-          type: string
-        workspace_id:
-          type: string
-      required:
-      - tool_name
-      - function_name
-      - requires_consent
-      - requires_translation
-      - description
-      - required_extracted_args
-      - content
-      - prompt
-      - type
-      - isActive
-    LinkParamsDto:
-      type: object
-      properties:
-        toolId:
-          type: string
-        toolFunctionName:
-          type: string
-        outputParam:
-          type: string
-        outputId:
-          type: string
-    Question:
+    AgentToolConfigurationOutputParams:
       type: object
       properties:
         id:
           type: string
-        question:
+          description: Unique identifier for the output parameter.
+          example: param-123e4567-e89b-12d3-a456-426614174000
+        paramName:
           type: string
-        keywordInPrompt:
+          description: Name of the output parameter.
+          example: customerData
+        position:
+          type: number
+          description: Position/order of the parameter in the output list.
+          example: 1
+        paramDescription:
           type: string
+          description: Human-readable description of what this output parameter represents.
+          example: The customer data retrieved from the database.
+        agentToolConfigurationId:
+          type: string
+          description: UUID of the parent tool configuration.
+          example: config-123e4567-e89b-12d3-a456-426614174000
+        parentId:
+          type: string
+          description: UUID of the parent parameter for nested structures.
+        paramPath:
+          type: string
+          description: JSON path to this parameter in the output structure.
+          example: response.data.customer
+        outputExample:
+          type: string
+          description: Example value demonstrating the expected output format.
+          example: '{"name": "John Doe", "email": "john@example.com"}'
+        dataType:
+          enum:
+          - string
+          - number
+          - boolean
+          - object
+          - enum
+          type:
+          - string
+          - 'null'
+          description: Data type of the output parameter.
+          example: string
+        isArray:
+          type: boolean
+          default: false
+          description: Whether this parameter returns an array of values.
+          example: false
+        typeOptions:
+          type:
+          - object
+          - 'null'
+          description: Additional type-specific configuration options.
+        createdAt:
+          format: date-time
+          type: string
+          description: Timestamp when the parameter was created.
+        updatedAt:
+          format: date-time
+          type: string
+          description: Timestamp when the parameter was last updated.
       required:
       - id
-      - question
-      - keywordInPrompt
+      - agentToolConfigurationId
+      - isArray
+      - createdAt
+      - updatedAt
+    CustomIntegrationToolBodyParamsDTO:
+      type: object
+      properties:
+        key:
+          type: string
+        parameterHint:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+      required:
+      - key
+      - parameterHint
+      - type
+      - required
   securitySchemes:
     bearer:
       scheme: bearer
