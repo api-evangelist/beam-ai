@@ -64,5 +64,142 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Beam AI is a company surfaced via the API Evangelist harvest backlog (source: tag-qc) and added to the network as a stub for full-pipeline profiling.
-- https://beam.ai
+Beam AI provides a leading platform for agentic automation and AI agents, enabling enterprises to create self‑learning AI agents that automate operations, reduce costs, and improve efficiency. Their solutions include AI‑driven workflows, integrations with databases and SaaS tools, and a suite of industry‑specific applications for finance, healthcare, and customer service. Beam AI serves Fortune 500 companies and scale‑ups, offering a no‑code interface, robust security, and customizable agents that can learn from SOPs and execute tasks autonomously.
+
+**Areas:** Company · Artificial Intelligence · Automation · Enterprise · Platform
+
+## Beam AI on APIs.io
+
+Everything profiled for Beam AI is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/beam-ai/](https://apis.io/providers/beam-ai/)** — or go straight to one of the APIs or properties below.
+
+### APIs (11)
+
+- [Beam AI Agent Context Files API](https://apis.io/apis/beam-ai/beam-ai-agent-context-files-api/) — The Agent Context Files API from Beam AI — 3 operation(s) for agent context files.
+- [Beam AI Agent Graph API](https://apis.io/apis/beam-ai/beam-ai-agent-graph-api/) — The Agent Graph API from Beam AI — 12 operation(s) for agent graph.
+- [Beam AI Agent Setup API](https://apis.io/apis/beam-ai/beam-ai-agent-setup-api/) — The Agent Setup API from Beam AI — 6 operation(s) for agent setup.
+- [Beam AI Agent Skills API](https://apis.io/apis/beam-ai/beam-ai-agent-skills-api/) — The Agent Skills API from Beam AI — 1 operation(s) for agent skills.
+- [Beam AI Agent Task API](https://apis.io/apis/beam-ai/beam-ai-agent-task-api/) — The Agent Task API from Beam AI — 12 operation(s) for agent task.
+- [Beam AI Agent Views API](https://apis.io/apis/beam-ai/beam-ai-agent-views-api/) — The Agent Views API from Beam AI — 4 operation(s) for agent views.
+- [Beam AI Agents API](https://apis.io/apis/beam-ai/beam-ai-agents-api/) — The Agents API from Beam AI — 2 operation(s) for agents.
+- [Beam AI Complete Agent Graph API](https://apis.io/apis/beam-ai/beam-ai-complete-agent-graph-api/) — The Complete Agent Graph API from Beam AI — 2 operation(s) for complete agent graph.
+- [Beam AI Custom Tool API](https://apis.io/apis/beam-ai/beam-ai-custom-tool-api/) — The Custom Tool API from Beam AI — 1 operation(s) for custom tool.
+- [Beam AI Tool API](https://apis.io/apis/beam-ai/beam-ai-tool-api/) — The Tool API from Beam AI — 3 operation(s) for tool.
+- [Beam AI User API](https://apis.io/apis/beam-ai/beam-ai-user-api/) — The User API from Beam AI — 1 operation(s) for user.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Beam Ai Agentic Access](https://apis.io/agentic-access/beam-ai/beam-ai-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [AgentGraphNode](https://apis.io/schemas/beam-ai/beam-ai-agent-graph-node/)
+- [AgentTaskWithUrlDto](https://apis.io/schemas/beam-ai/beam-ai-agent-task-with-url-dto/)
+- [AgentToolConfigurationOutputParams](https://apis.io/schemas/beam-ai/beam-ai-agent-tool-configuration-output-params/)
+- [MinimalAgentGraphNodeDto](https://apis.io/schemas/beam-ai/beam-ai-minimal-agent-graph-node-dto/)
+- [MinimalAgentTaskDto](https://apis.io/schemas/beam-ai/beam-ai-minimal-agent-task-dto/)
+- [SetupBeamAgentDTO](https://apis.io/schemas/beam-ai/beam-ai-setup-beam-agent-dto/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Beam Ai Context](https://apis.io/jsonld/beam-ai/beam-ai-context/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Beam Ai Openapi Overlay](https://apis.io/overlays/beam-ai/beam-ai-openapi-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Beam AI API Rules](https://apis.io/rules/beam-ai/beam-ai-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Beam Ai Authentication](https://apis.io/security/beam-ai/beam-ai-authentication/)
+- [Beam Ai Domain Security](https://apis.io/security/beam-ai/beam-ai-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://beam.ai)
+- [Documentation](https://docs.beam.ai)
+- [Getting started](https://docs.beam.ai/01-getting-started/welcome/welcome)
+- [API reference](https://docs.beam.ai/llms.txt)
+- [Pricing](https://beam.ai/roi-calculator)
+- [Support](https://beam.ai/contact)
+- [Changelog](https://beam.ai/resources/changelog)
+- [Blog](https://beam.ai/articles)
+- [Security](https://beam.ai/legal/security)
+- [Trust centre](https://beam.ai/integrations/trust)
+- [Terms of service](https://beam.ai/legal/terms-of-use)
+- [Privacy policy](https://beam.ai/legal/privacy-policy)
+
+## API Evangelist rating
+
+**Kin Score 49.7** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 54.8 |
+| Contract governance | 35.6 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 39.5 |
+
+**Agent readiness 24.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 27.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/beam-ai/](https://apis.io/providers/beam-ai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Beam AI: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/beam-ai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
